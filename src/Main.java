@@ -12,6 +12,6 @@ public class Main {
         CardReader cardReader = new CardReader();
         Login Login = new Login();
         Login.setVisible(true);
-        //hi
+        
     }
 }
