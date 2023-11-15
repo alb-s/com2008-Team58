@@ -1,23 +1,27 @@
 package Functions;
+import java.sql.*;
 import java.util.*;
 
 public class CardReader{
 
-        enum CardType {
+    enum CardType {
+        AMERICANEXPRESS,
         MASTERCARD,
         VISA,
-        AMERICANEXPRESS
-        }       
+    }       
+    
 	public void checkCard(){
 
         try (Scanner inputString = new Scanner(System.in)) {
             String cardReader = inputString.nextLine();
 
             if (isValidCardNumber(cardReader)){
-                 CardType cardType = identifyCardType(cardReader);
-                
+                CardType cardType = identifyCardType(cardReader);
+
                 if (cardType != null){
                     System.out.println("Card Type: " + cardType);
+
+                    insertCardNumberIntoDatabase(cardReader);
                 } 
                 else{
                     System.out.println("Unable to identify card type");
@@ -68,4 +72,30 @@ public class CardReader{
         }
         return null; // Unable to identify card type
     }
+
+    // Insert the card number and its type into the database
+    private void insertCardNumberIntoDatabase(String cardNumber) {
+        String url = "jdbc:mysql://localhost:3306/DCS DB";
+        String username = "team058";
+        String password = "eel7Ahsi0";
+
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            String query = "INSERT INTO CardNumber (CardNumber) VALUES (?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, cardNumber);
+                int rowsAffected = preparedStatement.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    System.out.println("Card number inserted into the database.");
+                } 
+                else{
+                    System.out.println("Failed to insert card number into the database.");
+                }
+            }
+        } 
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
 }

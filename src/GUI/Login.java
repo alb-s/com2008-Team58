@@ -69,7 +69,7 @@ public class Login extends JFrame {
     }
 
     private void performLogin() {
-/*place code here for the login function*/
+    /*place code here for the login function*/
     }
 
     private void performRegister() {
@@ -78,11 +78,6 @@ public class Login extends JFrame {
         Register.setVisible(true);
 
     }
-
-
-
-
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             Login Login = new Login();
