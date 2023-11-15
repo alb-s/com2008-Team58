@@ -75,7 +75,7 @@ public class CardReader{
 
     // Insert the card number and its type into the database
     private void insertCardNumberIntoDatabase(String cardNumber) {
-        String url = "jdbc:mysql://localhost:3306/DCS DB";
+        String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
         String username = "team058";
         String password = "eel7Ahsi0";
 
