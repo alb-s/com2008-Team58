@@ -94,11 +94,12 @@ public class Login extends JFrame {
         String dbPassword = "eel7Ahsi0";
 
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)){
-            String query = "SELECT INTO Users (email,password) VALUES (?,?)";
+            String query = "SELECT INTO Users (email) VALUES (?)";
+            String query1 = "SELECT INTO Users (password) VALUES (?)";
             String email =usernameField.toString();
-            String passCheck = passwordField.toString();
+            String passCheck = new String(passwordField.getPassword());
             if (query == email){
-                if(query == passCheck){
+                if(query1 == passCheck){
                     System.out.println("You have successfully logged in.");
                     return true;
                 }
@@ -108,7 +109,7 @@ public class Login extends JFrame {
                 }
             }
             else{
-                System.out.println("You have entered an incorrect password.");
+                System.out.println("You have entered an incorrect email.");
                 return false;
             }
         }
