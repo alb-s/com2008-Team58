@@ -3,6 +3,9 @@ import GUI.Register;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Login extends JFrame {
     private JTextField usernameField;
@@ -86,7 +89,34 @@ public class Login extends JFrame {
     
     private boolean checkCredentials(String username, String password) {
         
-        return false; // Replace this with database logic
+        String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
+        String dbUsername = "team058";
+        String dbPassword = "eel7Ahsi0";
+
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)){
+            String query = "SELECT INTO Users (email) VALUES (?)";
+            String query1 = "SELECT INTO Users (password) VALUES (?)";
+            String email =usernameField.toString();
+            String passCheck = new String(passwordField.getPassword());
+            if (query == email){
+                if(query1 == passCheck){
+                    System.out.println("You have successfully logged in.");
+                    return true;
+                }
+                else{
+                    System.out.println("You have entered an incorrect password.");
+                    return false;
+                }
+            }
+            else{
+                System.out.println("You have entered an incorrect email.");
+                return false;
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return (Boolean) null;
     }
     
     private void redirectToRegister() {
