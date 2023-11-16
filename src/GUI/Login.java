@@ -104,20 +104,15 @@ public class Login extends JFrame {
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
                 preparedStatement.setString(1,username);
                 ResultSet resultSet = preparedStatement.executeQuery();
+                String emailCheck = resultSet.getString("email");
                 try(PreparedStatement preparedStatement1 = connection.prepareStatement(query1)){
                     preparedStatement1.setString(1,password);
                     ResultSet resultSet1 = preparedStatement1.executeQuery();
-                    if (resultSet.equals(email)){
-                        if(resultSet1.equals(passCheck)){
-                            System.out.println("You have successfully logged in.");
-                            loginValidator = true;
+                    String pass = resultSet1.getString("password");
+                    if (resultSet.next() && resultSet1.next()){
+                        if (emailCheck.equals(email) && pass.equals(passCheck)){
+                            loginValidator =true;
                         }
-                        else{
-                        System.out.println("You have entered an incorrect password.");
-                        }
-                    }   
-                    else{
-                        System.out.println("You have entered an incorrect email.");
                     }
                 } 
             }
