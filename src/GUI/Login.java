@@ -86,7 +86,7 @@ public class Login extends JFrame {
     
     private boolean checkCredentials(String username, String password) {
         
-        return false; // Replace this with your database logic
+        return false; // Replace this with database logic
     }
     
     private void redirectToRegister() {
