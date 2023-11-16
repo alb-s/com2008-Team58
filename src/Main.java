@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 
 public class Main {
     public static void main(String[] args) {
-        CardReader cardReader = new CardReader();
+        
         Login Login = new Login();
         Login.setVisible(true);
     }

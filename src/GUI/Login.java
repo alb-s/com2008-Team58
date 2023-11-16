@@ -69,8 +69,32 @@ public class Login extends JFrame {
     }
 
     private void performLogin() {
-/*place code here for the login function*/
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
+    
+        
+        boolean isValidUser = checkCredentials(username, password); 
+    
+        if (isValidUser) {
+            JOptionPane.showMessageDialog(null, "Login successful!");
+            
+        } else {
+            JOptionPane.showMessageDialog(null, "Invalid username or password!");
+            
+        }
     }
+    
+    private boolean checkCredentials(String username, String password) {
+        
+        return false; // Replace this with your database logic
+    }
+    
+    private void redirectToRegister() {
+        dispose(); // Close the login window
+        Register registerPage = new Register();
+        registerPage.setVisible(true);
+    }
+    
 
     private void performRegister() {
         dispose();
