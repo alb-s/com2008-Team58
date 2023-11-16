@@ -3,6 +3,9 @@ import GUI.Register;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Login extends JFrame {
     private JTextField usernameField;
@@ -69,8 +72,58 @@ public class Login extends JFrame {
     }
 
     private void performLogin() {
-    /*place code here for the login function*/
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
+    
+        
+        boolean isValidUser = checkCredentials(username, password); 
+    
+        if (isValidUser) {
+            JOptionPane.showMessageDialog(null, "Login successful!");
+            
+        } else {
+            JOptionPane.showMessageDialog(null, "Invalid username or password!");
+            
+        }
     }
+    
+    private boolean checkCredentials(String username, String password) {
+        
+        String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
+        String dbUsername = "team058";
+        String dbPassword = "eel7Ahsi0";
+
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)){
+            String query = "SELECT INTO Users (email,password) VALUES (?,?)";
+            String email =usernameField.toString();
+            String passCheck = passwordField.toString();
+            if (query == email){
+                if(query == passCheck){
+                    System.out.println("You have successfully logged in.");
+                    return true;
+                }
+                else{
+                    System.out.println("You have entered an incorrect password.");
+                    return false;
+                }
+            }
+            else{
+                System.out.println("You have entered an incorrect password.");
+                return false;
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return (Boolean) null;
+    }
+    
+    private void redirectToRegister() {
+        dispose(); // Close the login window
+        Register registerPage = new Register();
+        registerPage.setVisible(true);
+    }
+    
 
     private void performRegister() {
         dispose();
@@ -78,6 +131,11 @@ public class Login extends JFrame {
         Register.setVisible(true);
 
     }
+
+
+
+
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             Login Login = new Login();

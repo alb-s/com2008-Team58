@@ -77,9 +77,12 @@ public class Register extends JFrame {
 
 
     private void performregister() {
-/*put code for registartion here*/
-
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
+    
+        
     }
+    
 
 
 
