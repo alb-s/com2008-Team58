@@ -95,26 +95,21 @@ public class Login extends JFrame {
         String dbUsername = "team058";
         String dbPassword = "eel7Ahsi0";
         boolean loginValidator = false;
+        String passField = new String(passwordField.getPassword());
 
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)){
-            String query = "SELECT email FROM Users WHERE email = ?";
-            String query1 = "SELECT password FROM Users WHERE password = ?";
-            String email = usernameField.toString();
-            String passCheck = new String(passwordField.getPassword());
+            String query = "SELECT password FROM Users WHERE email = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
-                preparedStatement.setString(1,username);
+                preparedStatement.setString(1, username);
                 ResultSet resultSet = preparedStatement.executeQuery();
-                String emailCheck = resultSet.getString("email");
-                try(PreparedStatement preparedStatement1 = connection.prepareStatement(query1)){
-                    preparedStatement1.setString(1,password);
-                    ResultSet resultSet1 = preparedStatement1.executeQuery();
-                    String pass = resultSet1.getString("password");
-                    if (resultSet.next() && resultSet1.next()){
-                        if (emailCheck.equals(email) && pass.equals(passCheck)){
-                            loginValidator =true;
-                        }
+                if (resultSet.next()){
+                    String passCheck = resultSet.getString("password");
+                    System.out.println(passCheck);
+                    if (passField.equals(passCheck)){
+                        loginValidator = true;
                     }
-                } 
+                }
+ 
             }
         }
         catch (SQLException e){
