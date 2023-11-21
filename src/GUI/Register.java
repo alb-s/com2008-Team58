@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
+
 
 public class Register extends JFrame {
 
@@ -136,8 +138,71 @@ public class Register extends JFrame {
     private void performregister() {
         String username = emailField.getText();
         String password = new String(passwordField.getPassword());
-    
         
+        boolean isValidUser = insertCredentials(); 
+        if (isValidUser){
+            JOptionPane.showMessageDialog(null, "Registration Successful");
+            dispose();
+            Login Login = new Login();
+            Login.setVisible(true);
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Invalid Fields!");
+        }
+
+        
+    }
+
+    private boolean insertCredentials (){
+        //this code is for accessing database
+        String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
+        String dbUsername = "team058";
+        String dbPassword = "eel7Ahsi0";
+
+        //this code creates strings we can use for validations later
+        String dbEmail = emailField.getText();
+        String dbForename = foreField.getText();
+        String dbSurname = surField.getText();
+        String dbPass = new String(passwordField.getPassword());
+        String dbHouse = houseField.getText();
+        String dbRoad = roadField.getText();
+        String dbPost = postField.getText();
+        String dbCity = cityField.getText();
+        boolean regValidator = false;
+
+        //this try catch block should 
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)){
+            String query = "INSERT INTO Users (email, forename, surname, password, house, road, post, city) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
+                preparedStatement.setString(1, dbEmail);
+                preparedStatement.setString(2, dbForename);
+                preparedStatement.setString(3, dbSurname);
+                preparedStatement.setString(4, dbPass);
+                preparedStatement.setString(5, dbHouse);
+                preparedStatement.setString(6, dbRoad);
+                preparedStatement.setString(7, dbPost);
+                preparedStatement.setString(8, dbCity);
+                int rowsAffected = preparedStatement.executeUpdate();
+                System.out.println(rowsAffected);
+
+                if (rowsAffected > 0){
+                    regValidator = true;
+                }
+                else{
+                    regValidator = false;
+                }
+            }
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }        
+
+
+
+
+        return regValidator;
     }
     
 
