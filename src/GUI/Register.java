@@ -172,7 +172,7 @@ public class Register extends JFrame {
 
         //this try catch block should 
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)){
-            String query = "INSERT INTO Users (email, forename, surname, password, house, road, post, city) " +
+            String query = "INSERT INTO Users (email, forename, surname, password, housenumber, cityname, roadname, postcode) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
                 preparedStatement.setString(1, dbEmail);
@@ -184,7 +184,6 @@ public class Register extends JFrame {
                 preparedStatement.setString(7, dbPost);
                 preparedStatement.setString(8, dbCity);
                 int rowsAffected = preparedStatement.executeUpdate();
-                System.out.println(rowsAffected);
 
                 if (rowsAffected > 0){
                     regValidator = true;
