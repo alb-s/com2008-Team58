@@ -105,7 +105,7 @@ public class Register extends JFrame {
         panel2.add(postField);
 
 
-        loginButton = new JButton("Login");
+        loginButton = new JButton("Login Page");
         loginButton.setBounds(400, 400, 110, 25);
         panel2.add(loginButton);
 
