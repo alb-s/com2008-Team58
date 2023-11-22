@@ -3,12 +3,11 @@ import GUI.Register;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+
 
 public class Login extends JFrame {
-    private JTextField usernameField;
+    private JTextField emailField;
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton registerButton;
@@ -32,13 +31,13 @@ public class Login extends JFrame {
         titleLabel.setBounds(180, 35, 140, 25);
         panel.add(titleLabel);
 
-        JLabel userLabel = new JLabel("Username:");
+        JLabel userLabel = new JLabel("Email:");
         userLabel.setBounds(150, 100, 80, 25);
         panel.add(userLabel);
 
-        usernameField = new JTextField(20);
-        usernameField.setBounds(155, 135, 165, 25);
-        panel.add(usernameField);
+        emailField = new JTextField(20);
+        emailField.setBounds(155, 135, 165, 25);
+        panel.add(emailField);
 
         JLabel passwordLabel = new JLabel("Password:");
         passwordLabel.setBounds(150, 165, 80, 25);
@@ -72,15 +71,17 @@ public class Login extends JFrame {
     }
 
     private void performLogin() {
-        String username = usernameField.getText();
+        String username = emailField.getText();
         String password = new String(passwordField.getPassword());
     
         
         boolean isValidUser = checkCredentials(username, password); 
     
         if (isValidUser) {
-            JOptionPane.showMessageDialog(null, "Login successful!");
-            
+            JOptionPane.showMessageDialog(null, "Login Successful");
+            dispose();
+            Home Home = new Home();
+            Home.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Invalid username or password!");
             
@@ -92,31 +93,28 @@ public class Login extends JFrame {
         String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
         String dbUsername = "team058";
         String dbPassword = "eel7Ahsi0";
+        boolean loginValidator = false;
+        String passField = new String(passwordField.getPassword());
 
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)){
-            String query = "SELECT INTO Users (email) VALUES (?)";
-            String query1 = "SELECT INTO Users (password) VALUES (?)";
-            String email =usernameField.toString();
-            String passCheck = new String(passwordField.getPassword());
-            if (query == email){
-                if(query1 == passCheck){
-                    System.out.println("You have successfully logged in.");
-                    return true;
+            String query = "SELECT password FROM Users WHERE email = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
+                preparedStatement.setString(1, username);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()){
+                    String passCheck = resultSet.getString("password");
+                    if (passField.equals(passCheck)){
+                        loginValidator = true;
+                    }
                 }
-                else{
-                    System.out.println("You have entered an incorrect password.");
-                    return false;
-                }
-            }
-            else{
-                System.out.println("You have entered an incorrect email.");
-                return false;
+ 
             }
         }
         catch (SQLException e){
             e.printStackTrace();
         }
-        return (Boolean) null;
+
+        return loginValidator;
     }
     
     private void redirectToRegister() {
