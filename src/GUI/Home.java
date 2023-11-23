@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.Vector;
 
 public class Home extends JFrame {
+    private JButton searchButton;
     public Home() {
         setTitle("Home Page");
         setSize(800, 600);
@@ -33,6 +34,10 @@ public class Home extends JFrame {
         SearchField.setBounds(145, 95, 165, 25);
         panel3.add(SearchField);
 
+        searchButton = new JButton("Search");
+        searchButton.setBounds(105, 185, 85, 25);
+        panel3.add(searchButton);
+
         JLabel Quantitylabel = new JLabel("Quantity");
         Quantitylabel.setBounds(75, 145, 400, 25);
         Quantitylabel.setFont(new Font(labelFont.getName(), labelFont.getStyle(), 14));
@@ -45,16 +50,13 @@ public class Home extends JFrame {
         Vector<Vector<Object>> data = fetchDataFromDatabase();
         // Create column names
         Vector<String> columnNames = new Vector<>();
-        columnNames.add("idnew_table");
-        columnNames.add("email");
-        columnNames.add("password");
-        columnNames.add("forename");
-        columnNames.add("surname");
-        columnNames.add("housenumber");
-        columnNames.add("cityname");
-        columnNames.add("roadname");
-        columnNames.add("postcode");
-        columnNames.add("Cardnumber");
+        columnNames.add("ProductCode");
+        columnNames.add("BrandName");
+        columnNames.add("ProductName");
+        columnNames.add("RetailPrice");
+        columnNames.add("FeatureCode");
+        columnNames.add("Gauge");
+        columnNames.add("Era");
         // Add more column names based on your data
 
         // Create JTable with data
@@ -75,21 +77,18 @@ public class Home extends JFrame {
 
             // Execute SQL query
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Users");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Product");
 
             // Process result set and add to data vector
             while (rs.next()) {
                 Vector<Object> row = new Vector<>();
-                row.add(rs.getObject("idnew_table"));
-                row.add(rs.getObject("email"));
-                row.add(rs.getObject("password"));
-                row.add(rs.getObject("forename"));
-                row.add(rs.getObject("surname"));
-                row.add(rs.getObject("housenumber"));
-                row.add(rs.getObject("cityname"));
-                row.add(rs.getObject("roadname"));
-                row.add(rs.getObject("postcode"));
-                row.add(rs.getObject("Cardnumber"));
+                row.add(rs.getObject("ProductCode"));
+                row.add(rs.getObject("BrandName"));
+                row.add(rs.getObject("ProductName"));
+                row.add(rs.getObject("RetailPrice"));
+                row.add(rs.getObject("FeatureCode"));
+                row.add(rs.getObject("Gauge"));
+                row.add(rs.getObject("Era"));
                 // Add more columns as needed
                 data.add(row);
             }
