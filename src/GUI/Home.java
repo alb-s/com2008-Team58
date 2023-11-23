@@ -8,7 +8,9 @@ import java.util.Vector;
 
 public class Home extends JFrame {
     private JButton searchButton;
+    private JButton orderButton;
     private JTextField searchField;
+    private JTextField quantityField;
     private JTable table;
     private Vector<String> columnNames;
 
@@ -45,11 +47,20 @@ public class Home extends JFrame {
         searchField.setBounds(145, 95, 165, 25);
         panel3.add(searchField);
 
+        quantityField = new JTextField(20);
+        quantityField.setBounds(145, 135, 165, 25);
+        panel3.add(quantityField);
+
         // Search button
         searchButton = new JButton("Search");
         searchButton.setBounds(320, 95, 85, 25);
         searchButton.addActionListener(e -> performSearch(searchField.getText()));
         panel3.add(searchButton);
+
+        orderButton = new JButton("Order");
+        orderButton.setBounds(320, 135, 85, 25);
+        orderButton.addActionListener(e -> placeOrder());
+        panel3.add(orderButton);
 
         // Initialize column names
         columnNames = new Vector<>();
@@ -69,6 +80,18 @@ public class Home extends JFrame {
         scrollPane.setBounds(45, 250, 725, 300);
         panel3.add(scrollPane);
     }
+    private void placeOrder() {
+        String productCode = searchField.getText();
+        String quantity = quantityField.getText();
+
+        // Perform order processing logic here
+        // For example: Insert order details into a database, perform calculations, etc.
+        // You can use productCode and quantity variables to process the order
+
+        // For demonstration, display a confirmation message
+        JOptionPane.showMessageDialog(null, "Order placed for Product Code: " + productCode + ", Quantity: " + quantity);
+    }
+
 
     private void performSearch(String searchText) {
         Vector<Vector<Object>> searchData = new Vector<>();
