@@ -33,6 +33,9 @@ public class EditBankDetails extends JFrame {
             }
         });
 
+
+
+
         // Cancel button to go back to main page
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(new ActionListener() {

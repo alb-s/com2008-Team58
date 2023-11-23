@@ -1,6 +1,8 @@
 package Functions;
 
 import java.sql.*;
+
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class CardReader{
@@ -22,10 +24,12 @@ public class CardReader{
                 if (cardType != null){
                     System.out.println("Card Type: " + cardType);
                     insertCardNumberIntoDatabase(cardReader);
+                    JOptionPane.showMessageDialog(null, "Bank details saved succesfully!");
+
                 } 
             }
             else{
-                System.out.println("error");
+                JOptionPane.showMessageDialog(null, "Incorrect Bank details.");
             }
         }
         catch (Exception e) {
