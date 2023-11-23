@@ -27,7 +27,7 @@ public class EditBankDetails extends JFrame {
         JButton submitBankDetails = new JButton("Update");
         submitBankDetails.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JTextField bankCardNumberField = (JTextField) bankDetailsPanel.getComponent(2);
+                JTextField bankCardNumberField = (JTextField) bankDetailsPanel.getComponent(5);
                 CardReader cardReader = new CardReader();
                 cardReader.checkCard(bankCardNumberField);
             }
