@@ -96,7 +96,7 @@ public class Register extends JFrame {
         cityField.setBounds(155, 320, 140, 25);
         panel2.add(cityField);
 
-        JLabel postLabel = new JLabel("Street Name:");
+        JLabel postLabel = new JLabel("Post Code:");
         postLabel.setBounds(450, 285, 140, 25);
         panel2.add(postLabel);
 

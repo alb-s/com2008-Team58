@@ -6,10 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="connected home page to log in and created registration page with no functionality">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI/EditBankDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI/EditBankDetails.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GUI/Home.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI/Home.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GUI/Register.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI/Register.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI/StaffDashboardScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI/StaffDashboardScreen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +74,21 @@
       <option name="project" value="LOCAL" />
       <updated>1700185450741</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="connected home page to log in and created registration page with no functionality">
+      <created>1700773772969</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1700773772969</updated>
+    </task>
+    <task id="LOCAL-00005" summary="editing function for card reader">
+      <created>1700773830263</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1700773830263</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -94,6 +106,7 @@
     <MESSAGE value="Creating frame with login and registartion page" />
     <MESSAGE value="Testing slack connection" />
     <MESSAGE value="connected home page to log in and created registration page with no functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="connected home page to log in and created registration page with no functionality" />
+    <MESSAGE value="editing function for card reader" />
+    <option name="LAST_COMMIT_MESSAGE" value="editing function for card reader" />
   </component>
 </project>
