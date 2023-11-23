@@ -5,6 +5,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class StaffDashboardScreen extends JFrame {
 
@@ -15,9 +17,9 @@ public class StaffDashboardScreen extends JFrame {
         initializeUI();
     }
 
-    private JPanel mainPanel;
-    private CardLayout cardLayout;
-
+private JPanel mainPanel;
+private CardLayout cardLayout;
+   
 private void initializeUI() {
     mainPanel = new JPanel();
     cardLayout = new CardLayout();
@@ -31,41 +33,59 @@ private void initializeUI() {
 
 
     // Add mainPanel to the JFrame
+    // Layout for the entire frame
+    setLayout(new BorderLayout());
+    add(createTopPanel(), BorderLayout.NORTH);
     add(mainPanel, BorderLayout.CENTER);
 
     // Add a sidebar or menu to switch views
     add(createSidebar(), BorderLayout.WEST);
-
-    
 }
 
+    private JPanel createTopPanel() {
+        JPanel topPanel = new JPanel(new BorderLayout());
+        
+        JButton signOutButton = new JButton("Sign Out");
+        signOutButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose(); // Close current window
+                new Login().setVisible(true);
+            }
+        });
+        
+        JButton homeButton = new JButton("Home");
+        signOutButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose(); // Close current window
+                new Home().setVisible(true);
+            }
+        });
+
+        topPanel.add(signOutButton, BorderLayout.WEST);
+        topPanel.add(homeButton, BorderLayout.EAST);
+        return topPanel;
+    }
 
 private JPanel createOrdersPanel() {
-    JPanel ordersPanel = new JPanel(new BorderLayout());
-    
-    // Form panel
-    JPanel formPanel = new JPanel(new GridLayout(0, 2));
-    
-    // Add form fields
-    formPanel.add(new JLabel("Order ID:"));
-    formPanel.add(new JTextField(15));
-    formPanel.add(new JLabel("Customer Name:"));
-    formPanel.add(new JTextField(15));
-    formPanel.add(new JLabel("Product:"));
-    formPanel.add(new JTextField(15));
-    formPanel.add(new JLabel("Quantity:"));
-    formPanel.add(new JTextField(15));
-    
-    // Add a submit button
-    JButton submitButton = new JButton("Create Order");
-    submitButton.addActionListener(e -> {
-        // Add action logic here
-    });
+    JPanel orderPanel = new JPanel(new BorderLayout());
 
-    ordersPanel.add(formPanel, BorderLayout.CENTER);
-    ordersPanel.add(submitButton, BorderLayout.SOUTH);
+    // Table for pending orders
+    String[] columnNames = {"Order ID", "Date/Time", "Details"};
+    JTable ordersTable = new JTable(new Object[][]{}, columnNames);
+    orderPanel.add(new JScrollPane(ordersTable), BorderLayout.CENTER);
 
-    return ordersPanel;
+    // Buttons for order management
+    JPanel buttonPanel = new JPanel(new FlowLayout());
+    JButton fulfillButton = new JButton("Fulfill Order");
+    JButton deleteOrderButton = new JButton("Delete Order");
+    buttonPanel.add(fulfillButton);
+    buttonPanel.add(deleteOrderButton);
+
+    // Add action listeners for buttons
+
+    orderPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+    return orderPanel;
 }
 
 private DefaultTableModel userModel;
@@ -75,6 +95,7 @@ private DefaultTableModel createUserModel() {
         {"001", "John Doe", "Staff"},
         {"002", "Jane Smith", "Manager"},
         // More dummy rows
+        // dummy rows
     };
     userModel = new DefaultTableModel(userData, userColumnNames);
     return userModel;
@@ -129,7 +150,12 @@ private JPanel createUserManagementPanel() {
 
 
 private JPanel createInventoryPanel() {
-    JPanel inventoryPanel = new JPanel(new BorderLayout());
+    JPanel inventoryPanel = new JPanel();
+    inventoryPanel.setLayout(new BorderLayout());
+
+    // Dropdown for product categories
+    JComboBox<String> categoryDropdown = new JComboBox<>(new String[]{"Category 1", "Category 2", "Category 3"});
+    inventoryPanel.add(categoryDropdown, BorderLayout.NORTH);
 
     // Dummy data for the table
     String[] columnNames = {"Product ID", "Product Name", "Quantity"};
@@ -139,18 +165,30 @@ private JPanel createInventoryPanel() {
         // More dummy rows
     };
 
-    JTable inventoryTable = new JTable(data, columnNames);
+
+    DefaultTableModel inventoryModel = new DefaultTableModel(data, columnNames);
+    JTable inventoryTable = new JTable(inventoryModel);
     JScrollPane scrollPane = new JScrollPane(inventoryTable);
     inventoryPanel.add(scrollPane, BorderLayout.CENTER);
-    
+
 
     // Add buttons for inventory management
+    // Buttons for inventory management
     JPanel buttonPanel = new JPanel();
-    buttonPanel.add(new JButton("Add New Item"));
-    buttonPanel.add(new JButton("Edit Selected Item"));
-    buttonPanel.add(new JButton("Delete Selected Item"));
+    JButton addButton = new JButton("Add New Item");
+    JButton editButton = new JButton("Edit Selected Item");
+    JButton deleteButton = new JButton("Delete Selected Item");
+    buttonPanel.add(addButton);
+    buttonPanel.add(editButton);
+    buttonPanel.add(deleteButton);
+
+    // Add action listeners for buttons
 
     inventoryPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+    // Add sorting and searching
+    TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(inventoryModel);
+    inventoryTable.setRowSorter(sorter);
 
     return inventoryPanel;
 }
