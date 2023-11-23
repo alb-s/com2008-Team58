@@ -15,8 +15,8 @@ public class StaffDashboardScreen extends JFrame {
         initializeUI();
     }
 
-private JPanel mainPanel;
-private CardLayout cardLayout;
+    private JPanel mainPanel;
+    private CardLayout cardLayout;
 
 private void initializeUI() {
     mainPanel = new JPanel();

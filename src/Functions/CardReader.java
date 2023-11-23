@@ -1,6 +1,9 @@
 package Functions;
+
 import java.sql.*;
-import java.util.*;
+
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 public class CardReader{
 
@@ -10,26 +13,27 @@ public class CardReader{
         VISA,
     }       
     
-	public void checkCard(){
+	public void checkCard(JTextField cardField){
 
-        try (Scanner inputString = new Scanner(System.in)) {
-            String cardReader = inputString.nextLine();
+        try  {
+            String cardReader = cardField.getText();
 
             if (isValidCardNumber(cardReader)){
                 CardType cardType = identifyCardType(cardReader);
 
                 if (cardType != null){
                     System.out.println("Card Type: " + cardType);
-
                     insertCardNumberIntoDatabase(cardReader);
+                    JOptionPane.showMessageDialog(null, "Bank details saved succesfully!");
+
                 } 
-                else{
-                    System.out.println("Unable to identify card type");
-                }
-            } 
-            else{
-                System.out.println("Invalid credit card number");
             }
+            else{
+                JOptionPane.showMessageDialog(null, "Incorrect Bank details.");
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
 
     }

@@ -1,10 +1,19 @@
 package GUI;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
 import java.util.Vector;
 
 public class Home extends JFrame {
+    private JButton searchButton;
+    private JButton orderButton;
+    private JTextField searchField;
+    private JTextField quantityField;
+    private JTable table;
+    private Vector<String> columnNames;
+
     public Home() {
         setTitle("Home Page");
         setSize(800, 600);
@@ -16,94 +25,136 @@ public class Home extends JFrame {
 
         setLocationRelativeTo(null); // Center the frame on the screen
     }
+
     private void placeComponents3(JPanel panel3) {
         panel3.setLayout(null);
+
+        // Title label
         JLabel titleLabel = new JLabel("Trains of Sheffield");
         titleLabel.setBounds(275, 35, 400, 25);
         Font labelFont = titleLabel.getFont();
         titleLabel.setFont(new Font(labelFont.getName(), labelFont.getStyle(), 26));
         panel3.add(titleLabel);
 
+        // Search label
         JLabel Searchlabel = new JLabel("Search");
         Searchlabel.setBounds(75, 95, 400, 25);
         Searchlabel.setFont(new Font(labelFont.getName(), labelFont.getStyle(), 14));
         panel3.add(Searchlabel);
 
-        JTextField SearchField = new JTextField(20);
-        SearchField.setBounds(145, 95, 165, 25);
-        panel3.add(SearchField);
+        // Search field
+        searchField = new JTextField(20);
+        searchField.setBounds(145, 95, 165, 25);
+        panel3.add(searchField);
 
-        JLabel Quantitylabel = new JLabel("Quantity");
-        Quantitylabel.setBounds(75, 145, 400, 25);
-        Quantitylabel.setFont(new Font(labelFont.getName(), labelFont.getStyle(), 14));
-        panel3.add(Quantitylabel);
+        quantityField = new JTextField(20);
+        quantityField.setBounds(145, 135, 165, 25);
+        panel3.add(quantityField);
 
-        JTextField QuantityField = new JTextField(20);
-        QuantityField.setBounds(145, 145, 165, 25);
-        panel3.add(QuantityField);
+        // Search button
+        searchButton = new JButton("Search");
+        searchButton.setBounds(320, 95, 85, 25);
+        searchButton.addActionListener(e -> performSearch(searchField.getText()));
+        panel3.add(searchButton);
 
-        Vector<Vector<Object>> data = fetchDataFromDatabase();
-        // Create column names
-        Vector<String> columnNames = new Vector<>();
-        columnNames.add("idnew_table");
-        columnNames.add("email");
-        columnNames.add("password");
-        columnNames.add("forename");
-        columnNames.add("surname");
-        columnNames.add("housenumber");
-        columnNames.add("cityname");
-        columnNames.add("roadname");
-        columnNames.add("postcode");
-        columnNames.add("Cardnumber");
-        // Add more column names based on your data
+        orderButton = new JButton("Order");
+        orderButton.setBounds(320, 135, 85, 25);
+        orderButton.addActionListener(e -> placeOrder());
+        panel3.add(orderButton);
 
-        // Create JTable with data
-        JTable table = new JTable(data, columnNames);
-        // Add table to JScrollPane and then to the frame
+        // Initialize column names
+        columnNames = new Vector<>();
+        columnNames.add("ProductCode");
+        columnNames.add("BrandName");
+        columnNames.add("ProductName");
+        columnNames.add("RetailPrice");
+        columnNames.add("FeatureCode");
+        columnNames.add("Gauge");
+        columnNames.add("Era");
+
+        // Initialize and add table
+        table = new JTable();
+        updateTable(fetchDataFromDatabase());
+
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(45, 250, 725, 300);
         panel3.add(scrollPane);
-
-
     }
-    private static Vector<Vector<Object>> fetchDataFromDatabase() {
-        Vector<Vector<Object>> data = new Vector<>();
+    private void placeOrder() {
+        String productCode = searchField.getText();
+        String quantity = quantityField.getText();
 
+        // Perform order processing logic here
+        // For example: Insert order details into a database, perform calculations, etc.
+        // You can use productCode and quantity variables to process the order
+
+        // For demonstration, display a confirmation message
+        JOptionPane.showMessageDialog(null, "Order placed for Product Code: " + productCode + ", Quantity: " + quantity);
+    }
+
+
+    private void performSearch(String searchText) {
+        Vector<Vector<Object>> searchData = new Vector<>();
         try {
-            // Establish Database Connection
             Connection conn = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058", "team058", "eel7Ahsi0");
-
-            // Execute SQL query
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Users");
-
-            // Process result set and add to data vector
+            String sql = "SELECT * FROM Product WHERE ProductCode LIKE ? OR BrandName LIKE ? OR ProductName LIKE ? OR RetailPrice LIKE ? OR FeatureCode LIKE ? OR Gauge LIKE ? OR Era LIKE ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            String searchPattern = "%" + searchText + "%";
+            for (int i = 1; i <= 7; i++) { // Repeat for all search columns
+                pstmt.setString(i, searchPattern);
+            }
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Vector<Object> row = new Vector<>();
-                row.add(rs.getObject("idnew_table"));
-                row.add(rs.getObject("email"));
-                row.add(rs.getObject("password"));
-                row.add(rs.getObject("forename"));
-                row.add(rs.getObject("surname"));
-                row.add(rs.getObject("housenumber"));
-                row.add(rs.getObject("cityname"));
-                row.add(rs.getObject("roadname"));
-                row.add(rs.getObject("postcode"));
-                row.add(rs.getObject("Cardnumber"));
-                // Add more columns as needed
+                row.add(rs.getObject("ProductCode"));
+                row.add(rs.getObject("BrandName"));
+                row.add(rs.getObject("ProductName"));
+                row.add(rs.getObject("RetailPrice"));
+                row.add(rs.getObject("FeatureCode"));
+                row.add(rs.getObject("Gauge"));
+                row.add(rs.getObject("Era"));
+                searchData.add(row);
+            }
+            rs.close();
+            pstmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        updateTable(searchData);
+    }
+
+    private void updateTable(Vector<Vector<Object>> data) {
+        DefaultTableModel model = new DefaultTableModel(data, columnNames);
+        table.setModel(model);
+    }
+
+    private static Vector<Vector<Object>> fetchDataFromDatabase() {
+        Vector<Vector<Object>> data = new Vector<>();
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058", "team058", "eel7Ahsi0");
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Product");
+            while (rs.next()) {
+                Vector<Object> row = new Vector<>();
+                row.add(rs.getObject("ProductCode"));
+                row.add(rs.getObject("BrandName"));
+                row.add(rs.getObject("ProductName"));
+                row.add(rs.getObject("RetailPrice"));
+                row.add(rs.getObject("FeatureCode"));
+                row.add(rs.getObject("Gauge"));
+                row.add(rs.getObject("Era"));
                 data.add(row);
             }
-
-            // Close connections
             rs.close();
             stmt.close();
             conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return data;
     }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             Home Home = new Home();
