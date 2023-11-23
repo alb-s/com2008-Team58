@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import Functions.CardReader;
+
 
 public class EditBankDetails extends JFrame {
     public EditBankDetails() {
@@ -25,8 +27,9 @@ public class EditBankDetails extends JFrame {
         JButton submitBankDetails = new JButton("Update");
         submitBankDetails.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Action to perform on submit for bank details
-                
+                JTextField bankCardNumberField = (JTextField) bankDetailsPanel.getComponent(2);
+                CardReader cardReader = new CardReader();
+                cardReader.checkCard(bankCardNumberField);
             }
         });
 
