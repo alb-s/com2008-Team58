@@ -42,6 +42,11 @@ public class Home extends JFrame {
         Searchlabel.setFont(new Font(labelFont.getName(), labelFont.getStyle(), 14));
         panel3.add(Searchlabel);
 
+        JLabel quanntitylabel = new JLabel("Quantity");
+        quanntitylabel.setBounds(75, 135, 400, 25);
+        quanntitylabel.setFont(new Font(labelFont.getName(), labelFont.getStyle(), 14));
+        panel3.add(quanntitylabel);
+
         // Search field
         searchField = new JTextField(20);
         searchField.setBounds(145, 95, 165, 25);
@@ -80,16 +85,72 @@ public class Home extends JFrame {
         scrollPane.setBounds(45, 250, 725, 300);
         panel3.add(scrollPane);
     }
+
     private void placeOrder() {
         String productCode = searchField.getText();
         String quantity = quantityField.getText();
 
-        // Perform order processing logic here
-        // For example: Insert order details into a database, perform calculations, etc.
-        // You can use productCode and quantity variables to process the order
+        if(quantity.isEmpty() || productCode.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Please enter both a product code and quantity.");
+            return;
+        }
+        int orderQuantity;
+        try{
+            orderQuantity = Integer.parseInt(quantity);
+            if (orderQuantity <= 0){
+                JOptionPane.showMessageDialog(null, "Please enter a valid order quantity.");
+                return;
+            }
+        }
+        catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "Please enter a valid order quantity.");
+            return;
+        }
+        try {
+            //database connection
+            String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
+            String dbUsername = "team058";
+            String dbPassword = "eel7Ahsi0";
+            Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+    
+            //checks for existing product code 
+            PreparedStatement checkProductStmt = connection.prepareStatement("SELECT * FROM Product WHERE ProductCode = ?");
+            checkProductStmt.setString(1, productCode);
+            ResultSet productResultSet = checkProductStmt.executeQuery();
+    
+            if (!productResultSet.next()) {
+                JOptionPane.showMessageDialog(null, "Product code does not exist.");
+                return;
+            }
 
-        // For demonstration, display a confirmation message
-        JOptionPane.showMessageDialog(null, "Order placed for Product Code: " + productCode + ", Quantity: " + quantity);
+            //price calculations 
+            double unitPrice = productResultSet.getDouble("RetailPrice");
+            double totalCost = unitPrice * orderQuantity;
+
+            //should enter the order into the database
+            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO Orders (ProductCode, Quantity, TotalCost) VALUES (?, ?, ?)");
+            insertOrderStmt.setString(1, productCode);
+            insertOrderStmt.setInt(2, orderQuantity);
+            insertOrderStmt.setDouble(3, totalCost);
+            int rowsAffected = insertOrderStmt.executeUpdate();
+    
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Order placed successfully.\nTotal Cost: " + totalCost);
+            } 
+            else {
+                JOptionPane.showMessageDialog(null, "Failed to place order.");
+            }
+
+            //closing connections
+            productResultSet.close();
+            checkProductStmt.close();
+            insertOrderStmt.close();
+            connection.close();
+        } 
+        catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error processing order.");
+        }
     }
 
 
