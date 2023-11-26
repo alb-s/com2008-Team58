@@ -40,6 +40,7 @@ public class EditBankDetails extends JFrame {
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                dispose();
                 //Redirect to home page
                 new Home().setVisible(true);
             }
