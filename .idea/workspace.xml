@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="connected home page to log in and created registration page with no functionality">
+      <change afterPath="$PROJECT_DIR$/src/GUI/staffView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GUI/Home.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI/Home.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI/Register.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI/Register.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI/UserManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI/UserManagement.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +95,14 @@
       <option name="project" value="LOCAL" />
       <updated>1700857973170</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="created new user management page with functionality from database and fixed other bugs">
+      <created>1701026052272</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1701026052272</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -115,7 +121,8 @@
     <MESSAGE value="Testing slack connection" />
     <MESSAGE value="editing function for card reader" />
     <MESSAGE value="connected home page to log in and created registration page with no functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="connected home page to log in and created registration page with no functionality" />
+    <MESSAGE value="created new user management page with functionality from database and fixed other bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="created new user management page with functionality from database and fixed other bugs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
