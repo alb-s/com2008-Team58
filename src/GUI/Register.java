@@ -14,6 +14,7 @@ public class Register extends JFrame {
     private JTextField surField;
     private JTextField roadField;
     private JTextField houseField;
+    private JTextField roleField;
     private JTextField cityField;
     private JTextField postField;
     private JPasswordField passwordField;
@@ -48,7 +49,7 @@ public class Register extends JFrame {
         emailField.setBounds(155, 135, 140, 25);
         panel2.add(emailField);
 
-        JLabel surLabel = new JLabel("Surname");
+        JLabel surLabel = new JLabel("Forename");
         surLabel.setBounds(150, 165, 140, 25);
         panel2.add(surLabel);
 
@@ -56,7 +57,7 @@ public class Register extends JFrame {
         surField.setBounds(155, 195, 140, 25);
         panel2.add(surField);
 
-        JLabel forLabel = new JLabel("Forename");
+        JLabel forLabel = new JLabel("Surname");
         forLabel.setBounds(450, 165, 140, 25);
         panel2.add(forLabel);
 
@@ -103,6 +104,12 @@ public class Register extends JFrame {
         postField = new JTextField(20);
         postField.setBounds(455, 320, 140, 25);
         panel2.add(postField);
+
+        // Create and set up the non-editable text field
+        roleField = new JTextField("Customer");
+        roleField.setBounds(455, 320, 140, 25); // Set the position and size as needed
+        roleField.setEditable(false);
+        panel2.add(roleField);
 
 
         loginButton = new JButton("Login Page");
@@ -168,12 +175,13 @@ public class Register extends JFrame {
         String dbRoad = roadField.getText();
         String dbPost = postField.getText();
         String dbCity = cityField.getText();
+        String dbRole = roleField.getText();
         boolean regValidator = false;
 
         //this try catch block should 
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)){
-            String query = "INSERT INTO Users (email, forename, surname, password, housenumber, cityname, roadname, postcode) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Users (email, forename, surname, password, housenumber, cityname, roadname, postcode, Role) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
                 preparedStatement.setString(1, dbEmail);
                 preparedStatement.setString(2, dbForename);
@@ -183,6 +191,7 @@ public class Register extends JFrame {
                 preparedStatement.setString(6, dbRoad);
                 preparedStatement.setString(7, dbPost);
                 preparedStatement.setString(8, dbCity);
+                preparedStatement.setString(9, dbRole);
                 int rowsAffected = preparedStatement.executeUpdate();
 
                 if (rowsAffected > 0){
