@@ -10,7 +10,9 @@ import java.util.Vector;
 
 public class UserManagement extends JFrame {
     private JButton searchButton;
+    private JButton updateRoleButton;
     private JTextField searchField;
+    private JComboBox<String> roleComboBox;
     private JTable table;
     private Vector<String> columnNames;
     private JLabel messageLabel; // Added message label
@@ -59,6 +61,17 @@ public class UserManagement extends JFrame {
         messageLabel.setBounds(45, 225, 725, 20);
         messageLabel.setForeground(Color.RED);
         panel4.add(messageLabel);
+
+        String[] roles = {"Customer", "Staff"};
+        roleComboBox = new JComboBox<>(roles);
+        roleComboBox.setBounds(145, 130, 165, 25);
+        panel4.add(roleComboBox);
+
+        // Update Role Button
+        updateRoleButton = new JButton("Update Role");
+        updateRoleButton.setBounds(320, 130, 150, 25);
+        updateRoleButton.addActionListener(e -> updateRole(roleComboBox.getSelectedItem().toString()));
+        panel4.add(updateRoleButton);
 
         // Initialize column names
         columnNames = new Vector<>();
@@ -128,6 +141,22 @@ public class UserManagement extends JFrame {
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
         table.setModel(model);
     }
+    private void updateRole(String newRole) {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) { // Check if a row is selected
+            Object userId = table.getModel().getValueAt(selectedRow, 0); // Assuming user ID is in column 0
+            if (userId != null) {
+                table.getModel().setValueAt(newRole, selectedRow, 10); // Assuming role is in column 10
+
+                // Update the role in the database
+                updateRoleInDatabase(userId.toString(), newRole);
+            } else {
+                JOptionPane.showMessageDialog(this, "User ID is null", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No row selected", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     private static Vector<Vector<Object>> fetchDataFromDatabase() {
         Vector<Vector<Object>> data = new Vector<>();
@@ -158,6 +187,35 @@ public class UserManagement extends JFrame {
         }
         return data;
     }
+    private void updateRoleInDatabase(String userId, String newRole) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058", "team058", "eel7Ahsi0");
+            String sql = "UPDATE Users SET Role = ? WHERE idnew_table = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, newRole);
+            pstmt.setString(2, userId);
+            int affectedRows = pstmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                JOptionPane.showMessageDialog(this, "Role updated successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Role update failed", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
