@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import GUI.Home;
 
 public class UserDetailsView extends JFrame {
     private JTextField oldEmailField = new JTextField(15), 
@@ -77,7 +78,7 @@ public class UserDetailsView extends JFrame {
         JButton cancelButton = new JButton("Cancel");
         
         editBankDetailsButton.addActionListener((ActionEvent e) -> {
-        // Redirect to edit bank details Screen
+        dispose();
         new EditBankDetails().setVisible(true);
         });
    
@@ -87,7 +88,8 @@ public class UserDetailsView extends JFrame {
         });
 
         cancelButton.addActionListener((ActionEvent e) -> {
-            UserDetailsView.this.dispose(); // Close the frame
+            dispose();
+            new Home().setVisible(true);
         });
         
         controlPanel.add(saveButton);

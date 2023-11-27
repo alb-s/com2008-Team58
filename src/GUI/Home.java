@@ -8,6 +8,8 @@ import java.util.Vector;
 
 public class Home extends JFrame {
     private JButton searchButton;
+    private JButton EditButton;
+    private JButton CardButton;
     private JButton orderButton;
     private JTextField searchField;
     private JTextField quantityField;
@@ -67,6 +69,16 @@ public class Home extends JFrame {
         orderButton.addActionListener(e -> placeOrder());
         panel3.add(orderButton);
 
+        EditButton = new JButton("Edit Details");
+        EditButton.setBounds(0, 0, 100, 25);
+        EditButton.addActionListener(e -> performEdit());
+        panel3.add(EditButton);
+
+        CardButton = new JButton("Edit Card Details");
+        CardButton.setBounds(105, 0, 130, 25);
+        CardButton.addActionListener(e -> performCard());
+        panel3.add(CardButton);
+
         // Initialize column names
         columnNames = new Vector<>();
         columnNames.add("ProductCode");
@@ -84,6 +96,15 @@ public class Home extends JFrame {
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(45, 250, 725, 300);
         panel3.add(scrollPane);
+    }
+
+    private void performEdit() {
+        dispose();
+        new UserDetailsView().setVisible(true);
+    }
+    private void performCard() {
+        dispose();
+        new EditBankDetails().setVisible(true);
     }
 
     private void placeOrder() {
@@ -128,7 +149,7 @@ public class Home extends JFrame {
             double totalCost = unitPrice * orderQuantity;
 
             //should enter the order into the database
-            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO Orders (ProductCode, Quantity, TotalCost) VALUES (?, ?, ?)");
+            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost) VALUES (?, ?, ?)");
             insertOrderStmt.setString(1, productCode);
             insertOrderStmt.setInt(2, orderQuantity);
             insertOrderStmt.setDouble(3, totalCost);
