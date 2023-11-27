@@ -1,11 +1,12 @@
-package GUI;
+package StaffGUI;
+
+import CustomerGUI.Home;
+import CustomerGUI.Login;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class StaffDashboardScreen extends JFrame {
     private DefaultTableModel tableModel;

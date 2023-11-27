@@ -1,5 +1,4 @@
-package GUI;
-import GUI.Register;
+package CustomerGUI;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,9 +8,7 @@ import java.sql.*;
 public class Login extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;
-    private JButton loginButton;
-    private JButton registerButton;
-
+    private JButton loginButton,registerButton;
     public Login() {
         setTitle("Login Page");
         setSize(500, 400);
@@ -21,7 +18,7 @@ public class Login extends JFrame {
         placeComponents(panel);
         add(panel);
 
-        setLocationRelativeTo(null); // Center the frame on the screen
+        setLocationRelativeTo(null);
     }
 
     private void placeComponents(JPanel panel) {
@@ -54,8 +51,6 @@ public class Login extends JFrame {
         registerButton = new JButton("Registration");
         registerButton.setBounds(250, 250, 110, 25);
         panel.add(registerButton);
-
-        // ActionListener for the login button
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

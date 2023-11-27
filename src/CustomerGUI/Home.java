@@ -1,4 +1,4 @@
-package GUI;
+package CustomerGUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -7,16 +7,10 @@ import java.sql.*;
 import java.util.Vector;
 
 public class Home extends JFrame {
-    private JButton searchButton;
-    private JButton EditButton;
-    private JButton CardButton;
-    private JButton orderButton;
-    private JTextField StatsField;
-    private JTextField searchField;
-    private JTextField quantityField;
+    private JButton searchButton, EditButton, CardButton, orderButton;
+    private JTextField StatsField, searchField, quantityField;
     private JTable table;
     private Vector<String> columnNames;
-
     public Home() {
         setTitle("Home Page");
         setSize(800, 600);
@@ -25,21 +19,18 @@ public class Home extends JFrame {
         JPanel panel3 = new JPanel();
         placeComponents3(panel3);
         add(panel3);
-
         setLocationRelativeTo(null); // Center the frame on the screen
     }
 
     private void placeComponents3(JPanel panel3) {
         panel3.setLayout(null);
 
-        // Title label
         JLabel titleLabel = new JLabel("Trains of Sheffield");
         titleLabel.setBounds(275, 35, 400, 25);
         Font labelFont = titleLabel.getFont();
         titleLabel.setFont(new Font(labelFont.getName(), labelFont.getStyle(), 26));
         panel3.add(titleLabel);
 
-        // Search label
         JLabel Searchlabel = new JLabel("Search");
         Searchlabel.setBounds(75, 95, 400, 25);
         Searchlabel.setFont(new Font(labelFont.getName(), labelFont.getStyle(), 14));
@@ -50,7 +41,6 @@ public class Home extends JFrame {
         quanntitylabel.setFont(new Font(labelFont.getName(), labelFont.getStyle(), 14));
         panel3.add(quanntitylabel);
 
-        // Search field
         searchField = new JTextField(20);
         searchField.setBounds(145, 95, 165, 25);
         panel3.add(searchField);
@@ -64,7 +54,6 @@ public class Home extends JFrame {
         StatsField.setEditable(false);
         panel3.add(StatsField);
 
-        // Search button
         searchButton = new JButton("Search");
         searchButton.setBounds(320, 95, 85, 25);
         searchButton.addActionListener(e -> performSearch(searchField.getText()));
@@ -85,7 +74,6 @@ public class Home extends JFrame {
         CardButton.addActionListener(e -> performCard());
         panel3.add(CardButton);
 
-        // Initialize column names
         columnNames = new Vector<>();
         columnNames.add("ProductCode");
         columnNames.add("BrandName");
@@ -94,8 +82,6 @@ public class Home extends JFrame {
         columnNames.add("FeatureCode");
         columnNames.add("Gauge");
         columnNames.add("Era");
-
-        // Initialize and add table
         table = new JTable();
         updateTable(fetchDataFromDatabase());
 
@@ -103,7 +89,6 @@ public class Home extends JFrame {
         scrollPane.setBounds(45, 250, 725, 300);
         panel3.add(scrollPane);
     }
-
     private void performEdit() {
         dispose();
         new UserDetailsView().setVisible(true);
@@ -112,12 +97,10 @@ public class Home extends JFrame {
         dispose();
         new EditBankDetails().setVisible(true);
     }
-
     private void placeOrder() {
         String productCode = searchField.getText();
         String quantity = quantityField.getText();
         String Status = StatsField.getText();
-
 
         if(quantity.isEmpty() || productCode.isEmpty()){
             JOptionPane.showMessageDialog(null, "Please enter both a product code and quantity.");
@@ -136,13 +119,11 @@ public class Home extends JFrame {
             return;
         }
         try {
-            //database connection
             String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
             String dbUsername = "team058";
             String dbPassword = "eel7Ahsi0";
             Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-    
-            //checks for existing product code 
+
             PreparedStatement checkProductStmt = connection.prepareStatement("SELECT * FROM Product WHERE ProductCode = ?");
             checkProductStmt.setString(1, productCode);
             ResultSet productResultSet = checkProductStmt.executeQuery();
@@ -152,11 +133,9 @@ public class Home extends JFrame {
                 return;
             }
 
-            //price calculations 
             double unitPrice = productResultSet.getDouble("RetailPrice");
             double totalCost = unitPrice * orderQuantity;
 
-            //should enter the order into the database
             PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status) VALUES (?, ?, ?, ?)");
             insertOrderStmt.setString(1, productCode);
             insertOrderStmt.setInt(2, orderQuantity);
@@ -171,7 +150,6 @@ public class Home extends JFrame {
                 JOptionPane.showMessageDialog(null, "Failed to place order.");
             }
 
-            //closing connections
             productResultSet.close();
             checkProductStmt.close();
             insertOrderStmt.close();
@@ -187,7 +165,8 @@ public class Home extends JFrame {
     private void performSearch(String searchText) {
         Vector<Vector<Object>> searchData = new Vector<>();
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058", "team058", "eel7Ahsi0");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058",
+                    "team058", "eel7Ahsi0");
             String sql = "SELECT * FROM Product WHERE ProductCode LIKE ? OR BrandName LIKE ? OR ProductName LIKE ? OR RetailPrice LIKE ? OR FeatureCode LIKE ? OR Gauge LIKE ? OR Era LIKE ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             String searchPattern = "%" + searchText + "%";
@@ -223,7 +202,8 @@ public class Home extends JFrame {
     private static Vector<Vector<Object>> fetchDataFromDatabase() {
         Vector<Vector<Object>> data = new Vector<>();
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058", "team058", "eel7Ahsi0");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058",
+                    "team058", "eel7Ahsi0");
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Product");
             while (rs.next()) {
@@ -245,7 +225,6 @@ public class Home extends JFrame {
         }
         return data;
     }
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             Home Home = new Home();

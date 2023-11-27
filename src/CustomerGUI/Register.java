@@ -1,4 +1,4 @@
-package GUI;
+package CustomerGUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,17 +9,10 @@ import java.sql.*;
 
 public class Register extends JFrame {
 
-    private JTextField emailField;
-    private JTextField foreField;
-    private JTextField surField;
-    private JTextField roadField;
-    private JTextField houseField;
-    private JTextField roleField;
-    private JTextField cityField;
-    private JTextField postField;
+    private JTextField emailField, foreField, surField, roadField, houseField;
+    private JTextField roleField, cityField, postField;
     private JPasswordField passwordField;
-    private JButton loginButton;
-    private JButton registerButton;
+    private JButton loginButton, registerButton;
 
     public Register() {
         setTitle("Registration Page");
@@ -30,7 +23,7 @@ public class Register extends JFrame {
         placeComponents2(panel2);
         add(panel2);
 
-        setLocationRelativeTo(null); // Center the frame on the screen
+        setLocationRelativeTo(null);
     }
 
     private void placeComponents2(JPanel panel2) {
@@ -105,12 +98,10 @@ public class Register extends JFrame {
         postField.setBounds(455, 320, 140, 25);
         panel2.add(postField);
 
-        // Create and set up the non-editable text field
         roleField = new JTextField("Customer");
-        roleField.setBounds(455, 320, 140, 25); // Set the position and size as needed
+        roleField.setBounds(455, 320, 140, 25);
         roleField.setEditable(false);
         panel2.add(roleField);
-
 
         loginButton = new JButton("Login Page");
         loginButton.setBounds(400, 400, 110, 25);
@@ -119,8 +110,6 @@ public class Register extends JFrame {
         registerButton = new JButton("Sign Up");
         registerButton.setBounds(250, 400, 110, 25);
         panel2.add(registerButton);
-
-        // ActionListener for the login button
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -141,7 +130,6 @@ public class Register extends JFrame {
         Login.setVisible(true);
     }
 
-
     private void performregister() {
         String username = emailField.getText();
         String password = new String(passwordField.getPassword());
@@ -156,17 +144,13 @@ public class Register extends JFrame {
         else {
             JOptionPane.showMessageDialog(null, "Invalid Fields!");
         }
-
-        
     }
 
     private boolean insertCredentials (){
-        //this code is for accessing database
         String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
         String dbUsername = "team058";
         String dbPassword = "eel7Ahsi0";
 
-        //this code creates strings we can use for validations later
         String dbEmail = emailField.getText();
         String dbForename = foreField.getText();
         String dbSurname = surField.getText();
@@ -178,7 +162,6 @@ public class Register extends JFrame {
         String dbRole = roleField.getText();
         boolean regValidator = false;
 
-        //this try catch block should 
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)){
             String query = "INSERT INTO Users (email, forename, surname, password, housenumber, cityname, roadname, postcode, Role) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -193,7 +176,6 @@ public class Register extends JFrame {
                 preparedStatement.setString(8, dbCity);
                 preparedStatement.setString(9, dbRole);
                 int rowsAffected = preparedStatement.executeUpdate();
-
                 if (rowsAffected > 0){
                     regValidator = true;
                 }
