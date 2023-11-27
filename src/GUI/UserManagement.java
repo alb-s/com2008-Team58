@@ -1,5 +1,3 @@
-
-
 package GUI;
 
 import javax.swing.*;
@@ -10,6 +8,7 @@ import java.util.Vector;
 
 public class UserManagement extends JFrame {
     private JButton searchButton;
+    private JButton HomeButton;
     private JButton updateRoleButton;
     private JTextField searchField;
     private JComboBox<String> roleComboBox;
@@ -73,6 +72,11 @@ public class UserManagement extends JFrame {
         updateRoleButton.addActionListener(e -> updateRole(roleComboBox.getSelectedItem().toString()));
         panel4.add(updateRoleButton);
 
+        HomeButton = new JButton("Home Page");
+        HomeButton.setBounds(0, 0, 120, 25);
+        HomeButton.addActionListener(e -> performHome());
+        panel4.add(HomeButton);
+
         // Initialize column names
         columnNames = new Vector<>();
         columnNames.add("idnew_table");
@@ -95,7 +99,11 @@ public class UserManagement extends JFrame {
         scrollPane.setBounds(45, 250, 725, 300);
         panel4.add(scrollPane);
     }
-
+    private void performHome() {
+        dispose();
+        HomeManager HomeManager = new HomeManager();
+        HomeManager.setVisible(true);
+    }
     private void performSearch(String searchText) {
         messageLabel.setText(""); // Clear previous message
         Vector<Vector<Object>> searchData = new Vector<>();
