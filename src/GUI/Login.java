@@ -69,14 +69,10 @@ public class Login extends JFrame {
             }
         });
     }
-
     private void performLogin() {
         String username = emailField.getText();
         String password = new String(passwordField.getPassword());
-    
-        
-        boolean isValidUser = checkCredentials(username, password); 
-    
+        boolean isValidUser = checkCredentials(username, password);
         if (isValidUser) {
             JOptionPane.showMessageDialog(null, "Login Successful");
             dispose();
@@ -84,18 +80,14 @@ public class Login extends JFrame {
             Home.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Invalid username or password!");
-            
         }
     }
-    
     private boolean checkCredentials(String username, String password) {
-        
         String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
         String dbUsername = "team058";
         String dbPassword = "eel7Ahsi0";
         boolean loginValidator = false;
         String passField = new String(passwordField.getPassword());
-
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)){
             String query = "SELECT password FROM Users WHERE email = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
@@ -107,7 +99,6 @@ public class Login extends JFrame {
                         loginValidator = true;
                     }
                 }
- 
             }
         }
         catch (SQLException e){
@@ -116,24 +107,12 @@ public class Login extends JFrame {
 
         return loginValidator;
     }
-    
-    private void redirectToRegister() {
-        dispose(); // Close the login window
-        Register registerPage = new Register();
-        registerPage.setVisible(true);
-    }
-    
 
     private void performRegister() {
         dispose();
         Register Register = new Register();
         Register.setVisible(true);
-
     }
-
-
-
-
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

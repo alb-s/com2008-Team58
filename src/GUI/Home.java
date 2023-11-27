@@ -8,7 +8,10 @@ import java.util.Vector;
 
 public class Home extends JFrame {
     private JButton searchButton;
+    private JButton EditButton;
+    private JButton CardButton;
     private JButton orderButton;
+    private JTextField StatsField;
     private JTextField searchField;
     private JTextField quantityField;
     private JTable table;
@@ -56,6 +59,10 @@ public class Home extends JFrame {
         quantityField.setBounds(145, 135, 165, 25);
         panel3.add(quantityField);
 
+        StatsField = new JTextField("Pending");
+        StatsField.setBounds(145, 135, 165, 25);
+        StatsField.setEditable(false);
+        panel3.add(StatsField);
         // Search button
         searchButton = new JButton("Search");
         searchButton.setBounds(320, 95, 85, 25);
@@ -66,6 +73,16 @@ public class Home extends JFrame {
         orderButton.setBounds(320, 135, 85, 25);
         orderButton.addActionListener(e -> placeOrder());
         panel3.add(orderButton);
+
+        EditButton = new JButton("Edit Details");
+        EditButton.setBounds(0, 0, 100, 25);
+        EditButton.addActionListener(e -> performEdit());
+        panel3.add(EditButton);
+
+        CardButton = new JButton("Edit Card Details");
+        CardButton.setBounds(105, 0, 130, 25);
+        CardButton.addActionListener(e -> performCard());
+        panel3.add(CardButton);
 
         // Initialize column names
         columnNames = new Vector<>();
@@ -86,9 +103,20 @@ public class Home extends JFrame {
         panel3.add(scrollPane);
     }
 
+    private void performEdit() {
+        dispose();
+        new UserDetailsView().setVisible(true);
+    }
+    private void performCard() {
+        dispose();
+        new EditBankDetails().setVisible(true);
+    }
+
     private void placeOrder() {
         String productCode = searchField.getText();
         String quantity = quantityField.getText();
+        String Status = StatsField.getText();
+
 
         if(quantity.isEmpty() || productCode.isEmpty()){
             JOptionPane.showMessageDialog(null, "Please enter both a product code and quantity.");
@@ -128,10 +156,11 @@ public class Home extends JFrame {
             double totalCost = unitPrice * orderQuantity;
 
             //should enter the order into the database
-            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO Orders (ProductCode, Quantity, TotalCost) VALUES (?, ?, ?)");
+            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status) VALUES (?, ?, ?, ?)");
             insertOrderStmt.setString(1, productCode);
             insertOrderStmt.setInt(2, orderQuantity);
             insertOrderStmt.setDouble(3, totalCost);
+            insertOrderStmt.setString(4,Status);
             int rowsAffected = insertOrderStmt.executeUpdate();
     
             if (rowsAffected > 0) {
