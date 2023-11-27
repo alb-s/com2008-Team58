@@ -11,6 +11,7 @@ public class Home extends JFrame {
     private JButton EditButton;
     private JButton CardButton;
     private JButton orderButton;
+    private JTextField StatsField;
     private JTextField searchField;
     private JTextField quantityField;
     private JTable table;
@@ -58,6 +59,10 @@ public class Home extends JFrame {
         quantityField.setBounds(145, 135, 165, 25);
         panel3.add(quantityField);
 
+        StatsField = new JTextField("Pending");
+        StatsField.setBounds(145, 135, 165, 25);
+        StatsField.setEditable(false);
+        panel3.add(StatsField);
         // Search button
         searchButton = new JButton("Search");
         searchButton.setBounds(320, 95, 85, 25);
@@ -110,6 +115,8 @@ public class Home extends JFrame {
     private void placeOrder() {
         String productCode = searchField.getText();
         String quantity = quantityField.getText();
+        String Status = StatsField.getText();
+
 
         if(quantity.isEmpty() || productCode.isEmpty()){
             JOptionPane.showMessageDialog(null, "Please enter both a product code and quantity.");
@@ -149,10 +156,11 @@ public class Home extends JFrame {
             double totalCost = unitPrice * orderQuantity;
 
             //should enter the order into the database
-            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost) VALUES (?, ?, ?)");
+            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status) VALUES (?, ?, ?, ?)");
             insertOrderStmt.setString(1, productCode);
             insertOrderStmt.setInt(2, orderQuantity);
             insertOrderStmt.setDouble(3, totalCost);
+            insertOrderStmt.setString(4,Status);
             int rowsAffected = insertOrderStmt.executeUpdate();
     
             if (rowsAffected > 0) {

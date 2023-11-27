@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="connected home page to log in and created registration page with no functionality">
+    <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI/EditBankDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI/EditBankDetails.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GUI/Home.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI/Home.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI/Login.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI/UserDetailsView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI/UserDetailsView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI/HomeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI/HomeManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +109,14 @@
       <option name="project" value="LOCAL" />
       <updated>1701054070214</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="work">
+      <created>1701116459807</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1701116459807</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -131,7 +136,8 @@
     <MESSAGE value="editing function for card reader" />
     <MESSAGE value="created new user management page with functionality from database and fixed other bugs" />
     <MESSAGE value="connected home page to log in and created registration page with no functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="connected home page to log in and created registration page with no functionality" />
+    <MESSAGE value="work" />
+    <option name="LAST_COMMIT_MESSAGE" value="work" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

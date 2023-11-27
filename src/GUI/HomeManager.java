@@ -12,6 +12,7 @@ public class HomeManager extends JFrame {
     private JButton orderButton;
     private JTextField searchField;
     private JTextField quantityField;
+    private JTextField StatsField;
     private JTable table;
     private Vector<String> columnNames;
     public HomeManager() {
@@ -49,6 +50,11 @@ public class HomeManager extends JFrame {
         quantityField = new JTextField(20);
         quantityField.setBounds(145, 135, 165, 25);
         panel5.add(quantityField);
+
+        StatsField = new JTextField("Pending");
+        StatsField.setBounds(145, 135, 165, 25);
+        StatsField.setEditable(false);
+        panel5.add(StatsField);
 
         searchButton = new JButton("Search");
         searchButton.setBounds(320, 95, 85, 25);
@@ -90,6 +96,7 @@ public class HomeManager extends JFrame {
     private void placeOrder() {
         String productCode = searchField.getText();
         String quantity = quantityField.getText();
+        String Status = StatsField.getText();
 
         if(quantity.isEmpty() || productCode.isEmpty()){
             JOptionPane.showMessageDialog(null, "Please enter both a product code and quantity.");
@@ -125,10 +132,11 @@ public class HomeManager extends JFrame {
             double unitPrice = productResultSet.getDouble("RetailPrice");
             double totalCost = unitPrice * orderQuantity;
 
-            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO Orders (ProductCode, Quantity, TotalCost) VALUES (?, ?, ?)");
+            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status) VALUES (?, ?, ?, ?)");
             insertOrderStmt.setString(1, productCode);
             insertOrderStmt.setInt(2, orderQuantity);
             insertOrderStmt.setDouble(3, totalCost);
+            insertOrderStmt.setString(4,Status);
             int rowsAffected = insertOrderStmt.executeUpdate();
 
             if (rowsAffected > 0) {
