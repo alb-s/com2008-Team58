@@ -1,4 +1,4 @@
-package GUI;
+package ManagerGUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -155,8 +155,6 @@ public class UserManagement extends JFrame {
             Object userId = table.getModel().getValueAt(selectedRow, 0); // Assuming user ID is in column 0
             if (userId != null) {
                 table.getModel().setValueAt(newRole, selectedRow, 10); // Assuming role is in column 10
-
-                // Update the role in the database
                 updateRoleInDatabase(userId.toString(), newRole);
             } else {
                 JOptionPane.showMessageDialog(this, "User ID is null", "Error", JOptionPane.ERROR_MESSAGE);

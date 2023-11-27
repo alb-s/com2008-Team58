@@ -201,21 +201,12 @@ public class Register extends JFrame {
                     regValidator = false;
                 }
             }
-
         }
         catch (SQLException e){
             e.printStackTrace();
-        }        
-
-
-
-
+        }
         return regValidator;
     }
-    
-
-
-
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

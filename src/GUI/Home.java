@@ -63,6 +63,7 @@ public class Home extends JFrame {
         StatsField.setBounds(145, 135, 165, 25);
         StatsField.setEditable(false);
         panel3.add(StatsField);
+
         // Search button
         searchButton = new JButton("Search");
         searchButton.setBounds(320, 95, 85, 25);

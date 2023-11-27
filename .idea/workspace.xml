@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="">
+    <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="pushing orderline fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GUI/Home.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI/Home.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI/HomeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI/HomeManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI/HomeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ManagerGUI/HomeManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI/Register.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI/Register.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI/StaffDashboardScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI/StaffDashboardScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI/UserManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ManagerGUI/UserManagement.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,7 +119,14 @@
       <option name="project" value="LOCAL" />
       <updated>1701116459807</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="pushing orderline fix">
+      <created>1701118592056</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1701118592056</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -137,7 +147,8 @@
     <MESSAGE value="created new user management page with functionality from database and fixed other bugs" />
     <MESSAGE value="connected home page to log in and created registration page with no functionality" />
     <MESSAGE value="work" />
-    <option name="LAST_COMMIT_MESSAGE" value="work" />
+    <MESSAGE value="pushing orderline fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="pushing orderline fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -1,11 +1,11 @@
-package GUI;
+package ManagerGUI;
 
     import javax.swing.*;
     import javax.swing.table.DefaultTableModel;
     import java.awt.*;
     import java.sql.*;
     import java.util.Vector;
-    import GUI.UserManagement;
+
 public class HomeManager extends JFrame {
     private JButton searchButton;
     private JButton UserButton;
