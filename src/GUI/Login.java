@@ -1,5 +1,7 @@
 package GUI;
-import GUI.Register;
+
+import Utility.PasswordHashUtility;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -87,15 +89,19 @@ public class Login extends JFrame {
         String dbUsername = "team058";
         String dbPassword = "eel7Ahsi0";
         boolean loginValidator = false;
-        String passField = new String(passwordField.getPassword());
-        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)){
-            String query = "SELECT password FROM Users WHERE email = ?";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)) {
+            String query = "SELECT password, Salt FROM Users WHERE email = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setString(1, username);
                 ResultSet resultSet = preparedStatement.executeQuery();
-                if (resultSet.next()){
-                    String passCheck = resultSet.getString("password");
-                    if (passField.equals(passCheck)){
+                if (resultSet.next()) {
+                    String hashedPasswordFromDB = resultSet.getString("password");
+                    String storedSalt = resultSet.getString("Salt");
+                        
+                    char[] passwordChars = passwordField.getPassword();
+                    String hashedEnteredPassword = PasswordHashUtility.hashPassword(passwordChars, storedSalt);
+                    
+                    if (hashedEnteredPassword != null && hashedEnteredPassword.equals(hashedPasswordFromDB)) {
                         loginValidator = true;
                     }
                 }

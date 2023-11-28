@@ -1,13 +1,21 @@
 package GUI;
 
+import Utility.PasswordHashUtility;
+
+
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.security.SecureRandom;
 import java.sql.*;
+import java.util.Base64;
+
 
 
 public class Register extends JFrame {
+
 
     private JTextField emailField;
     private JTextField foreField;
@@ -143,9 +151,7 @@ public class Register extends JFrame {
 
 
     private void performregister() {
-        String username = emailField.getText();
-        String password = new String(passwordField.getPassword());
-        
+    
         boolean isValidUser = insertCredentials(); 
         if (isValidUser){
             JOptionPane.showMessageDialog(null, "Registration Successful");
@@ -170,7 +176,6 @@ public class Register extends JFrame {
         String dbEmail = emailField.getText();
         String dbForename = foreField.getText();
         String dbSurname = surField.getText();
-        String dbPass = new String(passwordField.getPassword());
         String dbHouse = houseField.getText();
         String dbRoad = roadField.getText();
         String dbPost = postField.getText();
@@ -178,20 +183,31 @@ public class Register extends JFrame {
         String dbRole = roleField.getText();
         boolean regValidator = false;
 
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+        String generatedSalt = Base64.getEncoder().encodeToString(salt);
+
+        char[] passwordChars = passwordField.getPassword();
+        String hashedPassword = PasswordHashUtility.hashPassword(passwordChars, generatedSalt);
+
+
         //this try catch block should 
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)){
-            String query = "INSERT INTO Users (email, forename, surname, password, housenumber, cityname, roadname, postcode, Role) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Users (email, forename, surname, password, housenumber, cityname, roadname, postcode, Role, Salt) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
                 preparedStatement.setString(1, dbEmail);
                 preparedStatement.setString(2, dbForename);
                 preparedStatement.setString(3, dbSurname);
-                preparedStatement.setString(4, dbPass);
+                preparedStatement.setString(4, hashedPassword);
                 preparedStatement.setString(5, dbHouse);
                 preparedStatement.setString(6, dbRoad);
                 preparedStatement.setString(7, dbPost);
                 preparedStatement.setString(8, dbCity);
                 preparedStatement.setString(9, dbRole);
+                preparedStatement.setString(10, generatedSalt);
+
                 int rowsAffected = preparedStatement.executeUpdate();
 
                 if (rowsAffected > 0){
@@ -201,20 +217,13 @@ public class Register extends JFrame {
                     regValidator = false;
                 }
             }
-
         }
         catch (SQLException e){
             e.printStackTrace();
         }        
 
-
-
-
         return regValidator;
     }
-    
-
-
 
 
     public static void main(String[] args) {
