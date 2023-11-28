@@ -1,4 +1,6 @@
-package GUI;
+package ManagerGUI;
+
+import CustomerGUI.Login;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -7,7 +9,7 @@ import java.sql.*;
 import java.util.Vector;
 
 public class UserManagement extends JFrame {
-    private JButton searchButton;
+    private JButton searchButton, outButton;
     private JButton HomeButton;
     private JButton updateRoleButton;
     private JTextField searchField;
@@ -77,6 +79,11 @@ public class UserManagement extends JFrame {
         HomeButton.addActionListener(e -> performHome());
         panel4.add(HomeButton);
 
+        outButton = new JButton("Sign Out");
+        outButton.setBounds(690, 0, 90, 25);
+        outButton.addActionListener(e ->  dologin());
+        panel4.add(outButton);
+
         // Initialize column names
         columnNames = new Vector<>();
         columnNames.add("idnew_table");
@@ -98,6 +105,12 @@ public class UserManagement extends JFrame {
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(45, 250, 725, 300);
         panel4.add(scrollPane);
+    }
+
+    private void dologin(){
+        dispose();
+        Login Login = new Login();
+        Login.setVisible(true);
     }
     private void performHome() {
         dispose();
@@ -155,8 +168,6 @@ public class UserManagement extends JFrame {
             Object userId = table.getModel().getValueAt(selectedRow, 0); // Assuming user ID is in column 0
             if (userId != null) {
                 table.getModel().setValueAt(newRole, selectedRow, 10); // Assuming role is in column 10
-
-                // Update the role in the database
                 updateRoleInDatabase(userId.toString(), newRole);
             } else {
                 JOptionPane.showMessageDialog(this, "User ID is null", "Error", JOptionPane.ERROR_MESSAGE);

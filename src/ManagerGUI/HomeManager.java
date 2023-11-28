@@ -1,15 +1,17 @@
-package GUI;
+package ManagerGUI;
+
+    import CustomerGUI.Login;
 
     import javax.swing.*;
     import javax.swing.table.DefaultTableModel;
     import java.awt.*;
     import java.sql.*;
     import java.util.Vector;
-    import GUI.UserManagement;
+
 public class HomeManager extends JFrame {
     private JButton searchButton;
     private JButton UserButton;
-    private JButton orderButton;
+    private JButton orderButton, outButton;
     private JTextField searchField;
     private JTextField quantityField;
     private JTextField StatsField;
@@ -71,6 +73,11 @@ public class HomeManager extends JFrame {
         UserButton.addActionListener(e -> performUser());
         panel5.add(UserButton);
 
+        outButton = new JButton("Sign Out");
+        outButton.setBounds(690, 0, 90, 25);
+        outButton.addActionListener(e -> dologin());
+        panel5.add(outButton);
+
         columnNames = new Vector<>();
         columnNames.add("ProductCode");
         columnNames.add("BrandName");
@@ -92,6 +99,11 @@ public class HomeManager extends JFrame {
         UserManagement UserManagement = new UserManagement();
         UserManagement.setVisible(true);
 
+    }
+    private void dologin(){
+        dispose();
+        Login Login = new Login();
+        Login.setVisible(true);
     }
     private void placeOrder() {
         String productCode = searchField.getText();

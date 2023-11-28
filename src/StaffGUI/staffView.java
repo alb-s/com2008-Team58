@@ -1,4 +1,4 @@
-package GUI;
+package StaffGUI;
 
         import javax.swing.*;
         import javax.swing.table.DefaultTableModel;

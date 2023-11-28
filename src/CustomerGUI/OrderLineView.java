@@ -1,13 +1,11 @@
-package GUI;
+package CustomerGUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 public class OrderLineView extends JFrame {
     private NonEditableTableModel orderLinesTableModel;
-
     public OrderLineView() {
         setTitle("Order Line");
         setSize(800, 600);
@@ -21,7 +19,6 @@ public class OrderLineView extends JFrame {
         setVisible(true);
     }
 
-    //Dummy code , insert from order table
     private JPanel createOrderInfoPanel() {
         JPanel orderInfoPanel = new JPanel(new GridLayout(0, 1));
         orderInfoPanel.add(new JLabel("Order Number: 12345"));

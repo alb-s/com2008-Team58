@@ -1,4 +1,4 @@
-package GUI;
+package CustomerGUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import GUI.Home;
 
 public class UserDetailsView extends JFrame {
     private JTextField oldEmailField = new JTextField(15), 
@@ -23,26 +22,32 @@ public class UserDetailsView extends JFrame {
         setTitle("Edit Details");
         setSize(700, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Center the frame on the screen
+        setLocationRelativeTo(null);
 
         setLayout(new BorderLayout(10, 10));
         add(createCustomerDetailsPanel(), BorderLayout.CENTER);
         add(createControlPanel(), BorderLayout.PAGE_END);
 
-        // Set a padding around the frame content
         ((JPanel) getContentPane()).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setOldEmailFromSession();
     }
 
     private JPanel createCustomerDetailsPanel() {
         JPanel detailsPanel = new JPanel();
         detailsPanel.setLayout(new GridLayout(2, 1, 10, 10));
-
         detailsPanel.add(createDetailSection("Personal Details", new String[]{ "Old Email","New Email","Forename", "Surname"}));
         detailsPanel.add(createDetailSection("Address Details", new String[]{"House Number", "Road Name", "City Name", "Postcode"}));
-
         return detailsPanel;
+
     }
 
+    private void setOldEmailFromSession() {
+        String userEmail = Session.getInstance().getUserEmail();
+        if (userEmail != null) {
+            oldEmailField.setText(userEmail);
+            oldEmailField.setEditable(false);
+        }
+    }
     private JPanel createDetailSection(String title, String[] fields) {
         JPanel sectionPanel = new JPanel(new GridBagLayout());
         sectionPanel.setBorder(BorderFactory.createTitledBorder(title));
@@ -55,7 +60,6 @@ public class UserDetailsView extends JFrame {
             sectionPanel.add(new JLabel(field + ":"), gbc);
             JTextField textField = new JTextField(15);
             sectionPanel.add(textField, gbc); // Correctly add the initialized textField
-    
             switch (field) {
                 case "Old Email": oldEmailField = textField; break;
                 case "New Email": newEmailField = textField; break;
@@ -67,31 +71,25 @@ public class UserDetailsView extends JFrame {
                 case "Postcode": postcodeField = textField; break;
             }
         }
-
         return sectionPanel;
     }
-
     private JPanel createControlPanel() {
         JPanel controlPanel = new JPanel();
         JButton editBankDetailsButton = new JButton("Edit Bank Details");
         JButton saveButton = new JButton("Save");
         JButton cancelButton = new JButton("Cancel");
-        
         editBankDetailsButton.addActionListener((ActionEvent e) -> {
         dispose();
         new EditBankDetails().setVisible(true);
         });
-   
         saveButton.addActionListener((ActionEvent e) -> {
             // Save button logic
             saveUserDetails();
         });
-
         cancelButton.addActionListener((ActionEvent e) -> {
             dispose();
             new Home().setVisible(true);
         });
-        
         controlPanel.add(saveButton);
         controlPanel.add(cancelButton);
         controlPanel.add(editBankDetailsButton);
@@ -100,32 +98,25 @@ public class UserDetailsView extends JFrame {
 
     private void saveUserDetails() {
         try {
-            // Establish Database Connection
             Connection connection = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058", "team058", "eel7Ahsi0");
-    
-            // SQL query with correct order of fields
             String sql = "UPDATE Users SET email = ?, forename = ?, surname = ?, housenumber = ?, roadname = ?, cityname = ?, postcode = ? WHERE email = ?";
             PreparedStatement pstmt = connection.prepareStatement(sql);
-    
-            // Set parameters from text fields
-            pstmt.setString(1, newEmailField.getText()); // New Email
+
+            pstmt.setString(1, newEmailField.getText());
             pstmt.setString(2, forenameField.getText());
             pstmt.setString(3, surnameField.getText());
             pstmt.setString(4, houseNumberField.getText());
             pstmt.setString(5, roadNameField.getText());
             pstmt.setString(6, cityNameField.getText());
             pstmt.setString(7, postcodeField.getText());
-            pstmt.setString(8, oldEmailField.getText()); // Old Email
-    
-            // Execute Update
+            pstmt.setString(8, oldEmailField.getText());
+
             int affectedRows = pstmt.executeUpdate();
-    
             if (affectedRows > 0) {
                 JOptionPane.showMessageDialog(this, "Details updated successfully.");
             } else {
                 JOptionPane.showMessageDialog(this, "No details updated. Check the old email.");
             }
-    
             pstmt.close();
             connection.close();
         } catch (SQLException ex) {
