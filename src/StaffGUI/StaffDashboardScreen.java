@@ -48,8 +48,8 @@ public class StaffDashboardScreen extends JFrame {
         homeButton.addActionListener(e -> {
            dohome();
         });
-        topPanel.add(signOutButton, BorderLayout.WEST);
-        topPanel.add(homeButton, BorderLayout.EAST);
+        topPanel.add(signOutButton, BorderLayout.EAST);
+        topPanel.add(homeButton, BorderLayout.WEST);
         return topPanel;
     }
     private void dohome(){

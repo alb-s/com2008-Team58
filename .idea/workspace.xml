@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="">
+    <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="connecting pages together">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/EditBankDetailsScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/EditBankDetailsScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/LoginScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/LoginScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/UserDetailsScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/UserDetailsScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ManagerGUI/HomeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ManagerGUI/HomeManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/StaffGUI/StaffDashboardScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StaffGUI/StaffDashboardScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StaffGUI/staffView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StaffGUI/staffView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -182,6 +176,7 @@
     <MESSAGE value="cleaning up code and structure" />
     <MESSAGE value="code" />
     <MESSAGE value="login" />
-    <option name="LAST_COMMIT_MESSAGE" value="login" />
+    <MESSAGE value="connecting pages together" />
+    <option name="LAST_COMMIT_MESSAGE" value="connecting pages together" />
   </component>
 </project>
