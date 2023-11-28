@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_11_2023_8_33_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_11_2023_8_33_PM__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CustomerGUI/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/Login.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/Register.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/Register.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,7 +136,14 @@
       <option name="project" value="LOCAL" />
       <updated>1701126509205</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="code">
+      <created>1701143650256</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1701143650256</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -163,7 +167,8 @@
     <MESSAGE value="pushing orderline fix" />
     <MESSAGE value="adding functionality to buttons and aranging some files" />
     <MESSAGE value="cleaning up code and structure" />
-    <option name="LAST_COMMIT_MESSAGE" value="cleaning up code and structure" />
+    <MESSAGE value="code" />
+    <option name="LAST_COMMIT_MESSAGE" value="code" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
