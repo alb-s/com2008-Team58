@@ -5,14 +5,14 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
 import java.util.Vector;
-import CustomerGUI.Login;
+import CustomerGUI.LoginScreen;
 
-public class Home extends JFrame {
+public class HomeScreen extends JFrame {
     private JButton searchButton, EditButton, CardButton, orderButton, outButton;
     private JTextField StatsField, searchField, quantityField;
     private JTable table;
     private Vector<String> columnNames;
-    public Home() {
+    public HomeScreen() {
         setTitle("Home Page");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -98,16 +98,16 @@ public class Home extends JFrame {
 
     private void dologin(){
         dispose();
-        Login Login = new Login();
+        LoginScreen Login = new LoginScreen();
         Login.setVisible(true);
     }
     private void performEdit() {
         dispose();
-        new UserDetailsView().setVisible(true);
+        new UserDetailsScreen().setVisible(true);
     }
     private void performCard() {
         dispose();
-        new EditBankDetails().setVisible(true);
+        new EditBankDetailsScreen().setVisible(true);
     }
     private void placeOrder() {
         String productCode = searchField.getText();
@@ -239,7 +239,7 @@ public class Home extends JFrame {
     }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Home Home = new Home();
+            HomeScreen Home = new HomeScreen();
             Home.setVisible(true);
         });
     }

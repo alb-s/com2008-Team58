@@ -8,7 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class UserDetailsView extends JFrame {
+public class UserDetailsScreen extends JFrame {
     private JTextField oldEmailField = new JTextField(15), 
                        newEmailField = new JTextField(15), 
                        forenameField = new JTextField(15), 
@@ -18,7 +18,7 @@ public class UserDetailsView extends JFrame {
                        cityNameField = new JTextField(15), 
                        postcodeField = new JTextField(15);
 
-    public UserDetailsView() {
+    public UserDetailsScreen() {
         setTitle("Edit Details");
         setSize(700, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,11 +72,11 @@ public class UserDetailsView extends JFrame {
     
         editBankDetailsButton.addActionListener((ActionEvent e) -> {
             dispose();
-            new EditBankDetails().setVisible(true);
+            new EditBankDetailsScreen().setVisible(true);
         });
     
         editPasswordButton.addActionListener((ActionEvent e) -> {
-            new EditPassword().setVisible(true);
+            new EditPasswordScreen().setVisible(true);
         });
     
         saveButton.addActionListener((ActionEvent e) -> {
@@ -85,7 +85,7 @@ public class UserDetailsView extends JFrame {
     
         cancelButton.addActionListener((ActionEvent e) -> {
             dispose();
-            new Home().setVisible(true);
+            new HomeScreen().setVisible(true);
         });
     
         controlPanel.add(saveButton);
@@ -127,7 +127,7 @@ public class UserDetailsView extends JFrame {
     }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new UserDetailsView().setVisible(true);
+            new UserDetailsScreen().setVisible(true);
         });
     }
 }

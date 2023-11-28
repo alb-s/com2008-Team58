@@ -1,11 +1,11 @@
-import CustomerGUI.Login;
+import CustomerGUI.LoginScreen;
 
 
 
 public class Main {
     public static void main(String[] args) {
         
-        Login Login = new Login();
+        LoginScreen Login = new LoginScreen();
         Login.setVisible(true);
     }
 }

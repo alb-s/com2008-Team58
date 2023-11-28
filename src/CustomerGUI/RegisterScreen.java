@@ -14,7 +14,7 @@ import java.util.Base64;
 
 
 
-public class Register extends JFrame {
+public class RegisterScreen extends JFrame {
 
 
     private JTextField emailField;
@@ -29,7 +29,7 @@ public class Register extends JFrame {
     private JButton loginButton;
     private JButton registerButton;
 
-    public Register() {
+    public RegisterScreen() {
         setTitle("Registration Page");
         setSize(800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -145,7 +145,7 @@ public class Register extends JFrame {
 
     private void performLogin() {
         dispose();
-        Login Login = new Login();
+        LoginScreen Login = new LoginScreen();
         Login.setVisible(true);
     }
 
@@ -156,7 +156,7 @@ public class Register extends JFrame {
         if (isValidUser){
             JOptionPane.showMessageDialog(null, "Registration Successful");
             dispose();
-            Login Login = new Login();
+            LoginScreen Login = new LoginScreen();
             Login.setVisible(true);
         }
         else {
@@ -228,7 +228,7 @@ public class Register extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Register Register = new Register();
+            RegisterScreen Register = new RegisterScreen();
             Register.setVisible(true);
         });
     }

@@ -8,12 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
-public class Login extends JFrame {
+public class LoginScreen extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;
     private JButton loginButton, registerButton;
 
-    public Login() {
+    public LoginScreen() {
         setTitle("Login Page");
         setSize(500, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -131,7 +131,7 @@ public class Login extends JFrame {
             HomeManager HomeManager = new HomeManager();
             HomeManager.setVisible(true);
         } else if (Role.equals("Customer")) {
-            Home Home = new Home();
+            HomeScreen Home = new HomeScreen();
             Home.setVisible(true);
         }
     }
@@ -139,13 +139,13 @@ public class Login extends JFrame {
     private void performRegister() {
         dispose();
         // Assuming Register is another JFrame for registration
-        Register register = new Register();
+        RegisterScreen register = new RegisterScreen();
         register.setVisible(true);
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Login login = new Login();
+            LoginScreen login = new LoginScreen();
             login.setVisible(true);
         });
     }

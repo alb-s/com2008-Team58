@@ -7,11 +7,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
-public class EditPassword extends JFrame {
+public class EditPasswordScreen extends JFrame {
     private JTextField emailField;
     private JPasswordField oldPasswordField, newPasswordField;
 
-    public EditPassword() {
+    public EditPasswordScreen() {
         setTitle("Update Password");
         setSize(500, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -135,6 +135,6 @@ public class EditPassword extends JFrame {
     // }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new EditPassword().setVisible(true));
+        SwingUtilities.invokeLater(() -> new EditPasswordScreen().setVisible(true));
     }
 }

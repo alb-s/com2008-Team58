@@ -1,6 +1,6 @@
 package ManagerGUI;
 
-import CustomerGUI.Login;
+import CustomerGUI.LoginScreen;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -109,7 +109,7 @@ public class UserManagement extends JFrame {
 
     private void dologin(){
         dispose();
-        Login Login = new Login();
+        LoginScreen Login = new LoginScreen();
         Login.setVisible(true);
     }
     private void performHome() {

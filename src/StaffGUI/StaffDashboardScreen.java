@@ -1,7 +1,7 @@
 package StaffGUI;
 
-import CustomerGUI.Home;
-import CustomerGUI.Login;
+import CustomerGUI.HomeScreen;
+import CustomerGUI.LoginScreen;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -39,12 +39,12 @@ public class StaffDashboardScreen extends JFrame {
         JButton signOutButton = new JButton("Sign Out");
         signOutButton.addActionListener(e -> {
             dispose(); // Close current window
-            new Login().setVisible(true);
+            new LoginScreen().setVisible(true);
         });
         JButton homeButton = new JButton("Home");
         homeButton.addActionListener(e -> {
             dispose(); // Close current window
-            new Home().setVisible(true);
+            new HomeScreen().setVisible(true);
         });
         topPanel.add(signOutButton, BorderLayout.WEST);
         topPanel.add(homeButton, BorderLayout.EAST);

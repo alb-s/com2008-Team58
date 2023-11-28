@@ -6,8 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import Functions.CardReader;
 
-public class EditBankDetails extends JFrame {
-    public EditBankDetails() {
+public class EditBankDetailsScreen extends JFrame {
+    public EditBankDetailsScreen() {
 
         setTitle("Update Bank Details");
         setSize(500, 400);
@@ -38,7 +38,7 @@ public class EditBankDetails extends JFrame {
         cancelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new Home().setVisible(true);
+                new HomeScreen().setVisible(true);
             }
         });
 
@@ -61,6 +61,6 @@ public class EditBankDetails extends JFrame {
     }
     public static void main(String[] args) {
 
-        new EditBankDetails();
+        new EditBankDetailsScreen();
     }
 }
