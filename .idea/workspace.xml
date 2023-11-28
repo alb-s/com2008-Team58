@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="connecting pages together">
+    <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StaffGUI/StaffDashboardScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StaffGUI/StaffDashboardScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/HomeScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/HomeScreen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -150,7 +150,14 @@
       <option name="project" value="LOCAL" />
       <updated>1701144071290</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="changing button postiotion">
+      <created>1701198841194</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1701198841194</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -177,6 +184,7 @@
     <MESSAGE value="code" />
     <MESSAGE value="login" />
     <MESSAGE value="connecting pages together" />
-    <option name="LAST_COMMIT_MESSAGE" value="connecting pages together" />
+    <MESSAGE value="changing button postiotion" />
+    <option name="LAST_COMMIT_MESSAGE" value="changing button postiotion" />
   </component>
 </project>
