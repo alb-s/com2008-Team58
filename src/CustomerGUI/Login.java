@@ -1,6 +1,7 @@
 package CustomerGUI;
 
 import ManagerGUI.HomeManager;
+import Utility.PasswordHashUtility;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -95,16 +96,21 @@ public class Login extends JFrame {
         boolean loginValidator = false;
         String Role = null;
         String userId = null;
-        String userEmail = null;// Add userId to the login result
+        String userEmail = null;
 
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)) {
-            String query = "SELECT idnew_table, email, password, Role FROM Users WHERE email = ?"; // Adjusted to fetch userId and role
+            String query = "SELECT password, Salt, Role, idnew_table, email FROM Users WHERE email = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setString(1, username);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
-                    String retrievedPassword = resultSet.getString("password");
-                    if (password.equals(retrievedPassword)) {
+                    String hashedPasswordFromDB = resultSet.getString("password");
+                    String storedSalt = resultSet.getString("Salt");
+                        
+                    char[] passwordChars = passwordField.getPassword();
+                    String hashedEnteredPassword = PasswordHashUtility.hashPassword(passwordChars, storedSalt);
+                    
+                    if (hashedEnteredPassword != null && hashedEnteredPassword.equals(hashedPasswordFromDB)) {
                         loginValidator = true;
                         Role = resultSet.getString("Role");
                         userId = resultSet.getString("idnew_table");
@@ -112,7 +118,8 @@ public class Login extends JFrame {
                     }
                 }
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e){
             e.printStackTrace();
         }
 
