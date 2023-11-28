@@ -8,6 +8,7 @@ import java.sql.*;
 public class OrderLineScreen extends JFrame {
     private NonEditableTableModel orderLinesTableModel;
     private JTable orderLinesTable;
+    
 
     public OrderLineScreen() {
         setTitle("Order Line");
@@ -67,15 +68,70 @@ public class OrderLineScreen extends JFrame {
 
     private void modifyQuantity() {
         int selectedRow = orderLinesTable.getSelectedRow();
-        if (selectedRow >= 0) {
-            String newQuantity = JOptionPane.showInputDialog(this, "Enter new quantity:");
-            if (newQuantity != null && !newQuantity.isEmpty()) {
-                orderLinesTableModel.setValueAt(newQuantity, selectedRow, 3); // Update quantity in the table
-            }
-        } else {
+        if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Please select an order line to modify.");
+            return;
         }
-    } 
+
+        String orderLineID = orderLinesTableModel.getValueAt(selectedRow, 0).toString();
+        String currentQuantity = orderLinesTableModel.getValueAt(selectedRow, 2).toString();
+
+        String newQuantity = JOptionPane.showInputDialog(this, "Enter new quantity:", currentQuantity);
+        if (newQuantity == null || newQuantity.isEmpty()) {
+            return; // User cancelled or input empty string
+        }
+
+        try {
+            int quantity = Integer.parseInt(newQuantity);
+            if (quantity <= 0) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid quantity.");
+                return;
+            }
+
+            updateOrderLineInDatabase(orderLineID, quantity, selectedRow);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid number.");
+        }
+    }
+
+    private void updateOrderLineInDatabase(String orderLineID, int newQuantity, int rowInTable) {
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058", "team058", "eel7Ahsi0");
+            String sql = "SELECT RetailPrice FROM Product WHERE ProductCode = (SELECT ProductCode FROM OrderLine WHERE OrderLineID = ?)";
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+
+            pstmt.setString(1, orderLineID);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                double unitPrice = rs.getDouble("RetailPrice");
+                double newLineCost = unitPrice * newQuantity;
+
+                sql = "UPDATE OrderLine SET Quantity = ?, LineCost = ? WHERE OrderLineID = ?";
+                pstmt = connection.prepareStatement(sql);
+
+                pstmt.setInt(1, newQuantity);
+                pstmt.setDouble(2, newLineCost);
+                pstmt.setString(3, orderLineID);
+
+                int affectedRows = pstmt.executeUpdate();
+                if (affectedRows > 0) {
+                    orderLinesTableModel.setValueAt(newQuantity, rowInTable, 2); // Update Quantity
+                    orderLinesTableModel.setValueAt(newLineCost, rowInTable, 3); // Update Line Cost
+                    JOptionPane.showMessageDialog(this, "Order line updated successfully.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Failed to update order line.");
+                }
+            }
+
+            rs.close();
+            pstmt.close();
+            connection.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error updating order line: " + ex.getMessage());
+        }
+    }
     
     private void deleteOrderLine() {
         int selectedRow = orderLinesTable.getSelectedRow();
