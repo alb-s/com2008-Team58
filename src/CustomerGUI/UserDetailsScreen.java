@@ -1,5 +1,8 @@
 package CustomerGUI;
 
+import ManagerGUI.HomeManager;
+import StaffGUI.staffView;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -29,7 +32,9 @@ public class UserDetailsScreen extends JFrame {
         add(createControlPanel(), BorderLayout.PAGE_END);
 
         ((JPanel) getContentPane()).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setOldEmailFromSession();
     }
+
 
     private JPanel createCustomerDetailsPanel() {
         JPanel detailsPanel = new JPanel();
@@ -63,6 +68,14 @@ public class UserDetailsScreen extends JFrame {
         }
         return sectionPanel;
     }
+
+    private void setOldEmailFromSession() {
+        String userEmail = Session.getInstance().getUserEmail();
+        if (userEmail != null) {
+            oldEmailField.setText(userEmail);
+            oldEmailField.setEditable(false);
+        }
+    }
     private JPanel createControlPanel() {
         JPanel controlPanel = new JPanel();
         JButton editBankDetailsButton = new JButton("Edit Bank Details");
@@ -84,8 +97,7 @@ public class UserDetailsScreen extends JFrame {
         });
     
         cancelButton.addActionListener((ActionEvent e) -> {
-            dispose();
-            new HomeScreen().setVisible(true);
+            dohome();
         });
     
         controlPanel.add(saveButton);
@@ -95,7 +107,25 @@ public class UserDetailsScreen extends JFrame {
     
         return controlPanel;
     }
-    
+
+    private void dohome(){
+        String Role = Session.getInstance().getUserRole();
+        if (Role.equals("Manager")) {
+            dispose();
+            HomeManager HomeManager = new HomeManager();
+            HomeManager.setVisible(true);
+        } else if (Role.equals("Staff")) {
+            dispose();
+            staffView staffView = new staffView();
+            staffView.setVisible(true);
+        }
+        else{
+            dispose();
+            HomeScreen HomeScreen = new HomeScreen();
+            HomeScreen.setVisible(true);
+        }
+
+    }
 
     private void saveUserDetails() {
         try {

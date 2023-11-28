@@ -2,6 +2,9 @@ package StaffGUI;
 
 import CustomerGUI.HomeScreen;
 import CustomerGUI.LoginScreen;
+import CustomerGUI.Session;
+import ManagerGUI.HomeManager;
+import CustomerGUI.LoginScreen;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -43,12 +46,29 @@ public class StaffDashboardScreen extends JFrame {
         });
         JButton homeButton = new JButton("Home");
         homeButton.addActionListener(e -> {
-            dispose(); // Close current window
-            new HomeScreen().setVisible(true);
+           dohome();
         });
-        topPanel.add(signOutButton, BorderLayout.WEST);
-        topPanel.add(homeButton, BorderLayout.EAST);
+        topPanel.add(signOutButton, BorderLayout.EAST);
+        topPanel.add(homeButton, BorderLayout.WEST);
         return topPanel;
+    }
+    private void dohome(){
+        String Role = Session.getInstance().getUserRole();
+        if (Role.equals("Manager")) {
+            dispose();
+            HomeManager HomeManager = new HomeManager();
+            HomeManager.setVisible(true);
+        } else if (Role.equals("Staff")) {
+            dispose();
+            staffView staffView = new staffView();
+            staffView.setVisible(true);
+        }
+        else{
+            dispose();
+            HomeScreen HomeScreen = new HomeScreen();
+            HomeScreen.setVisible(true);;
+        }
+
     }
 
     private JPanel createOrdersPanel() {
@@ -177,6 +197,13 @@ public class StaffDashboardScreen extends JFrame {
         JButton updateStockButton = new JButton("Update Stock");
         buttonPanel.add(updateStockButton);
 
+        JButton productButton = new JButton("Add New Product");
+        buttonPanel.add(productButton);
+
+        JButton DeleteButton = new JButton("Delete Product");
+        buttonPanel.add(DeleteButton);
+
+
         updateStockButton.addActionListener(e -> {
             int selectedRow = inventoryTable.getSelectedRow();
             if (selectedRow != -1) {
@@ -193,6 +220,27 @@ public class StaffDashboardScreen extends JFrame {
                 JOptionPane.showMessageDialog(null, "No product selected.");
             }
         });
+
+        productButton.addActionListener(e -> {
+            dispose();
+            addProduct addProduct = new addProduct();
+            addProduct.setVisible(true);
+        });
+
+        DeleteButton.addActionListener(e -> {
+            int selectedRow = inventoryTable.getSelectedRow();
+            if (selectedRow != -1) {
+                int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this Product?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    Object productCode = inventoryTable.getValueAt(selectedRow, 0);
+                    deleteProduct(productCode);
+                    refreshInventoryTable();
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "No product selected.");
+            }
+        });
+
         inventoryPanel.add(buttonPanel, BorderLayout.SOUTH);
         return inventoryPanel;
     }
@@ -213,6 +261,24 @@ public class StaffDashboardScreen extends JFrame {
             e.printStackTrace();
         }
     }
+    private void deleteProduct(Object productCode) {
+        try {
+            String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
+            String dbUsername = "team058";
+            String dbPassword = "eel7Ahsi0";
+            Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+            String query = "DELETE FROM Product WHERE ProductCode = ?";
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setObject(1, productCode);
+            pstmt.executeUpdate();
+            pstmt.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error deleting product: " + e.getMessage());
+        }
+    }
+
 
 
     private DefaultTableModel fetchDataFromDatabaseForInventory() {

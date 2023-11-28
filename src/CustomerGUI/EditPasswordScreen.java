@@ -1,10 +1,10 @@
 package CustomerGUI;
 
+import Utility.PasswordHashUtility;
+
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 public class EditPasswordScreen extends JFrame {
@@ -61,78 +61,103 @@ public class EditPasswordScreen extends JFrame {
         String userEmail = emailField.getText();
         String oldPassword = new String(oldPasswordField.getPassword());
         String newPassword = new String(newPasswordField.getPassword());
-
+    
         if (userEmail.isEmpty() || oldPassword.isEmpty() || newPassword.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please fill in all fields.");
             return;
         }
-
+    
         if (checkOldPassword(userEmail, oldPassword)) {
-            // String hashedNewPassword = hashPassword(newPassword.toCharArray());
-
             try {
                 Connection connection = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058", "team058", "eel7Ahsi0");
-                String sql = "UPDATE Users SET password = ? WHERE email = ?";
-                PreparedStatement pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, newPassword);
-                pstmt.setString(2, userEmail);
-
-                int affectedRows = pstmt.executeUpdate();
-                if (affectedRows > 0) {
-                    JOptionPane.showMessageDialog(this, "Password updated successfully.");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Password update failed.");
+    
+                String selectSaltSql = "SELECT Salt FROM Users WHERE email = ?";
+                PreparedStatement selectSaltPstmt = connection.prepareStatement(selectSaltSql);
+                selectSaltPstmt.setString(1, userEmail);
+                ResultSet saltResultSet = selectSaltPstmt.executeQuery();
+    
+                //hash new pass with old SALT then store new password
+                if (saltResultSet.next()) {
+                    String storedSalt = saltResultSet.getString("Salt");
+    
+                    String hashedNewPassword = PasswordHashUtility.hashPassword(newPassword.toCharArray(), storedSalt);
+    
+                    String updateSql = "UPDATE Users SET password = ? WHERE email = ?";
+                    PreparedStatement updatePstmt = connection.prepareStatement(updateSql);
+                    updatePstmt.setString(1, hashedNewPassword);
+                    updatePstmt.setString(2, userEmail);
+    
+                    int affectedRows = updatePstmt.executeUpdate();
+    
+                    if (affectedRows > 0) {
+                        JOptionPane.showMessageDialog(this, "Password updated successfully.");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Password update failed.");
+                    }
+    
+                    updatePstmt.close();
                 }
-
-                pstmt.close();
+    
+                selectSaltPstmt.close();
                 connection.close();
-            } catch (SQLException ex) {
+            } 
+            catch (SQLException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Database error: " + ex.getMessage());
             }
-        } else {
+        } 
+        else {
             JOptionPane.showMessageDialog(this, "Old password is incorrect.");
         }
     }
 
     private boolean checkOldPassword(String email, String oldPassword) {
+
+        boolean passwordChange = false;
+
         try {
             Connection connection = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058", "team058", "eel7Ahsi0");
-            String sql = "SELECT password FROM Users WHERE email = ?";
-            PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setString(1, email);
-
-            ResultSet rs = pstmt.executeQuery();
+    
+            String selectSql = "SELECT password, Salt FROM Users WHERE email = ?";
+            PreparedStatement selectPstmt = connection.prepareStatement(selectSql);
+            selectPstmt.setString(1, email);
+            ResultSet rs = selectPstmt.executeQuery();
+    
             if (rs.next()) {
                 String storedPassword = rs.getString("password");
-                // String hashedOldPassword = hashPassword(oldPassword.toCharArray());
-                
-                pstmt.close();
-                connection.close();
-                return oldPassword.equals(storedPassword);
+                String storedSalt = rs.getString("Salt");
+    
+                String hashedOldPassword = PasswordHashUtility.hashPassword(oldPassword.toCharArray(), storedSalt);
+    
+                if (hashedOldPassword != null && hashedOldPassword.equals(storedPassword)) {
+                    char[] newPasswordChars = newPasswordField.getPassword();
+                    String newHashedPassword = PasswordHashUtility.hashPassword(newPasswordChars, storedSalt);
+    
+                    String updateSql = "UPDATE Users SET password = ? WHERE email = ?";
+                    PreparedStatement updatePstmt = connection.prepareStatement(updateSql);
+                    updatePstmt.setString(1, newHashedPassword);
+                    updatePstmt.setString(2, email);
+    
+                    int rowsAffected = updatePstmt.executeUpdate();
+
+                    updatePstmt.close();
+                    selectPstmt.close();
+                    connection.close();
+
+                    return rowsAffected > 0;
+                }
             }
-            pstmt.close();
+    
+            // Close resources
+            selectPstmt.close();
             connection.close();
-        } catch (SQLException ex) {
+        } 
+        catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return false;
+        return passwordChange;
     }
 
-    // public static String hashPassword(char[] password) {
-    //     try {
-    //         MessageDigest md = MessageDigest.getInstance("SHA-256");
-    //         byte[] hashedBytes = md.digest(new String(password).getBytes());
-    //         StringBuilder sb = new StringBuilder();
-    //         for (byte b : hashedBytes) {
-    //             sb.append(String.format("%02x", b));
-    //         }
-    //         return sb.toString();
-    //     } catch (NoSuchAlgorithmException e) {
-    //         e.printStackTrace();
-    //         return null;
-    //     }
-    // }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new EditPasswordScreen().setVisible(true));

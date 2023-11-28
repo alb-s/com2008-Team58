@@ -1,6 +1,9 @@
 package ManagerGUI;
 
+    import CustomerGUI.EditBankDetailsScreen;
     import CustomerGUI.LoginScreen;
+    import CustomerGUI.UserDetailsScreen;
+    import StaffGUI.StaffDashboardScreen;
 
     import javax.swing.*;
     import javax.swing.table.DefaultTableModel;
@@ -10,8 +13,8 @@ package ManagerGUI;
 
 public class HomeManager extends JFrame {
     private JButton searchButton;
-    private JButton UserButton;
-    private JButton orderButton, outButton;
+    private JButton UserButton, EditButton, CardButton;
+    private JButton orderButton, outButton, StaffButton;
     private JTextField searchField;
     private JTextField quantityField;
     private JTextField StatsField;
@@ -78,6 +81,21 @@ public class HomeManager extends JFrame {
         outButton.addActionListener(e -> dologin());
         panel5.add(outButton);
 
+        EditButton = new JButton("Edit Details");
+        EditButton.setBounds(280, 0, 100, 25);
+        EditButton.addActionListener(e -> performEdit());
+        panel5.add(EditButton);
+
+        CardButton = new JButton("Edit Card Details");
+        CardButton.setBounds(390, 0, 130, 25);
+        CardButton.addActionListener(e -> performCard());
+        panel5.add(CardButton);
+
+        StaffButton = new JButton("Staff Page");
+        StaffButton.setBounds(170, 0, 100, 25);
+        StaffButton.addActionListener(e -> performStaff());
+        panel5.add(StaffButton);
+
         columnNames = new Vector<>();
         columnNames.add("ProductCode");
         columnNames.add("BrandName");
@@ -93,6 +111,19 @@ public class HomeManager extends JFrame {
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(45, 250, 725, 300);
         panel5.add(scrollPane);
+    }
+
+    private void performEdit() {
+        dispose();
+        new UserDetailsScreen().setVisible(true);
+    }
+    private void performStaff() {
+        dispose();
+        new StaffDashboardScreen().setVisible(true);
+    }
+    private void performCard() {
+        dispose();
+        new EditBankDetailsScreen().setVisible(true);
     }
     private void performUser() {
         dispose();

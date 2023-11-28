@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import Functions.CardReader;
+import ManagerGUI.HomeManager;
+import StaffGUI.staffView;
 
 public class EditBankDetailsScreen extends JFrame {
     public EditBankDetailsScreen() {
@@ -13,6 +15,7 @@ public class EditBankDetailsScreen extends JFrame {
         setSize(500, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
+        setLocationRelativeTo(null);
 
         JPanel bankDetailsPanel = new JPanel(new GridBagLayout());
         bankDetailsPanel.setBorder(BorderFactory.createTitledBorder("Bank Details"));
@@ -37,8 +40,7 @@ public class EditBankDetailsScreen extends JFrame {
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                dispose();
-                new HomeScreen().setVisible(true);
+                dohome();
             }
         });
 
@@ -49,6 +51,25 @@ public class EditBankDetailsScreen extends JFrame {
         add(bankDetailsPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
         setVisible(true);
+    }
+
+    private void dohome(){
+        String Role = Session.getInstance().getUserRole();
+        if (Role.equals("Manager")) {
+            dispose();
+            HomeManager HomeManager = new HomeManager();
+            HomeManager.setVisible(true);
+        } else if (Role.equals("Staff")) {
+            dispose();
+            staffView staffView = new staffView();
+            staffView.setVisible(true);
+        }
+        else{
+            dispose();
+            HomeScreen HomeScreen = new HomeScreen();
+            HomeScreen.setVisible(true);
+        }
+
     }
     private void addFields(JPanel panel, GridBagConstraints constraints, String[] labels) {
         for (String label : labels) {
