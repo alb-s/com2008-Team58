@@ -1,4 +1,4 @@
-package GUI;
+package CustomerGUI;
 
 import Utility.PasswordHashUtility;
 
@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import CustomerGUI.Register;
+import CustomerGUI.Login;
+
 
 
 public class Login extends JFrame {
