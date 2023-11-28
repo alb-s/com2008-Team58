@@ -1,5 +1,7 @@
 package ManagerGUI;
 
+import CustomerGUI.Login;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -7,7 +9,7 @@ import java.sql.*;
 import java.util.Vector;
 
 public class UserManagement extends JFrame {
-    private JButton searchButton;
+    private JButton searchButton, outButton;
     private JButton HomeButton;
     private JButton updateRoleButton;
     private JTextField searchField;
@@ -77,6 +79,11 @@ public class UserManagement extends JFrame {
         HomeButton.addActionListener(e -> performHome());
         panel4.add(HomeButton);
 
+        outButton = new JButton("Sign Out");
+        outButton.setBounds(690, 0, 90, 25);
+        outButton.addActionListener(e ->  dologin());
+        panel4.add(outButton);
+
         // Initialize column names
         columnNames = new Vector<>();
         columnNames.add("idnew_table");
@@ -98,6 +105,12 @@ public class UserManagement extends JFrame {
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(45, 250, 725, 300);
         panel4.add(scrollPane);
+    }
+
+    private void dologin(){
+        dispose();
+        Login Login = new Login();
+        Login.setVisible(true);
     }
     private void performHome() {
         dispose();

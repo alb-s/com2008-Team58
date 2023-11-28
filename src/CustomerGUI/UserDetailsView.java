@@ -29,6 +29,7 @@ public class UserDetailsView extends JFrame {
         add(createControlPanel(), BorderLayout.PAGE_END);
 
         ((JPanel) getContentPane()).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setOldEmailFromSession();
     }
 
     private JPanel createCustomerDetailsPanel() {
@@ -37,6 +38,15 @@ public class UserDetailsView extends JFrame {
         detailsPanel.add(createDetailSection("Personal Details", new String[]{ "Old Email","New Email","Forename", "Surname"}));
         detailsPanel.add(createDetailSection("Address Details", new String[]{"House Number", "Road Name", "City Name", "Postcode"}));
         return detailsPanel;
+
+    }
+
+    private void setOldEmailFromSession() {
+        String userEmail = Session.getInstance().getUserEmail();
+        if (userEmail != null) {
+            oldEmailField.setText(userEmail);
+            oldEmailField.setEditable(false);
+        }
     }
     private JPanel createDetailSection(String title, String[] fields) {
         JPanel sectionPanel = new JPanel(new GridBagLayout());

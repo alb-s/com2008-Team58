@@ -5,16 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/CustomerGUI/Session.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI/EditBankDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/EditBankDetails.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI/Home.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/Home.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/Login.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI/OrderLineView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/OrderLineView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI/Register.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/Register.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI/StaffDashboardScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StaffGUI/StaffDashboardScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI/UserDetailsView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/UserDetailsView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI/staffView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StaffGUI/staffView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/Home.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/Home.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/Login.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/UserDetailsView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/UserDetailsView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ManagerGUI/HomeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ManagerGUI/HomeManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ManagerGUI/UserManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ManagerGUI/UserManagement.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,7 +134,14 @@
       <option name="project" value="LOCAL" />
       <updated>1701124397870</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="cleaning up code and structure">
+      <created>1701126509205</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1701126509205</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -160,7 +164,8 @@
     <MESSAGE value="work" />
     <MESSAGE value="pushing orderline fix" />
     <MESSAGE value="adding functionality to buttons and aranging some files" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding functionality to buttons and aranging some files" />
+    <MESSAGE value="cleaning up code and structure" />
+    <option name="LAST_COMMIT_MESSAGE" value="cleaning up code and structure" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

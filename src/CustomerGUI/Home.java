@@ -5,9 +5,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
 import java.util.Vector;
+import CustomerGUI.Login;
 
 public class Home extends JFrame {
-    private JButton searchButton, EditButton, CardButton, orderButton;
+    private JButton searchButton, EditButton, CardButton, orderButton, outButton;
     private JTextField StatsField, searchField, quantityField;
     private JTable table;
     private Vector<String> columnNames;
@@ -74,6 +75,11 @@ public class Home extends JFrame {
         CardButton.addActionListener(e -> performCard());
         panel3.add(CardButton);
 
+        outButton = new JButton("Sign Out");
+        outButton.setBounds(690, 0, 90, 25);
+        outButton.addActionListener(e -> dologin());
+        panel3.add(outButton);
+
         columnNames = new Vector<>();
         columnNames.add("ProductCode");
         columnNames.add("BrandName");
@@ -88,6 +94,12 @@ public class Home extends JFrame {
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(45, 250, 725, 300);
         panel3.add(scrollPane);
+    }
+
+    private void dologin(){
+        dispose();
+        Login Login = new Login();
+        Login.setVisible(true);
     }
     private void performEdit() {
         dispose();
