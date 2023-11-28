@@ -29,7 +29,6 @@ public class UserDetailsView extends JFrame {
         add(createControlPanel(), BorderLayout.PAGE_END);
 
         ((JPanel) getContentPane()).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        setOldEmailFromSession();
     }
 
     private JPanel createCustomerDetailsPanel() {
@@ -38,15 +37,6 @@ public class UserDetailsView extends JFrame {
         detailsPanel.add(createDetailSection("Personal Details", new String[]{ "Old Email","New Email","Forename", "Surname"}));
         detailsPanel.add(createDetailSection("Address Details", new String[]{"House Number", "Road Name", "City Name", "Postcode"}));
         return detailsPanel;
-
-    }
-
-    private void setOldEmailFromSession() {
-        String userEmail = Session.getInstance().getUserEmail();
-        if (userEmail != null) {
-            oldEmailField.setText(userEmail);
-            oldEmailField.setEditable(false);
-        }
     }
     private JPanel createDetailSection(String title, String[] fields) {
         JPanel sectionPanel = new JPanel(new GridBagLayout());
@@ -76,25 +66,36 @@ public class UserDetailsView extends JFrame {
     private JPanel createControlPanel() {
         JPanel controlPanel = new JPanel();
         JButton editBankDetailsButton = new JButton("Edit Bank Details");
+        JButton editPasswordButton = new JButton("Edit Password"); 
         JButton saveButton = new JButton("Save");
         JButton cancelButton = new JButton("Cancel");
+    
         editBankDetailsButton.addActionListener((ActionEvent e) -> {
-        dispose();
-        new EditBankDetails().setVisible(true);
+            dispose();
+            new EditBankDetails().setVisible(true);
         });
+    
+        editPasswordButton.addActionListener((ActionEvent e) -> {
+            new EditPassword().setVisible(true);
+        });
+    
         saveButton.addActionListener((ActionEvent e) -> {
-            // Save button logic
             saveUserDetails();
         });
+    
         cancelButton.addActionListener((ActionEvent e) -> {
             dispose();
             new Home().setVisible(true);
         });
+    
         controlPanel.add(saveButton);
         controlPanel.add(cancelButton);
         controlPanel.add(editBankDetailsButton);
+        controlPanel.add(editPasswordButton); 
+    
         return controlPanel;
     }
+    
 
     private void saveUserDetails() {
         try {
