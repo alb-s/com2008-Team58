@@ -1,14 +1,12 @@
-package GUI;
+package CustomerGUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
-public class OrderLineView extends JFrame {
+public class OrderLineScreen extends JFrame {
     private NonEditableTableModel orderLinesTableModel;
-
-    public OrderLineView() {
+    public OrderLineScreen() {
         setTitle("Order Line");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -21,7 +19,6 @@ public class OrderLineView extends JFrame {
         setVisible(true);
     }
 
-    //Dummy code , insert from order table
     private JPanel createOrderInfoPanel() {
         JPanel orderInfoPanel = new JPanel(new GridLayout(0, 1));
         orderInfoPanel.add(new JLabel("Order Number: 12345"));
@@ -81,7 +78,7 @@ public class OrderLineView extends JFrame {
     private void confirmOrder() { /* ... */ }
     private void returnToHome() {
         dispose();
-        new Home().setVisible(true);
+        new HomeScreen().setVisible(true);
     }
 
     private void addDataToTable() {
@@ -100,7 +97,7 @@ public class OrderLineView extends JFrame {
     }
 
     public static void main(String[] args) {
-        new OrderLineView();
+        new OrderLineScreen();
     }
 }
     

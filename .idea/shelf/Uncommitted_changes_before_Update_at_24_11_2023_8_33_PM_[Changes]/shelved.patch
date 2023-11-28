@@ -1,0 +1,46 @@
+Index: src/GUI/Home.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package GUI;\r\n\r\nimport javax.swing.*;\r\nimport javax.swing.table.DefaultTableModel;\r\nimport java.awt.*;\r\nimport java.sql.*;\r\nimport java.util.Vector;\r\n\r\npublic class Home extends JFrame {\r\n    private JButton searchButton;\r\n    private JButton orderButton;\r\n    private JTextField searchField;\r\n    private JTextField quantityField;\r\n    private JTable table;\r\n    private Vector<String> columnNames;\r\n\r\n    public Home() {\r\n        setTitle(\"Home Page\");\r\n        setSize(800, 600);\r\n        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);\r\n\r\n        JPanel panel3 = new JPanel();\r\n        placeComponents3(panel3);\r\n        add(panel3);\r\n\r\n        setLocationRelativeTo(null); // Center the frame on the screen\r\n    }\r\n\r\n    private void placeComponents3(JPanel panel3) {\r\n        panel3.setLayout(null);\r\n\r\n        // Title label\r\n        JLabel titleLabel = new JLabel(\"Trains of Sheffield\");\r\n        titleLabel.setBounds(275, 35, 400, 25);\r\n        Font labelFont = titleLabel.getFont();\r\n        titleLabel.setFont(new Font(labelFont.getName(), labelFont.getStyle(), 26));\r\n        panel3.add(titleLabel);\r\n\r\n        // Search label\r\n        JLabel Searchlabel = new JLabel(\"Search\");\r\n        Searchlabel.setBounds(75, 95, 400, 25);\r\n        Searchlabel.setFont(new Font(labelFont.getName(), labelFont.getStyle(), 14));\r\n        panel3.add(Searchlabel);\r\n\r\n        // Search field\r\n        searchField = new JTextField(20);\r\n        searchField.setBounds(145, 95, 165, 25);\r\n        panel3.add(searchField);\r\n\r\n        quantityField = new JTextField(20);\r\n        quantityField.setBounds(145, 135, 165, 25);\r\n        panel3.add(quantityField);\r\n\r\n        // Search button\r\n        searchButton = new JButton(\"Search\");\r\n        searchButton.setBounds(320, 95, 85, 25);\r\n        searchButton.addActionListener(e -> performSearch(searchField.getText()));\r\n        panel3.add(searchButton);\r\n\r\n        orderButton = new JButton(\"Order\");\r\n        orderButton.setBounds(320, 135, 85, 25);\r\n        orderButton.addActionListener(e -> placeOrder());\r\n        panel3.add(orderButton);\r\n\r\n        // Initialize column names\r\n        columnNames = new Vector<>();\r\n        columnNames.add(\"ProductCode\");\r\n        columnNames.add(\"BrandName\");\r\n        columnNames.add(\"ProductName\");\r\n        columnNames.add(\"RetailPrice\");\r\n        columnNames.add(\"FeatureCode\");\r\n        columnNames.add(\"Gauge\");\r\n        columnNames.add(\"Era\");\r\n\r\n        // Initialize and add table\r\n        table = new JTable();\r\n        updateTable(fetchDataFromDatabase());\r\n\r\n        JScrollPane scrollPane = new JScrollPane(table);\r\n        scrollPane.setBounds(45, 250, 725, 300);\r\n        panel3.add(scrollPane);\r\n    }\r\n    private void placeOrder() {\r\n        String productCode = searchField.getText();\r\n        String quantity = quantityField.getText();\r\n\r\n        // Perform order processing logic here\r\n        // For example: Insert order details into a database, perform calculations, etc.\r\n        // You can use productCode and quantity variables to process the order\r\n\r\n        // For demonstration, display a confirmation message\r\n        JOptionPane.showMessageDialog(null, \"Order placed for Product Code: \" + productCode + \", Quantity: \" + quantity);\r\n    }\r\n\r\n\r\n    private void performSearch(String searchText) {\r\n        Vector<Vector<Object>> searchData = new Vector<>();\r\n        try {\r\n            Connection conn = DriverManager.getConnection(\"jdbc:mysql://stusql.dcs.shef.ac.uk/team058\", \"team058\", \"eel7Ahsi0\");\r\n            String sql = \"SELECT * FROM Product WHERE ProductCode LIKE ? OR BrandName LIKE ? OR ProductName LIKE ? OR RetailPrice LIKE ? OR FeatureCode LIKE ? OR Gauge LIKE ? OR Era LIKE ?\";\r\n            PreparedStatement pstmt = conn.prepareStatement(sql);\r\n            String searchPattern = \"%\" + searchText + \"%\";\r\n            for (int i = 1; i <= 7; i++) { // Repeat for all search columns\r\n                pstmt.setString(i, searchPattern);\r\n            }\r\n            ResultSet rs = pstmt.executeQuery();\r\n            while (rs.next()) {\r\n                Vector<Object> row = new Vector<>();\r\n                row.add(rs.getObject(\"ProductCode\"));\r\n                row.add(rs.getObject(\"BrandName\"));\r\n                row.add(rs.getObject(\"ProductName\"));\r\n                row.add(rs.getObject(\"RetailPrice\"));\r\n                row.add(rs.getObject(\"FeatureCode\"));\r\n                row.add(rs.getObject(\"Gauge\"));\r\n                row.add(rs.getObject(\"Era\"));\r\n                searchData.add(row);\r\n            }\r\n            rs.close();\r\n            pstmt.close();\r\n            conn.close();\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n        updateTable(searchData);\r\n    }\r\n\r\n    private void updateTable(Vector<Vector<Object>> data) {\r\n        DefaultTableModel model = new DefaultTableModel(data, columnNames);\r\n        table.setModel(model);\r\n    }\r\n\r\n    private static Vector<Vector<Object>> fetchDataFromDatabase() {\r\n        Vector<Vector<Object>> data = new Vector<>();\r\n        try {\r\n            Connection conn = DriverManager.getConnection(\"jdbc:mysql://stusql.dcs.shef.ac.uk/team058\", \"team058\", \"eel7Ahsi0\");\r\n            Statement stmt = conn.createStatement();\r\n            ResultSet rs = stmt.executeQuery(\"SELECT * FROM Product\");\r\n            while (rs.next()) {\r\n                Vector<Object> row = new Vector<>();\r\n                row.add(rs.getObject(\"ProductCode\"));\r\n                row.add(rs.getObject(\"BrandName\"));\r\n                row.add(rs.getObject(\"ProductName\"));\r\n                row.add(rs.getObject(\"RetailPrice\"));\r\n                row.add(rs.getObject(\"FeatureCode\"));\r\n                row.add(rs.getObject(\"Gauge\"));\r\n                row.add(rs.getObject(\"Era\"));\r\n                data.add(row);\r\n            }\r\n            rs.close();\r\n            stmt.close();\r\n            conn.close();\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n        }\r\n        return data;\r\n    }\r\n\r\n    public static void main(String[] args) {\r\n        SwingUtilities.invokeLater(() -> {\r\n            Home Home = new Home();\r\n            Home.setVisible(true);\r\n        });\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/GUI/Home.java b/src/GUI/Home.java
+--- a/src/GUI/Home.java	(revision 9676072015dbcf365330ebce30e34f57c9b37a39)
++++ b/src/GUI/Home.java	(date 1700853597364)
+@@ -47,6 +47,11 @@
+         searchField.setBounds(145, 95, 165, 25);
+         panel3.add(searchField);
+ 
++        JLabel quanntitylabel = new JLabel("Quantity");
++        quanntitylabel.setBounds(75, 135, 400, 25);
++        quanntitylabel.setFont(new Font(labelFont.getName(), labelFont.getStyle(), 14));
++        panel3.add(quanntitylabel);
++
+         quantityField = new JTextField(20);
+         quantityField.setBounds(145, 135, 165, 25);
+         panel3.add(quantityField);
+@@ -71,6 +76,7 @@
+         columnNames.add("FeatureCode");
+         columnNames.add("Gauge");
+         columnNames.add("Era");
++        columnNames.add("Stock");
+ 
+         // Initialize and add table
+         table = new JTable();
+@@ -113,6 +119,7 @@
+                 row.add(rs.getObject("FeatureCode"));
+                 row.add(rs.getObject("Gauge"));
+                 row.add(rs.getObject("Era"));
++                row.add(rs.getObject("Stock"));
+                 searchData.add(row);
+             }
+             rs.close();
+@@ -144,6 +151,7 @@
+                 row.add(rs.getObject("FeatureCode"));
+                 row.add(rs.getObject("Gauge"));
+                 row.add(rs.getObject("Era"));
++                row.add(rs.getObject("Stock"));
+                 data.add(row);
+             }
+             rs.close();

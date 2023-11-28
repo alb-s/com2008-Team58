@@ -1,73 +1,83 @@
-package GUI;
+package ManagerGUI;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.sql.*;
-import java.util.Vector;
+    import CustomerGUI.LoginScreen;
 
-public class Home extends JFrame {
+    import javax.swing.*;
+    import javax.swing.table.DefaultTableModel;
+    import java.awt.*;
+    import java.sql.*;
+    import java.util.Vector;
+
+public class HomeManager extends JFrame {
     private JButton searchButton;
-    private JButton orderButton;
+    private JButton UserButton;
+    private JButton orderButton, outButton;
     private JTextField searchField;
     private JTextField quantityField;
+    private JTextField StatsField;
     private JTable table;
     private Vector<String> columnNames;
-
-    public Home() {
+    public HomeManager() {
         setTitle("Home Page");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        JPanel panel3 = new JPanel();
-        placeComponents3(panel3);
-        add(panel3);
-
+        JPanel panel5 = new JPanel();
+        placeComponents5(panel5);
+        add(panel5);
         setLocationRelativeTo(null); // Center the frame on the screen
     }
+    private void placeComponents5(JPanel panel5) {
+        panel5.setLayout(null);
 
-    private void placeComponents3(JPanel panel3) {
-        panel3.setLayout(null);
-
-        // Title label
         JLabel titleLabel = new JLabel("Trains of Sheffield");
         titleLabel.setBounds(275, 35, 400, 25);
         Font labelFont = titleLabel.getFont();
         titleLabel.setFont(new Font(labelFont.getName(), labelFont.getStyle(), 26));
-        panel3.add(titleLabel);
+        panel5.add(titleLabel);
 
-        // Search label
         JLabel Searchlabel = new JLabel("Search");
         Searchlabel.setBounds(75, 95, 400, 25);
         Searchlabel.setFont(new Font(labelFont.getName(), labelFont.getStyle(), 14));
-        panel3.add(Searchlabel);
+        panel5.add(Searchlabel);
 
         JLabel quanntitylabel = new JLabel("Quantity");
         quanntitylabel.setBounds(75, 135, 400, 25);
         quanntitylabel.setFont(new Font(labelFont.getName(), labelFont.getStyle(), 14));
-        panel3.add(quanntitylabel);
+        panel5.add(quanntitylabel);
 
-        // Search field
         searchField = new JTextField(20);
         searchField.setBounds(145, 95, 165, 25);
-        panel3.add(searchField);
+        panel5.add(searchField);
 
         quantityField = new JTextField(20);
         quantityField.setBounds(145, 135, 165, 25);
-        panel3.add(quantityField);
+        panel5.add(quantityField);
 
-        // Search button
+        StatsField = new JTextField("Pending");
+        StatsField.setBounds(145, 135, 165, 25);
+        StatsField.setEditable(false);
+        panel5.add(StatsField);
+
         searchButton = new JButton("Search");
         searchButton.setBounds(320, 95, 85, 25);
         searchButton.addActionListener(e -> performSearch(searchField.getText()));
-        panel3.add(searchButton);
+        panel5.add(searchButton);
 
         orderButton = new JButton("Order");
         orderButton.setBounds(320, 135, 85, 25);
         orderButton.addActionListener(e -> placeOrder());
-        panel3.add(orderButton);
+        panel5.add(orderButton);
 
-        // Initialize column names
+        UserButton = new JButton("User Management");
+        UserButton.setBounds(0, 0, 160, 25);
+        UserButton.addActionListener(e -> performUser());
+        panel5.add(UserButton);
+
+        outButton = new JButton("Sign Out");
+        outButton.setBounds(690, 0, 90, 25);
+        outButton.addActionListener(e -> dologin());
+        panel5.add(outButton);
+
         columnNames = new Vector<>();
         columnNames.add("ProductCode");
         columnNames.add("BrandName");
@@ -77,18 +87,28 @@ public class Home extends JFrame {
         columnNames.add("Gauge");
         columnNames.add("Era");
 
-        // Initialize and add table
         table = new JTable();
         updateTable(fetchDataFromDatabase());
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(45, 250, 725, 300);
-        panel3.add(scrollPane);
+        panel5.add(scrollPane);
     }
+    private void performUser() {
+        dispose();
+        UserManagement UserManagement = new UserManagement();
+        UserManagement.setVisible(true);
 
+    }
+    private void dologin(){
+        dispose();
+        LoginScreen Login = new LoginScreen();
+        Login.setVisible(true);
+    }
     private void placeOrder() {
         String productCode = searchField.getText();
         String quantity = quantityField.getText();
+        String Status = StatsField.getText();
 
         if(quantity.isEmpty() || productCode.isEmpty()){
             JOptionPane.showMessageDialog(null, "Please enter both a product code and quantity.");
@@ -107,53 +127,47 @@ public class Home extends JFrame {
             return;
         }
         try {
-            //database connection
             String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
             String dbUsername = "team058";
             String dbPassword = "eel7Ahsi0";
             Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-    
-            //checks for existing product code 
+
             PreparedStatement checkProductStmt = connection.prepareStatement("SELECT * FROM Product WHERE ProductCode = ?");
             checkProductStmt.setString(1, productCode);
             ResultSet productResultSet = checkProductStmt.executeQuery();
-    
+
             if (!productResultSet.next()) {
                 JOptionPane.showMessageDialog(null, "Product code does not exist.");
                 return;
             }
 
-            //price calculations 
             double unitPrice = productResultSet.getDouble("RetailPrice");
             double totalCost = unitPrice * orderQuantity;
 
-            //should enter the order into the database
-            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO Orders (ProductCode, Quantity, TotalCost) VALUES (?, ?, ?)");
+            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status) VALUES (?, ?, ?, ?)");
             insertOrderStmt.setString(1, productCode);
             insertOrderStmt.setInt(2, orderQuantity);
             insertOrderStmt.setDouble(3, totalCost);
+            insertOrderStmt.setString(4,Status);
             int rowsAffected = insertOrderStmt.executeUpdate();
-    
+
             if (rowsAffected > 0) {
                 JOptionPane.showMessageDialog(null, "Order placed successfully.\nTotal Cost: " + totalCost);
-            } 
+            }
             else {
                 JOptionPane.showMessageDialog(null, "Failed to place order.");
             }
 
-            //closing connections
             productResultSet.close();
             checkProductStmt.close();
             insertOrderStmt.close();
             connection.close();
-        } 
+        }
         catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error processing order.");
         }
     }
-
-
     private void performSearch(String searchText) {
         Vector<Vector<Object>> searchData = new Vector<>();
         try {
@@ -189,7 +203,6 @@ public class Home extends JFrame {
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
         table.setModel(model);
     }
-
     private static Vector<Vector<Object>> fetchDataFromDatabase() {
         Vector<Vector<Object>> data = new Vector<>();
         try {
@@ -218,8 +231,8 @@ public class Home extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Home Home = new Home();
-            Home.setVisible(true);
+            HomeManager HomeManager = new HomeManager();
+            HomeManager.setVisible(true);
         });
     }
 }

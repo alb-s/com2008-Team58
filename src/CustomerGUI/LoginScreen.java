@@ -1,18 +1,19 @@
-package GUI;
-import GUI.Register;
+package CustomerGUI;
+
+import ManagerGUI.HomeManager;
+import Utility.PasswordHashUtility;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
-
-public class Login extends JFrame {
+public class LoginScreen extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;
-    private JButton loginButton;
-    private JButton registerButton;
+    private JButton loginButton, registerButton;
 
-    public Login() {
+    public LoginScreen() {
         setTitle("Login Page");
         setSize(500, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -21,7 +22,7 @@ public class Login extends JFrame {
         placeComponents(panel);
         add(panel);
 
-        setLocationRelativeTo(null); // Center the frame on the screen
+        setLocationRelativeTo(null);
     }
 
     private void placeComponents(JPanel panel) {
@@ -55,13 +56,13 @@ public class Login extends JFrame {
         registerButton.setBounds(250, 250, 110, 25);
         panel.add(registerButton);
 
-        // ActionListener for the login button
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 performLogin();
             }
         });
+
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -73,73 +74,93 @@ public class Login extends JFrame {
     private void performLogin() {
         String username = emailField.getText();
         String password = new String(passwordField.getPassword());
-    
-        
-        boolean isValidUser = checkCredentials(username, password); 
-    
-        if (isValidUser) {
+        LoginResult loginResult = checkCredentials(username, password);
+
+        if (loginResult.isValid) {
             JOptionPane.showMessageDialog(null, "Login Successful");
+
+            // Set session information
+            Session.getInstance().setUserDetails(loginResult.userId, LoginResult.userEmail, loginResult.Role);
+
             dispose();
-            Home Home = new Home();
-            Home.setVisible(true);
+            navigateBasedOnRole(loginResult.Role);
         } else {
             JOptionPane.showMessageDialog(null, "Invalid username or password!");
-            
         }
     }
-    
-    private boolean checkCredentials(String username, String password) {
-        
+
+    private LoginResult checkCredentials(String username, String password) {
         String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
         String dbUsername = "team058";
         String dbPassword = "eel7Ahsi0";
         boolean loginValidator = false;
-        String passField = new String(passwordField.getPassword());
+        String Role = null;
+        String userId = null;
+        String userEmail = null;
 
-        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)){
-            String query = "SELECT password FROM Users WHERE email = ?";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
+        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)) {
+            String query = "SELECT password, Salt, Role, idnew_table, email FROM Users WHERE email = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setString(1, username);
                 ResultSet resultSet = preparedStatement.executeQuery();
-                if (resultSet.next()){
-                    String passCheck = resultSet.getString("password");
-                    if (passField.equals(passCheck)){
+                if (resultSet.next()) {
+                    String hashedPasswordFromDB = resultSet.getString("password");
+                    String storedSalt = resultSet.getString("Salt");
+                        
+                    char[] passwordChars = passwordField.getPassword();
+                    String hashedEnteredPassword = PasswordHashUtility.hashPassword(passwordChars, storedSalt);
+                    
+                    if (hashedEnteredPassword != null && hashedEnteredPassword.equals(hashedPasswordFromDB)) {
                         loginValidator = true;
+                        Role = resultSet.getString("Role");
+                        userId = resultSet.getString("idnew_table");
+                        userEmail = resultSet.getString("email");
                     }
                 }
- 
             }
         }
         catch (SQLException e){
             e.printStackTrace();
         }
 
-        return loginValidator;
+        return new LoginResult(loginValidator, Role, userId, userEmail);
     }
-    
-    private void redirectToRegister() {
-        dispose(); // Close the login window
-        Register registerPage = new Register();
-        registerPage.setVisible(true);
+
+    private void navigateBasedOnRole(String Role) {
+        if (Role.equals("Manager")) {
+            HomeManager HomeManager = new HomeManager();
+            HomeManager.setVisible(true);
+        } else if (Role.equals("Customer")) {
+            HomeScreen Home = new HomeScreen();
+            Home.setVisible(true);
+        }
     }
-    
 
     private void performRegister() {
         dispose();
-        Register Register = new Register();
-        Register.setVisible(true);
-
+        // Assuming Register is another JFrame for registration
+        RegisterScreen register = new RegisterScreen();
+        register.setVisible(true);
     }
-
-
-
-
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Login Login = new Login();
-            Login.setVisible(true);
+            LoginScreen login = new LoginScreen();
+            login.setVisible(true);
         });
     }
 }
 
+class LoginResult {
+    boolean isValid;
+    String Role;
+    String userId;
+    static String userEmail;
+
+    LoginResult(boolean isValid, String Role, String userId, String userEmail) {
+        this.isValid = isValid;
+        this.Role = Role;
+        this.userEmail = userEmail;
+        this.userId = userId;
+    }
+}

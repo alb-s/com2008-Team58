@@ -1,6 +1,6 @@
+package ManagerGUI;
 
-
-package GUI;
+import CustomerGUI.LoginScreen;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -9,7 +9,8 @@ import java.sql.*;
 import java.util.Vector;
 
 public class UserManagement extends JFrame {
-    private JButton searchButton;
+    private JButton searchButton, outButton;
+    private JButton HomeButton;
     private JButton updateRoleButton;
     private JTextField searchField;
     private JComboBox<String> roleComboBox;
@@ -73,6 +74,16 @@ public class UserManagement extends JFrame {
         updateRoleButton.addActionListener(e -> updateRole(roleComboBox.getSelectedItem().toString()));
         panel4.add(updateRoleButton);
 
+        HomeButton = new JButton("Home Page");
+        HomeButton.setBounds(0, 0, 120, 25);
+        HomeButton.addActionListener(e -> performHome());
+        panel4.add(HomeButton);
+
+        outButton = new JButton("Sign Out");
+        outButton.setBounds(690, 0, 90, 25);
+        outButton.addActionListener(e ->  dologin());
+        panel4.add(outButton);
+
         // Initialize column names
         columnNames = new Vector<>();
         columnNames.add("idnew_table");
@@ -96,6 +107,16 @@ public class UserManagement extends JFrame {
         panel4.add(scrollPane);
     }
 
+    private void dologin(){
+        dispose();
+        LoginScreen Login = new LoginScreen();
+        Login.setVisible(true);
+    }
+    private void performHome() {
+        dispose();
+        HomeManager HomeManager = new HomeManager();
+        HomeManager.setVisible(true);
+    }
     private void performSearch(String searchText) {
         messageLabel.setText(""); // Clear previous message
         Vector<Vector<Object>> searchData = new Vector<>();
@@ -147,8 +168,6 @@ public class UserManagement extends JFrame {
             Object userId = table.getModel().getValueAt(selectedRow, 0); // Assuming user ID is in column 0
             if (userId != null) {
                 table.getModel().setValueAt(newRole, selectedRow, 10); // Assuming role is in column 10
-
-                // Update the role in the database
                 updateRoleInDatabase(userId.toString(), newRole);
             } else {
                 JOptionPane.showMessageDialog(this, "User ID is null", "Error", JOptionPane.ERROR_MESSAGE);
