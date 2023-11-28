@@ -1,6 +1,7 @@
 package CustomerGUI;
 
 import ManagerGUI.HomeManager;
+import StaffGUI.staffView;
 import Utility.PasswordHashUtility;
 
 import javax.swing.*;
@@ -133,6 +134,10 @@ public class LoginScreen extends JFrame {
         } else if (Role.equals("Customer")) {
             HomeScreen Home = new HomeScreen();
             Home.setVisible(true);
+        }
+        else{
+            staffView staffView = new staffView();
+            staffView.setVisible(true);
         }
     }
 

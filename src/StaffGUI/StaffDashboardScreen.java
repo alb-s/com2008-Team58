@@ -2,6 +2,9 @@ package StaffGUI;
 
 import CustomerGUI.HomeScreen;
 import CustomerGUI.LoginScreen;
+import CustomerGUI.Session;
+import ManagerGUI.HomeManager;
+import CustomerGUI.LoginScreen;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -43,12 +46,29 @@ public class StaffDashboardScreen extends JFrame {
         });
         JButton homeButton = new JButton("Home");
         homeButton.addActionListener(e -> {
-            dispose(); // Close current window
-            new HomeScreen().setVisible(true);
+           dohome();
         });
         topPanel.add(signOutButton, BorderLayout.WEST);
         topPanel.add(homeButton, BorderLayout.EAST);
         return topPanel;
+    }
+    private void dohome(){
+        String Role = Session.getInstance().getUserRole();
+        if (Role.equals("Manager")) {
+            dispose();
+            HomeManager HomeManager = new HomeManager();
+            HomeManager.setVisible(true);
+        } else if (Role.equals("Staff")) {
+            dispose();
+            staffView staffView = new staffView();
+            staffView.setVisible(true);
+        }
+        else{
+            dispose();
+            HomeScreen HomeScreen = new HomeScreen();
+            HomeScreen.setVisible(true);;
+        }
+
     }
 
     private JPanel createOrdersPanel() {
