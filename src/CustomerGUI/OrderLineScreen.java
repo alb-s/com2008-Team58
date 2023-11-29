@@ -20,6 +20,8 @@ public class OrderLineScreen extends JFrame {
         setLayout(new BorderLayout(10, 10));
         setLocationRelativeTo(null);
 
+        JLabel pending = new JLabel("View Pending Orders");
+
         orderLinesTableModel = new NonEditableTableModel(new String[]{"OrderLineID", "LineNumber", "Quantity", "LineCost", "OrderNumber", "ProductCode", "Status"}, 0);
         orderLinesTable = new JTable(orderLinesTableModel);
         orderLinesTable.getTableHeader().setReorderingAllowed(false);
@@ -28,6 +30,7 @@ public class OrderLineScreen extends JFrame {
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.add(createOrderLinesTable(), BorderLayout.CENTER);
         mainPanel.add(createSummaryPanel(), BorderLayout.SOUTH);
+        mainPanel.add(pending,BorderLayout.NORTH);
 
         add(mainPanel);
         setVisible(true);
