@@ -170,49 +170,56 @@ public class OrderLineScreen extends JFrame {
     
 
     private void proceedCheckout() { 
+        // Start transaction
         Connection connection = null;
         try {
             connection = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058", "team058", "eel7Ahsi0");
-            connection.setAutoCommit(false); // Start a transaction
+            connection.setAutoCommit(false);
     
             for (int i = 0; i < orderLinesTableModel.getRowCount(); i++) {
                 String productCode = orderLinesTableModel.getValueAt(i, 5).toString();
                 int orderedQuantity = Integer.parseInt(orderLinesTableModel.getValueAt(i, 2).toString());
     
-                // Get the current stock for the product
                 int currentStock = getCurrentStock(connection, productCode);
-                if (currentStock <= 0 || currentStock < orderedQuantity) {
+                if (currentStock < orderedQuantity) {
                     JOptionPane.showMessageDialog(this, "Insufficient stock for product code: " + productCode);
-                    connection.rollback(); // Rollback the transaction as we cannot fulfill this order
-                    return; // Stop the checkout process
+                    connection.rollback();
+                    return;
                 }
     
-                // Update the stock
-                int newStock = currentStock - orderedQuantity;
-                updateProductStock(connection, productCode, newStock);
+                updateProductStock(connection, productCode, currentStock - orderedQuantity);
             }
     
-            connection.commit(); // Commit the transaction
+            connection.commit();
             JOptionPane.showMessageDialog(this, "Order confirmed and stock updated.");
+            
+            // Proceed to CheckoutScreen
+            SwingUtilities.invokeLater(() -> {
+                CheckoutScreen checkoutScreen = new CheckoutScreen();
+                checkoutScreen.setVisible(true);
+                this.dispose(); // Close the OrderLineScreen
+            });
+    
         } catch (SQLException e) {
             try {
                 if (connection != null) {
-                    connection.rollback(); // Rollback the transaction in case of errors
+                    connection.rollback(); // Rollback transaction in case of error
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-            JOptionPane.showMessageDialog(this, "Error confirming order: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Error during checkout: " + e.getMessage());
         } finally {
             try {
                 if (connection != null) {
-                    connection.close(); // Close the connection
+                    connection.close(); // Always close the connection
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
         }
     }
+    
 
     private int getCurrentStock(Connection connection, String productCode) throws SQLException {
         String sql = "SELECT Stock FROM Product WHERE ProductCode = ?";
