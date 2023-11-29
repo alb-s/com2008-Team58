@@ -2,6 +2,7 @@ package ManagerGUI;
 
     import CustomerGUI.EditBankDetailsScreen;
     import CustomerGUI.LoginScreen;
+    import CustomerGUI.OrderLineScreen;
     import CustomerGUI.UserDetailsScreen;
     import StaffGUI.StaffDashboardScreen;
 
@@ -13,7 +14,7 @@ package ManagerGUI;
 
 public class HomeManager extends JFrame {
     private JButton searchButton;
-    private JButton UserButton, EditButton, CardButton;
+    private JButton UserButton, EditButton, CardButton, placeButton;
     private JButton orderButton, outButton, StaffButton;
     private JTextField searchField;
     private JTextField quantityField;
@@ -96,6 +97,11 @@ public class HomeManager extends JFrame {
         StaffButton.addActionListener(e -> performStaff());
         panel5.add(StaffButton);
 
+        placeButton = new JButton("View Orders");
+        placeButton.setBounds(530,0,110,25);
+        placeButton.addActionListener(e -> doButton());
+        panel5.add(placeButton);
+
         columnNames = new Vector<>();
         columnNames.add("ProductCode");
         columnNames.add("BrandName");
@@ -130,6 +136,11 @@ public class HomeManager extends JFrame {
         UserManagement UserManagement = new UserManagement();
         UserManagement.setVisible(true);
 
+    }
+
+    private void doButton(){
+        dispose();
+        new OrderLineScreen().setVisible(true);
     }
     private void dologin(){
         dispose();

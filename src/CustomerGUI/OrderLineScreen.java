@@ -1,5 +1,8 @@
 package CustomerGUI;
 
+import ManagerGUI.HomeManager;
+import StaffGUI.staffView;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -15,6 +18,7 @@ public class OrderLineScreen extends JFrame {
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
+        setLocationRelativeTo(null);
 
         orderLinesTableModel = new NonEditableTableModel(new String[]{"OrderLineID", "LineNumber", "Quantity", "LineCost", "OrderNumber", "ProductCode", "Status"}, 0);
         orderLinesTable = new JTable(orderLinesTableModel);
@@ -169,8 +173,21 @@ public class OrderLineScreen extends JFrame {
     } 
     
     private void returnToHome() {
-        dispose();
-        new HomeScreen().setVisible(true);
+        String Role = Session.getInstance().getUserRole();
+        if (Role.equals("Manager")) {
+            dispose();
+            HomeManager HomeManager = new HomeManager();
+            HomeManager.setVisible(true);
+        } else if (Role.equals("Staff")) {
+            dispose();
+            staffView staffView = new staffView();
+            staffView.setVisible(true);
+        }
+        else{
+            dispose();
+            HomeScreen HomeScreen = new HomeScreen();
+            HomeScreen.setVisible(true);
+        }
     }
 
     private void loadOrderLinesFromDatabase() {

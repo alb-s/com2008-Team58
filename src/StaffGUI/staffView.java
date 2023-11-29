@@ -8,7 +8,7 @@ import java.util.Vector;
 import CustomerGUI.LoginScreen;
 
 public class staffView extends JFrame {
-    private JButton searchButton, EditButton, CardButton, orderButton, outButton, StaffButton;
+    private JButton searchButton, EditButton, CardButton, orderButton, outButton, StaffButton, placeButton;
     private JTextField StatsField, searchField, quantityField;
     private JTable table;
     private Vector<String> columnNames;
@@ -85,6 +85,11 @@ public class staffView extends JFrame {
         outButton.addActionListener(e -> dologin());
         panel9.add(outButton);
 
+        placeButton = new JButton("View Orders");
+        placeButton.setBounds(345,0,110,25);
+        placeButton.addActionListener(e -> doButton());
+        panel9.add(placeButton);
+
         columnNames = new Vector<>();
         columnNames.add("ProductCode");
         columnNames.add("BrandName");
@@ -105,6 +110,11 @@ public class staffView extends JFrame {
         dispose();
         LoginScreen Login = new LoginScreen();
         Login.setVisible(true);
+    }
+
+    private void doButton(){
+        dispose();
+        new OrderLineScreen().setVisible(true);
     }
     private void performEdit() {
         dispose();

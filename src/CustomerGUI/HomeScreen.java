@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.Vector;
 
 public class HomeScreen extends JFrame {
-    private JButton searchButton, EditButton, CardButton, orderButton, outButton;
+    private JButton searchButton, EditButton, CardButton, orderButton, outButton, placeButton;
     private JTextField StatsField, searchField, quantityField;
     private JTable table;
     private Vector<String> columnNames;
@@ -79,6 +79,11 @@ public class HomeScreen extends JFrame {
         outButton.addActionListener(e -> dologin());
         panel3.add(outButton);
 
+        placeButton = new JButton("View Orders");
+        placeButton.setBounds(240,0,110,25);
+        placeButton.addActionListener(e -> doButton());
+        panel3.add(placeButton);
+
         columnNames = new Vector<>();
         columnNames.add("ProductCode");
         columnNames.add("BrandName");
@@ -95,7 +100,10 @@ public class HomeScreen extends JFrame {
         scrollPane.setBounds(45, 250, 725, 300);
         panel3.add(scrollPane);
     }
-
+    private void doButton(){
+        dispose();
+        new OrderLineScreen().setVisible(true);
+    }
     private void dologin(){
         dispose();
         LoginScreen Login = new LoginScreen();

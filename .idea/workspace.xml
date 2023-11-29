@@ -6,8 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/EditBankDetailsScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/EditBankDetailsScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/UserDetailsScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/UserDetailsScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/HomeScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/HomeScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/OrderLineScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/OrderLineScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ManagerGUI/HomeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ManagerGUI/HomeManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StaffGUI/staffView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StaffGUI/staffView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,7 +174,14 @@
       <option name="project" value="LOCAL" />
       <updated>1701206041274</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="redirecting">
+      <created>1701216577511</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1701216577511</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -202,6 +211,7 @@
     <MESSAGE value="changing button postiotion" />
     <MESSAGE value="adding stock column" />
     <MESSAGE value="adding product and delting product from the inventory" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding product and delting product from the inventory" />
+    <MESSAGE value="redirecting" />
+    <option name="LAST_COMMIT_MESSAGE" value="redirecting" />
   </component>
 </project>
