@@ -33,6 +33,21 @@ public class EditBankDetailsScreen extends JFrame {
                 JTextField bankCardNumberField = (JTextField) bankDetailsPanel.getComponent(5);
                 CardReader cardReader = new CardReader();
                 cardReader.checkCard(bankCardNumberField);
+                String Role = Session.getInstance().getUserRole();
+                if (Role.equals("Manager")) {
+                    dispose();
+                    HomeManager HomeManager = new HomeManager();
+                    HomeManager.setVisible(true);
+                } else if (Role.equals("Staff")) {
+                    dispose();
+                    staffView staffView = new staffView();
+                    staffView.setVisible(true);
+                }
+                else{
+                    dispose();
+                    HomeScreen HomeScreen = new HomeScreen();
+                    HomeScreen.setVisible(true);
+                }
             }
         });
 
