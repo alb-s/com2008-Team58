@@ -87,10 +87,16 @@ public class CheckoutScreen extends JFrame {
     }
 
 private void performPayment(){
-    // Start transaction
     Connection connection = null;
     try {
         connection = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058", "team058", "eel7Ahsi0");
+
+        if (!hasValidCardNumber(connection, Session.getInstance().getUserId())) {
+            JOptionPane.showMessageDialog(this, "No valid card number found. Redirecting...");
+            dispose();
+            new EditBankDetailsScreen().setVisible(true);
+            return;
+        }
         connection.setAutoCommit(false);
 
         for (int i = 0; i < checkoutTableModel.getRowCount(); i++) {
@@ -133,7 +139,19 @@ private void performPayment(){
     }
 
     }
-    private int getCurrentStock(Connection connection, String productCode) throws SQLException {
+
+    private boolean hasValidCardNumber(Connection connection, String userID) throws SQLException {
+        String sql = "SELECT CardNumber FROM Users WHERE idnew_table = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, userID);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("CardNumber") != null && !rs.getString("CardNumber").isEmpty();
+            }
+            return false;
+        }
+    }
+        private int getCurrentStock(Connection connection, String productCode) throws SQLException {
         String sql = "SELECT Stock FROM Product WHERE ProductCode = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, productCode);
