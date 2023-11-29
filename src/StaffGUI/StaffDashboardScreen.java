@@ -4,7 +4,6 @@ import CustomerGUI.HomeScreen;
 import CustomerGUI.LoginScreen;
 import CustomerGUI.Session;
 import ManagerGUI.HomeManager;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
@@ -111,39 +110,47 @@ public class StaffDashboardScreen extends JFrame {
 
     private DefaultTableModel fetchDataFromDatabaseForOrders() {
         DefaultTableModel ordersModel = new DefaultTableModel();
-    
+
         try {
             String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
             String dbUsername = "team058";
             String dbPassword = "eel7Ahsi0";
             Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT OrderLineID, Quantity, LineCost, ProductCode, Status, userID FROM OrderLine");
+            
+            // Use PreparedStatement to prevent SQL injection and specify the status "Confirmed"
+            String query = "SELECT OrderLineID, Quantity, LineCost, ProductCode, Status, userID FROM OrderLine WHERE Status = ?";
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setString(1, "Confirmed");
+    
+            ResultSet rs = pstmt.executeQuery();
             ordersModel.addColumn("Order ID");
             ordersModel.addColumn("Quantity");
             ordersModel.addColumn("Line Cost");
             ordersModel.addColumn("Product Code");
             ordersModel.addColumn("Status");
             ordersModel.addColumn("userID");
+    
             while (rs.next()) {
                 Object[] rowData = {
                     rs.getInt("OrderLineID"),
                     rs.getInt("Quantity"),
-                    rs.getDouble("Quantity"),
+                    rs.getDouble("LineCost"),
                     rs.getString("ProductCode"),
                     rs.getString("Status"),
-                        rs.getString("userID")
+                    rs.getString("userID")
                 };
                 ordersModel.addRow(rowData);
             }
+    
             rs.close();
-            stmt.close();
+            pstmt.close();
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return ordersModel;
     }
+
     private void deleteOrder(Object orderId) {
         try {
             String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
