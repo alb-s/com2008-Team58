@@ -196,25 +196,29 @@ public class OrderLineScreen extends JFrame {
     private void loadOrderLinesFromDatabase() {
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058", "team058", "eel7Ahsi0");
-            Statement stmt = conn.createStatement();
             String userID = Session.getInstance().getUserId();
-            String query = "SELECT * FROM OrderLine WHERE userID = '" + userID + "'";
-            ResultSet rs = stmt.executeQuery(query);
+            String query = "SELECT * FROM OrderLine WHERE userID = ? AND Status = ?";
 
-            while (rs.next()) {
-                Object[] row = {
-                    rs.getInt("OrderLineID"),
-                    rs.getInt("LineNumber"),
-                    rs.getInt("Quantity"),
-                    rs.getDouble("LineCost"),
-                    rs.getInt("OrderNumber"),
-                    rs.getString("ProductCode"),
-                    rs.getString("Status"),
-                };
-                orderLinesTableModel.addRow(row);
+            try(PreparedStatement pstmt = conn.prepareStatement(query)){
+                pstmt.setString(1, userID);
+                pstmt.setString(2, "Pending");
+                ResultSet rs = pstmt.executeQuery();
+
+                while (rs.next()) {
+                    Object[] row = {
+                        rs.getInt("OrderLineID"),
+                        rs.getInt("LineNumber"),
+                        rs.getInt("Quantity"),
+                        rs.getDouble("LineCost"),
+                        rs.getInt("OrderNumber"),
+                        rs.getString("ProductCode"),
+                        rs.getString("Status"),
+                    };
+                    orderLinesTableModel.addRow(row);
+                }
+                rs.close();
+
             }
-            rs.close();
-            stmt.close();
             conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
