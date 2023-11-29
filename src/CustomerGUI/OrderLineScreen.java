@@ -168,9 +168,77 @@ public class OrderLineScreen extends JFrame {
         }
     }
     
+
     private void proceedCheckout() { 
-        JOptionPane.showMessageDialog(this, "Order confirmed."); // Placeholder confirmation message
-    } 
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058", "team058", "eel7Ahsi0");
+            connection.setAutoCommit(false); // Start a transaction
+    
+            for (int i = 0; i < orderLinesTableModel.getRowCount(); i++) {
+                String productCode = orderLinesTableModel.getValueAt(i, 5).toString();
+                int orderedQuantity = Integer.parseInt(orderLinesTableModel.getValueAt(i, 2).toString());
+    
+                // Get the current stock for the product
+                int currentStock = getCurrentStock(connection, productCode);
+                if (currentStock <= 0 || currentStock < orderedQuantity) {
+                    JOptionPane.showMessageDialog(this, "Insufficient stock for product code: " + productCode);
+                    connection.rollback(); // Rollback the transaction as we cannot fulfill this order
+                    return; // Stop the checkout process
+                }
+    
+                // Update the stock
+                int newStock = currentStock - orderedQuantity;
+                updateProductStock(connection, productCode, newStock);
+            }
+    
+            connection.commit(); // Commit the transaction
+            JOptionPane.showMessageDialog(this, "Order confirmed and stock updated.");
+        } catch (SQLException e) {
+            try {
+                if (connection != null) {
+                    connection.rollback(); // Rollback the transaction in case of errors
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            JOptionPane.showMessageDialog(this, "Error confirming order: " + e.getMessage());
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close(); // Close the connection
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    private int getCurrentStock(Connection connection, String productCode) throws SQLException {
+        String sql = "SELECT Stock FROM Product WHERE ProductCode = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, productCode);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("Stock");
+            } else {
+                throw new SQLException("Product not found with code: " + productCode);
+            }
+        }
+    }
+    
+    private void updateProductStock(Connection connection, String productCode, int newStock) throws SQLException {
+        String sql = "UPDATE Product SET Stock = ? WHERE ProductCode = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, newStock);
+            pstmt.setString(2, productCode);
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Updating stock failed, no rows affected.");
+            }
+        }
+    }
+    
     
     private void returnToHome() {
         String Role = Session.getInstance().getUserRole();
