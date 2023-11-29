@@ -28,6 +28,7 @@ public class StaffDashboardScreen extends JFrame {
         mainPanel.setLayout(cardLayout);
         mainPanel.add(createInventoryPanel(), "Inventory");
         mainPanel.add(createOrdersPanel(), "Orders");
+        mainPanel.add(createArchivePanel(), "Archive");
 
 
         setLayout(new BorderLayout());
@@ -67,6 +68,56 @@ public class StaffDashboardScreen extends JFrame {
             HomeScreen.setVisible(true);;
         }
 
+    }
+    private JPanel createArchivePanel () {
+        JPanel archivePanel = new JPanel(new BorderLayout());
+        DefaultTableModel archiveModel = fetchDataFromDatabaseForArchive();
+        JTable archiveTable = new JTable(archiveModel);
+        JScrollPane scrollPane = new JScrollPane(archiveTable);
+        archivePanel.add(scrollPane, BorderLayout.CENTER);
+        return archivePanel;
+
+    }
+    private DefaultTableModel fetchDataFromDatabaseForArchive() {
+        DefaultTableModel ordersModel = new DefaultTableModel();
+
+        try {
+            String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
+            String dbUsername = "team058";
+            String dbPassword = "eel7Ahsi0";
+            Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
+            Statement stmt = connection.createStatement();
+            String query = "SELECT OrderLineID, Quantity, LineCost, ProductCode, Status, userID FROM OrderLine WHERE (Status = ? OR Status = ?)";
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setString(1, "Confirmed");
+            pstmt.setString(2,"Fulfiled");
+
+            ordersModel.addColumn("Order ID");
+            ordersModel.addColumn("Quantity");
+            ordersModel.addColumn("Line Cost");
+            ordersModel.addColumn("Product Code");
+            ordersModel.addColumn("Status");
+            ordersModel.addColumn("userID");
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Object[] rowData = {
+                        rs.getInt("OrderLineID"),
+                        rs.getInt("Quantity"),
+                        rs.getDouble("Quantity"),
+                        rs.getString("ProductCode"),
+                        rs.getString("Status"),
+                        rs.getString("userID")
+                };
+                ordersModel.addRow(rowData);
+            }
+            rs.close();
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ordersModel;
     }
 
     private JPanel createOrdersPanel() {
@@ -335,11 +386,14 @@ public class StaffDashboardScreen extends JFrame {
 
         JButton ordersButton = new JButton("Orders");
         JButton inventoryButton = new JButton("Inventory");
+        JButton archiveButton = new JButton("Order Archive");
 
         ordersButton.addActionListener(e -> cardLayout.show(mainPanel, "Orders"));
         inventoryButton.addActionListener(e -> cardLayout.show(mainPanel, "Inventory"));
+        archiveButton.addActionListener(e -> cardLayout.show(mainPanel, "Archive"));
         sidebar.add(inventoryButton);
         sidebar.add(ordersButton);
+        sidebar.add(archiveButton);
 
 
         return sidebar;
