@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="small edit">
+    <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/RegisterScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/RegisterScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ManagerGUI/UserManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ManagerGUI/UserManagement.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/StaffGUI/StaffDashboardScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StaffGUI/StaffDashboardScreen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -213,7 +215,14 @@
       <option name="project" value="LOCAL" />
       <updated>1701288045521</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="added archive">
+      <created>1701291846661</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1701291846662</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -249,6 +258,7 @@
     <MESSAGE value="order history" />
     <MESSAGE value="checkout done small edits needed" />
     <MESSAGE value="small edit" />
-    <option name="LAST_COMMIT_MESSAGE" value="small edit" />
+    <MESSAGE value="added archive" />
+    <option name="LAST_COMMIT_MESSAGE" value="added archive" />
   </component>
 </project>

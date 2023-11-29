@@ -95,7 +95,6 @@ public class UserManagement extends JFrame {
         columnNames.add("cityname");
         columnNames.add("roadname");
         columnNames.add("postcode");
-        columnNames.add("Cardnumber");
         columnNames.add("Role");
 
         // Initialize and add table
@@ -122,10 +121,10 @@ public class UserManagement extends JFrame {
         Vector<Vector<Object>> searchData = new Vector<>();
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058", "team058", "eel7Ahsi0");
-            String sql = "SELECT * FROM Users WHERE idnew_table LIKE ? OR email LIKE ? OR password LIKE ? OR forename LIKE ? OR surname LIKE ? OR housenumber LIKE ? OR cityname LIKE ? OR roadname LIKE ? OR postcode LIKE ? OR cardNumber LIKE ? OR role LIKE ?";
+            String sql = "SELECT * FROM Users WHERE idnew_table LIKE ? OR email LIKE ? OR password LIKE ? OR forename LIKE ? OR surname LIKE ? OR housenumber LIKE ? OR cityname LIKE ? OR roadname LIKE ? OR postcode LIKE ? OR role LIKE ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             String searchPattern = "%" + searchText + "%";
-            for (int i = 1; i <= 11; i++) { // Repeat for all search columns
+            for (int i = 1; i <= 10; i++) { // Repeat for all search columns
                 pstmt.setString(i, searchPattern);
             }
             ResultSet rs = pstmt.executeQuery();
@@ -140,7 +139,6 @@ public class UserManagement extends JFrame {
                 row.add(rs.getObject("cityname"));
                 row.add(rs.getObject("roadname"));
                 row.add(rs.getObject("postcode"));
-                row.add(rs.getObject("Cardnumber"));
                 row.add(rs.getObject("Role"));
                 searchData.add(row);
             }
@@ -167,7 +165,7 @@ public class UserManagement extends JFrame {
         if (selectedRow != -1) { // Check if a row is selected
             Object userId = table.getModel().getValueAt(selectedRow, 0); // Assuming user ID is in column 0
             if (userId != null) {
-                table.getModel().setValueAt(newRole, selectedRow, 10); // Assuming role is in column 10
+                table.getModel().setValueAt(newRole, selectedRow, 9); // Assuming role is in column 10
                 updateRoleInDatabase(userId.toString(), newRole);
             } else {
                 JOptionPane.showMessageDialog(this, "User ID is null", "Error", JOptionPane.ERROR_MESSAGE);
@@ -194,7 +192,6 @@ public class UserManagement extends JFrame {
                 row.add(rs.getObject("cityname"));
                 row.add(rs.getObject("roadname"));
                 row.add(rs.getObject("postcode"));
-                row.add(rs.getObject("Cardnumber"));
                 row.add(rs.getObject("Role"));
                 data.add(row);
             }

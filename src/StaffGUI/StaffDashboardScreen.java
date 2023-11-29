@@ -151,6 +151,7 @@ public class StaffDashboardScreen extends JFrame {
                 Object orderId = ordersTable.getValueAt(selectedRow, 0);
                 updateOrderStatusToPending(orderId);
                 refreshOrdersTable();
+
             } else {
                 JOptionPane.showMessageDialog(null, "No order selected.");
             }
@@ -158,6 +159,8 @@ public class StaffDashboardScreen extends JFrame {
         ordersPanel.add(buttonPanel, BorderLayout.SOUTH);
         return ordersPanel;
     }
+
+
 
     private DefaultTableModel fetchDataFromDatabaseForOrders() {
         DefaultTableModel ordersModel = new DefaultTableModel();
