@@ -4,7 +4,6 @@ import CustomerGUI.HomeScreen;
 import CustomerGUI.LoginScreen;
 import CustomerGUI.Session;
 import ManagerGUI.HomeManager;
-import CustomerGUI.LoginScreen;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -12,7 +11,6 @@ import java.sql.*;
 import java.awt.*;
 
 public class StaffDashboardScreen extends JFrame {
-    private DefaultTableModel tableModel;
     private JTable ordersTable; // Class level variable for orders table
     private JTable inventoryTable; // Class level variable for inventory table
     private JPanel mainPanel;
