@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/OrderLineScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/OrderLineScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/HomeScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/HomeScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StaffGUI/staffView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StaffGUI/staffView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -206,7 +207,14 @@
       <option name="project" value="LOCAL" />
       <updated>1701287492417</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="small edit">
+      <created>1701288045521</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1701288045521</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -241,6 +249,7 @@
     <MESSAGE value="checkout completing not full done" />
     <MESSAGE value="order history" />
     <MESSAGE value="checkout done small edits needed" />
-    <option name="LAST_COMMIT_MESSAGE" value="checkout done small edits needed" />
+    <MESSAGE value="small edit" />
+    <option name="LAST_COMMIT_MESSAGE" value="small edit" />
   </component>
 </project>

@@ -123,81 +123,62 @@ public class HomeScreen extends JFrame {
         String quantity = quantityField.getText();
         String Status = StatsField.getText();
         String userID = Session.getInstance().getUserId();
-    
-        if (quantity.isEmpty() || productCode.isEmpty()) {
+
+        if(quantity.isEmpty() || productCode.isEmpty()){
             JOptionPane.showMessageDialog(null, "Please enter both a product code and quantity.");
             return;
         }
-    
         int orderQuantity;
-        try {
+        try{
             orderQuantity = Integer.parseInt(quantity);
-            if (orderQuantity <= 0) {
+            if (orderQuantity <= 0){
                 JOptionPane.showMessageDialog(null, "Please enter a valid order quantity.");
                 return;
             }
-        } catch (NumberFormatException e) {
+        }
+        catch(NumberFormatException e){
             JOptionPane.showMessageDialog(null, "Please enter a valid order quantity.");
             return;
         }
-    
         try {
             String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
             String dbUsername = "team058";
             String dbPassword = "eel7Ahsi0";
             Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-    
-            PreparedStatement checkProductStmt = connection.prepareStatement("SELECT Stock, RetailPrice FROM Product WHERE ProductCode = ?");
+
+            PreparedStatement checkProductStmt = connection.prepareStatement("SELECT * FROM Product WHERE ProductCode = ?");
             checkProductStmt.setString(1, productCode);
             ResultSet productResultSet = checkProductStmt.executeQuery();
-    
-            if (productResultSet.next()) {
-                int availableStock = productResultSet.getInt("Stock");
-                double unitPrice = productResultSet.getDouble("RetailPrice");
-                double totalCost = unitPrice * orderQuantity;
-    
-                if (orderQuantity > availableStock) {
-                    JOptionPane.showMessageDialog(null, "Insufficient stock available for the order quantity.");
-                    return;
-                }
-    
-                int remainingStock = availableStock - orderQuantity;
-    
-                PreparedStatement updateStockStmt = connection.prepareStatement("UPDATE Product SET Stock = ? WHERE ProductCode = ?");
-                updateStockStmt.setInt(1, remainingStock);
-                updateStockStmt.setString(2, productCode);
-                updateStockStmt.executeUpdate();
-    
-                PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status, userID) VALUES (?, ?, ?, ?, ?)");
-                insertOrderStmt.setString(1, productCode);
-                insertOrderStmt.setInt(2, orderQuantity);
-                insertOrderStmt.setDouble(3, totalCost);
-                insertOrderStmt.setString(4, Status);
-                insertOrderStmt.setString(5,userID);
-                int rowsAffected = insertOrderStmt.executeUpdate();
-    
-                if (rowsAffected > 0) {
-                    JOptionPane.showMessageDialog(null, "Order placed successfully.\nTotal Cost: " + totalCost);
 
-                    //this should update the table with the new stock available
-                    Vector<Vector<Object>> updatedData = fetchDataFromDatabase();
-                    updateTable(updatedData);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Failed to place order.");
-                }
-    
-                insertOrderStmt.close();
-                updateStockStmt.close();
+            if (!productResultSet.next()) {
+                JOptionPane.showMessageDialog(null, "Product code does not exist.");
+                return;
+            }
+
+            double unitPrice = productResultSet.getDouble("RetailPrice");
+            double totalCost = unitPrice * orderQuantity;
+
+            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status, userID) VALUES (?, ?, ?, ?, ?)");
+            insertOrderStmt.setString(1, productCode);
+            insertOrderStmt.setInt(2, orderQuantity);
+            insertOrderStmt.setDouble(3, totalCost);
+            insertOrderStmt.setString(4, Status);
+            insertOrderStmt.setString(5,userID);
+            int rowsAffected = insertOrderStmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Order placed successfully.\nTotal Cost: " + totalCost);
             }
             else {
-                JOptionPane.showMessageDialog(null, "Product code does not exist.");
+                JOptionPane.showMessageDialog(null, "Failed to place order.");
             }
-    
+
             productResultSet.close();
             checkProductStmt.close();
+            insertOrderStmt.close();
             connection.close();
         }
-         catch (SQLException e) {
+        catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error processing order.");
         }

@@ -98,6 +98,7 @@ public class staffView extends JFrame {
         columnNames.add("FeatureCode");
         columnNames.add("Gauge");
         columnNames.add("Era");
+        columnNames.add("Stock");
         table = new JTable();
         updateTable(fetchDataFromDatabase());
 
@@ -248,6 +249,7 @@ public class staffView extends JFrame {
                 row.add(rs.getObject("FeatureCode"));
                 row.add(rs.getObject("Gauge"));
                 row.add(rs.getObject("Era"));
+                row.add(rs.getObject("Stock"));
                 data.add(row);
             }
             rs.close();
