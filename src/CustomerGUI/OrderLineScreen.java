@@ -41,8 +41,7 @@ public class OrderLineScreen extends JFrame {
 
     private JPanel createSummaryPanel() {
         JPanel summaryPanel = new JPanel();
-        summaryPanel.add(new JLabel("Total Cost: £100")); // Replace with actual calculation
-        summaryPanel.add(new JLabel("Status: Pending")); // Replace with actual status
+
 
         JPanel bottomPanel = createBottomPanel();
         summaryPanel.add(bottomPanel);
@@ -52,20 +51,26 @@ public class OrderLineScreen extends JFrame {
 
     private JPanel createBottomPanel() {
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton historyButton = new JButton("Order History");
         JButton modifyButton = new JButton("Modify Quantity");
         JButton deleteButton = new JButton("Delete Order Line");
         JButton checkoutButton = new JButton("Proceed to Checkout");
         JButton backButton = new JButton("Home");
 
+
+        historyButton.addActionListener(e -> returnToHistory());
         modifyButton.addActionListener(e -> modifyQuantity());
         deleteButton.addActionListener(e -> deleteOrderLine());
         checkoutButton.addActionListener(e -> proceedCheckout());
         backButton.addActionListener(e -> returnToHome());
 
+
+        bottomPanel.add(historyButton);
         bottomPanel.add(modifyButton);
         bottomPanel.add(deleteButton);
         bottomPanel.add(checkoutButton);
         bottomPanel.add(backButton);
+
 
         return bottomPanel;
     }
@@ -173,7 +178,10 @@ public class OrderLineScreen extends JFrame {
         checkoutScreen.setVisible(true);
 
     }
+    private void returnToHistory() {
 
+
+    }
 
     private void returnToHome() {
         String Role = Session.getInstance().getUserRole();
