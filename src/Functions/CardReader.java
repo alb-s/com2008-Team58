@@ -13,17 +13,17 @@ public class CardReader{
         VISA,
     }       
     
-	public void checkCard(JTextField cardField){
+	public void checkCard(JTextField cardField, String userEmail){
 
         try  {
             String cardReader = cardField.getText();
+
 
             if (isValidCardNumber(cardReader)){
                 CardType cardType = identifyCardType(cardReader);
 
                 if (cardType != null){
-                    System.out.println("Card Type: " + cardType);
-                    insertCardNumberIntoDatabase(cardReader);
+                    insertCardNumberIntoDatabase(cardReader,userEmail);
                     JOptionPane.showMessageDialog(null, "Bank details saved succesfully!");
 
                 } 
@@ -78,15 +78,16 @@ public class CardReader{
     }
 
     // Insert the card number and its type into the database
-    private void insertCardNumberIntoDatabase(String cardNumber) {
+    private void insertCardNumberIntoDatabase(String cardNumber, String userEmail) {
         String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
         String username = "team058";
         String password = "eel7Ahsi0";
 
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String query = "INSERT INTO CardNumber (CardNumber) VALUES (?)";
+            String query = "UPDATE Users SET CardNumber = ? WHERE email = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setString(1, cardNumber);
+                preparedStatement.setString(2, userEmail);
                 int rowsAffected = preparedStatement.executeUpdate();
 
                 if (rowsAffected > 0) {
