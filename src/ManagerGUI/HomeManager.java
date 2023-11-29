@@ -1,9 +1,6 @@
 package ManagerGUI;
 
-    import CustomerGUI.EditBankDetailsScreen;
-    import CustomerGUI.LoginScreen;
-    import CustomerGUI.OrderLineScreen;
-    import CustomerGUI.UserDetailsScreen;
+    import CustomerGUI.*;
     import StaffGUI.StaffDashboardScreen;
 
     import javax.swing.*;
@@ -114,6 +111,8 @@ public class HomeManager extends JFrame {
 
         table = new JTable();
         updateTable(fetchDataFromDatabase());
+        table.getTableHeader().setReorderingAllowed(false);
+        table.getTableHeader().setResizingAllowed(false);
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(45, 250, 725, 300);
@@ -141,7 +140,8 @@ public class HomeManager extends JFrame {
 
     private void doButton(){
         dispose();
-        new OrderLineScreen().setVisible(true);
+        OrderLineScreen order = new OrderLineScreen();
+        order.setVisible(true);
     }
     private void dologin(){
         dispose();
@@ -152,6 +152,7 @@ public class HomeManager extends JFrame {
         String productCode = searchField.getText();
         String quantity = quantityField.getText();
         String Status = StatsField.getText();
+        String userID = Session.getInstance().getUserId();
 
         if(quantity.isEmpty() || productCode.isEmpty()){
             JOptionPane.showMessageDialog(null, "Please enter both a product code and quantity.");
@@ -187,11 +188,12 @@ public class HomeManager extends JFrame {
             double unitPrice = productResultSet.getDouble("RetailPrice");
             double totalCost = unitPrice * orderQuantity;
 
-            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status) VALUES (?, ?, ?, ?)");
+            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status, userID) VALUES (?, ?, ?, ?, ?)");
             insertOrderStmt.setString(1, productCode);
             insertOrderStmt.setInt(2, orderQuantity);
             insertOrderStmt.setDouble(3, totalCost);
-            insertOrderStmt.setString(4,Status);
+            insertOrderStmt.setString(4, Status);
+            insertOrderStmt.setString(5,userID);
             int rowsAffected = insertOrderStmt.executeUpdate();
 
             if (rowsAffected > 0) {

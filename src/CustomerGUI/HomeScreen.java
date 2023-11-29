@@ -122,6 +122,7 @@ public class HomeScreen extends JFrame {
         String productCode = searchField.getText();
         String quantity = quantityField.getText();
         String Status = StatsField.getText();
+        String userID = Session.getInstance().getUserId();
     
         if (quantity.isEmpty() || productCode.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter both a product code and quantity.");
@@ -167,11 +168,12 @@ public class HomeScreen extends JFrame {
                 updateStockStmt.setString(2, productCode);
                 updateStockStmt.executeUpdate();
     
-                PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status) VALUES (?, ?, ?, ?)");
+                PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status, userID) VALUES (?, ?, ?, ?, ?)");
                 insertOrderStmt.setString(1, productCode);
                 insertOrderStmt.setInt(2, orderQuantity);
                 insertOrderStmt.setDouble(3, totalCost);
                 insertOrderStmt.setString(4, Status);
+                insertOrderStmt.setString(5,userID);
                 int rowsAffected = insertOrderStmt.executeUpdate();
     
                 if (rowsAffected > 0) {

@@ -29,8 +29,9 @@ public class StaffDashboardScreen extends JFrame {
         mainPanel = new JPanel();
         cardLayout = new CardLayout();
         mainPanel.setLayout(cardLayout);
-        mainPanel.add(createOrdersPanel(), "Orders");
         mainPanel.add(createInventoryPanel(), "Inventory");
+        mainPanel.add(createOrdersPanel(), "Orders");
+
 
         setLayout(new BorderLayout());
         add(createTopPanel(), BorderLayout.NORTH);
@@ -119,19 +120,21 @@ public class StaffDashboardScreen extends JFrame {
             String dbPassword = "eel7Ahsi0";
             Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT OrderLineID, Quantity, LineCost, ProductCode, Status FROM OrderLine");
+            ResultSet rs = stmt.executeQuery("SELECT OrderLineID, Quantity, LineCost, ProductCode, Status, userID FROM OrderLine");
             ordersModel.addColumn("Order ID");
             ordersModel.addColumn("Quantity");
             ordersModel.addColumn("Line Cost");
             ordersModel.addColumn("Product Code");
             ordersModel.addColumn("Status");
+            ordersModel.addColumn("userID");
             while (rs.next()) {
                 Object[] rowData = {
                     rs.getInt("OrderLineID"),
                     rs.getInt("Quantity"),
                     rs.getDouble("Quantity"),
                     rs.getString("ProductCode"),
-                    rs.getString("Status")
+                    rs.getString("Status"),
+                        rs.getString("userID")
                 };
                 ordersModel.addRow(rowData);
             }
@@ -330,9 +333,9 @@ public class StaffDashboardScreen extends JFrame {
 
         ordersButton.addActionListener(e -> cardLayout.show(mainPanel, "Orders"));
         inventoryButton.addActionListener(e -> cardLayout.show(mainPanel, "Inventory"));
-
-        sidebar.add(ordersButton);
         sidebar.add(inventoryButton);
+        sidebar.add(ordersButton);
+
 
         return sidebar;
     }

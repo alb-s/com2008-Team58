@@ -167,86 +167,14 @@ public class OrderLineScreen extends JFrame {
             JOptionPane.showMessageDialog(this, "Error deleting order line: " + ex.getMessage());
         }
     }
-    
+    private void proceedCheckout() {
+        dispose();
+        CheckoutScreen checkoutScreen = new CheckoutScreen();
+        checkoutScreen.setVisible(true);
 
-    private void proceedCheckout() { 
-        // Start transaction
-        Connection connection = null;
-        try {
-            connection = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058", "team058", "eel7Ahsi0");
-            connection.setAutoCommit(false);
-    
-            for (int i = 0; i < orderLinesTableModel.getRowCount(); i++) {
-                String productCode = orderLinesTableModel.getValueAt(i, 5).toString();
-                int orderedQuantity = Integer.parseInt(orderLinesTableModel.getValueAt(i, 2).toString());
-    
-                int currentStock = getCurrentStock(connection, productCode);
-                if (currentStock < orderedQuantity) {
-                    JOptionPane.showMessageDialog(this, "Insufficient stock for product code: " + productCode);
-                    connection.rollback();
-                    return;
-                }
-    
-                updateProductStock(connection, productCode, currentStock - orderedQuantity);
-            }
-    
-            connection.commit();
-            JOptionPane.showMessageDialog(this, "Order confirmed and stock updated.");
-            
-            // Proceed to CheckoutScreen
-            SwingUtilities.invokeLater(() -> {
-                CheckoutScreen checkoutScreen = new CheckoutScreen();
-                checkoutScreen.setVisible(true);
-                this.dispose(); // Close the OrderLineScreen
-            });
-    
-        } catch (SQLException e) {
-            try {
-                if (connection != null) {
-                    connection.rollback(); // Rollback transaction in case of error
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-            JOptionPane.showMessageDialog(this, "Error during checkout: " + e.getMessage());
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close(); // Always close the connection
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }
     }
-    
 
-    private int getCurrentStock(Connection connection, String productCode) throws SQLException {
-        String sql = "SELECT Stock FROM Product WHERE ProductCode = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, productCode);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("Stock");
-            } else {
-                throw new SQLException("Product not found with code: " + productCode);
-            }
-        }
-    }
-    
-    private void updateProductStock(Connection connection, String productCode, int newStock) throws SQLException {
-        String sql = "UPDATE Product SET Stock = ? WHERE ProductCode = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, newStock);
-            pstmt.setString(2, productCode);
-            int affectedRows = pstmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Updating stock failed, no rows affected.");
-            }
-        }
-    }
-    
-    
+
     private void returnToHome() {
         String Role = Session.getInstance().getUserRole();
         if (Role.equals("Manager")) {
@@ -269,7 +197,9 @@ public class OrderLineScreen extends JFrame {
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058", "team058", "eel7Ahsi0");
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM OrderLine");
+            String userID = Session.getInstance().getUserId();
+            String query = "SELECT * FROM OrderLine WHERE userID = '" + userID + "'";
+            ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
                 Object[] row = {
@@ -279,7 +209,7 @@ public class OrderLineScreen extends JFrame {
                     rs.getDouble("LineCost"),
                     rs.getInt("OrderNumber"),
                     rs.getString("ProductCode"),
-                    rs.getString("Status")
+                    rs.getString("Status"),
                 };
                 orderLinesTableModel.addRow(row);
             }
