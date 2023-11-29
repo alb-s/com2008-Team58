@@ -145,6 +145,23 @@ public class UserDetailsScreen extends JFrame {
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows > 0) {
                 JOptionPane.showMessageDialog(this, "Details updated successfully.");
+                dispose();
+                String Role = Session.getInstance().getUserRole();
+                if (Role.equals("Manager")) {
+                    dispose();
+                    HomeManager HomeManager = new HomeManager();
+                    HomeManager.setVisible(true);
+                } else if (Role.equals("Staff")) {
+                    dispose();
+                    staffView staffView = new staffView();
+                    staffView.setVisible(true);
+                }
+                else{
+                    dispose();
+                    HomeScreen HomeScreen = new HomeScreen();
+                    HomeScreen.setVisible(true);
+                }
+
             } else {
                 JOptionPane.showMessageDialog(this, "No details updated. Check the old email.");
             }

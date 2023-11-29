@@ -5,10 +5,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
 import java.util.Vector;
-import CustomerGUI.LoginScreen;
 
 public class HomeScreen extends JFrame {
-    private JButton searchButton, EditButton, CardButton, orderButton, outButton;
+    private JButton searchButton, EditButton, CardButton, orderButton, outButton, placeButton;
     private JTextField StatsField, searchField, quantityField;
     private JTable table;
     private Vector<String> columnNames;
@@ -80,6 +79,11 @@ public class HomeScreen extends JFrame {
         outButton.addActionListener(e -> dologin());
         panel3.add(outButton);
 
+        placeButton = new JButton("View Orders");
+        placeButton.setBounds(240,0,110,25);
+        placeButton.addActionListener(e -> doButton());
+        panel3.add(placeButton);
+
         columnNames = new Vector<>();
         columnNames.add("ProductCode");
         columnNames.add("BrandName");
@@ -96,7 +100,10 @@ public class HomeScreen extends JFrame {
         scrollPane.setBounds(45, 250, 725, 300);
         panel3.add(scrollPane);
     }
-
+    private void doButton(){
+        dispose();
+        new OrderLineScreen().setVisible(true);
+    }
     private void dologin(){
         dispose();
         LoginScreen Login = new LoginScreen();
@@ -110,65 +117,85 @@ public class HomeScreen extends JFrame {
         dispose();
         new EditBankDetailsScreen().setVisible(true);
     }
+
     private void placeOrder() {
         String productCode = searchField.getText();
         String quantity = quantityField.getText();
         String Status = StatsField.getText();
-
-        if(quantity.isEmpty() || productCode.isEmpty()){
+    
+        if (quantity.isEmpty() || productCode.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter both a product code and quantity.");
             return;
         }
+    
         int orderQuantity;
-        try{
+        try {
             orderQuantity = Integer.parseInt(quantity);
-            if (orderQuantity <= 0){
+            if (orderQuantity <= 0) {
                 JOptionPane.showMessageDialog(null, "Please enter a valid order quantity.");
                 return;
             }
-        }
-        catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Please enter a valid order quantity.");
             return;
         }
+    
         try {
             String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
             String dbUsername = "team058";
             String dbPassword = "eel7Ahsi0";
             Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-
-            PreparedStatement checkProductStmt = connection.prepareStatement("SELECT * FROM Product WHERE ProductCode = ?");
+    
+            PreparedStatement checkProductStmt = connection.prepareStatement("SELECT Stock, RetailPrice FROM Product WHERE ProductCode = ?");
             checkProductStmt.setString(1, productCode);
             ResultSet productResultSet = checkProductStmt.executeQuery();
     
-            if (!productResultSet.next()) {
-                JOptionPane.showMessageDialog(null, "Product code does not exist.");
-                return;
-            }
-
-            double unitPrice = productResultSet.getDouble("RetailPrice");
-            double totalCost = unitPrice * orderQuantity;
-
-            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status) VALUES (?, ?, ?, ?)");
-            insertOrderStmt.setString(1, productCode);
-            insertOrderStmt.setInt(2, orderQuantity);
-            insertOrderStmt.setDouble(3, totalCost);
-            insertOrderStmt.setString(4,Status);
-            int rowsAffected = insertOrderStmt.executeUpdate();
+            if (productResultSet.next()) {
+                int availableStock = productResultSet.getInt("Stock");
+                double unitPrice = productResultSet.getDouble("RetailPrice");
+                double totalCost = unitPrice * orderQuantity;
     
-            if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Order placed successfully.\nTotal Cost: " + totalCost);
-            } 
-            else {
-                JOptionPane.showMessageDialog(null, "Failed to place order.");
-            }
+                if (orderQuantity > availableStock) {
+                    JOptionPane.showMessageDialog(null, "Insufficient stock available for the order quantity.");
+                    return;
+                }
+    
+                int remainingStock = availableStock - orderQuantity;
+    
+                PreparedStatement updateStockStmt = connection.prepareStatement("UPDATE Product SET Stock = ? WHERE ProductCode = ?");
+                updateStockStmt.setInt(1, remainingStock);
+                updateStockStmt.setString(2, productCode);
+                updateStockStmt.executeUpdate();
+    
+                PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status) VALUES (?, ?, ?, ?)");
+                insertOrderStmt.setString(1, productCode);
+                insertOrderStmt.setInt(2, orderQuantity);
+                insertOrderStmt.setDouble(3, totalCost);
+                insertOrderStmt.setString(4, Status);
+                int rowsAffected = insertOrderStmt.executeUpdate();
+    
+                if (rowsAffected > 0) {
+                    JOptionPane.showMessageDialog(null, "Order placed successfully.\nTotal Cost: " + totalCost);
 
+                    //this should update the table with the new stock available
+                    Vector<Vector<Object>> updatedData = fetchDataFromDatabase();
+                    updateTable(updatedData);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Failed to place order.");
+                }
+    
+                insertOrderStmt.close();
+                updateStockStmt.close();
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Product code does not exist.");
+            }
+    
             productResultSet.close();
             checkProductStmt.close();
-            insertOrderStmt.close();
             connection.close();
-        } 
-        catch (SQLException e) {
+        }
+         catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error processing order.");
         }
