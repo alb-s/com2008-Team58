@@ -50,17 +50,17 @@ public class OrderLineScreen extends JFrame {
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton modifyButton = new JButton("Modify Quantity");
         JButton deleteButton = new JButton("Delete Order Line");
-        JButton confirmButton = new JButton("Confirm Order");
+        JButton checkoutButton = new JButton("Proceed to Checkout");
         JButton backButton = new JButton("Home");
 
         modifyButton.addActionListener(e -> modifyQuantity());
         deleteButton.addActionListener(e -> deleteOrderLine());
-        confirmButton.addActionListener(e -> confirmOrder());
+        checkoutButton.addActionListener(e -> proceedCheckout());
         backButton.addActionListener(e -> returnToHome());
 
         bottomPanel.add(modifyButton);
         bottomPanel.add(deleteButton);
-        bottomPanel.add(confirmButton);
+        bottomPanel.add(checkoutButton);
         bottomPanel.add(backButton);
 
         return bottomPanel;
@@ -164,7 +164,7 @@ public class OrderLineScreen extends JFrame {
         }
     }
     
-    private void confirmOrder() { 
+    private void proceedCheckout() { 
         JOptionPane.showMessageDialog(this, "Order confirmed."); // Placeholder confirmation message
     } 
     
