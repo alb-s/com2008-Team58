@@ -182,7 +182,8 @@ public class OrderLineScreen extends JFrame {
 
     }
     private void returnToHistory() {
-
+        dispose();
+        new OrderLineHistory().setVisible(true);
 
     }
 
