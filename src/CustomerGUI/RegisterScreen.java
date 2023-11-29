@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.security.SecureRandom;
 import java.sql.*;
 import java.util.Base64;
+import java.util.UUID;
+
 
 
 
@@ -189,11 +191,13 @@ public class RegisterScreen extends JFrame {
         char[] passwordChars = passwordField.getPassword();
         String hashedPassword = PasswordHashUtility.hashPassword(passwordChars, generatedSalt);
 
+        UUID uuid = UUID.randomUUID();
+        String uuid1 = uuid.toString();
 
         //this try catch block should 
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)){
-            String query = "INSERT INTO Users (email, forename, surname, password, housenumber, cityname, roadname, postcode, Role, Salt) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Users (email, forename, surname, password, housenumber, cityname, roadname, postcode, Role, Salt, idnew_table) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
                 preparedStatement.setString(1, dbEmail);
                 preparedStatement.setString(2, dbForename);
@@ -205,6 +209,7 @@ public class RegisterScreen extends JFrame {
                 preparedStatement.setString(8, dbCity);
                 preparedStatement.setString(9, dbRole);
                 preparedStatement.setString(10, generatedSalt);
+                preparedStatement.setString(11, uuid1);
 
                 int rowsAffected = preparedStatement.executeUpdate();
 
