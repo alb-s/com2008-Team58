@@ -18,7 +18,7 @@ public class CheckoutScreen extends JFrame {
         setLayout(new BorderLayout(10, 10));
         setLocationRelativeTo(null);
 
-        checkoutTableModel = new DefaultTableModel(new Object[]{"ProductCode", "ProductName", "Quantity", "UnitPrice", "LineTotal", "Status"}, 0);
+        checkoutTableModel = new DefaultTableModel(new Object[]{"OrderLineID","LineNumber", "Quantity", "LineCost", "OrderNumber", "ProductCode", "Status"}, 0);
         checkoutTable = new JTable(checkoutTableModel);
         checkoutTable.getTableHeader().setReorderingAllowed(false);
         checkoutTable.getTableHeader().setResizingAllowed(false);
@@ -85,7 +85,7 @@ public class CheckoutScreen extends JFrame {
         this.dispose();
         new CustomerGUI.OrderLineScreen().setVisible(true);
     }
-    
+
 private void performPayment(){
     // Start transaction
     Connection connection = null;
@@ -105,10 +105,14 @@ private void performPayment(){
             }
 
             updateProductStock(connection, productCode, currentStock - orderedQuantity);
+            int orderLineID = Integer.parseInt(checkoutTableModel.getValueAt(i, 0).toString());
+            updateOrderLineStatus(connection, orderLineID);
         }
 
         connection.commit();
         JOptionPane.showMessageDialog(this, "Order confirmed and stock updated.");
+        dispose();
+        new OrderLineScreen().setVisible(true);
     } catch (SQLException e) {
         try {
             if (connection != null) {
@@ -153,6 +157,16 @@ private void performPayment(){
             }
         }
     }
+
+    private void updateOrderLineStatus(Connection connection, int orderLineID) throws SQLException {
+        String sql = "UPDATE OrderLine SET Status = 'Confirmed' WHERE OrderLineID = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, orderLineID);
+            pstmt.executeUpdate();
+        }
+    }
+
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new CheckoutScreen().setVisible(true));
     }
