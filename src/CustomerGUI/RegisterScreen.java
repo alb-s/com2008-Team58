@@ -57,22 +57,21 @@ public class RegisterScreen extends JFrame {
         emailField.setBounds(155, 135, 140, 25);
         panel2.add(emailField);
 
-        JLabel forLabel = new JLabel("Surname");
-        forLabel.setBounds(450, 165, 140, 25);
-        panel2.add(forLabel);
-
-        foreField = new JTextField(20);
-        foreField.setBounds(455, 195, 140, 25);
-        panel2.add(foreField);
-
         JLabel surLabel = new JLabel("Forename");
-        surLabel.setBounds(150, 165, 140, 25);
+        surLabel.setBounds(450, 165, 140, 25);
         panel2.add(surLabel);
 
         surField = new JTextField(20);
-        surField.setBounds(155, 195, 140, 25);
+        surField.setBounds(455, 195, 140, 25);
         panel2.add(surField);
 
+        JLabel forLabel = new JLabel("Surname");
+        forLabel.setBounds(150, 165, 140, 25);
+        panel2.add(forLabel);
+
+        foreField = new JTextField(20);
+        foreField.setBounds(155, 195, 140, 25);
+        panel2.add(foreField);
 
         JLabel passwordLabel = new JLabel("Password:");
         passwordLabel.setBounds(450, 100, 80, 25);

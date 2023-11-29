@@ -7,8 +7,6 @@
     <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CustomerGUI/RegisterScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/RegisterScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ManagerGUI/UserManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ManagerGUI/UserManagement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StaffGUI/StaffDashboardScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StaffGUI/StaffDashboardScreen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -222,7 +220,14 @@
       <option name="project" value="LOCAL" />
       <updated>1701291846662</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="changes">
+      <created>1701298312145</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1701298312145</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -259,6 +264,7 @@
     <MESSAGE value="checkout done small edits needed" />
     <MESSAGE value="small edit" />
     <MESSAGE value="added archive" />
-    <option name="LAST_COMMIT_MESSAGE" value="added archive" />
+    <MESSAGE value="changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="changes" />
   </component>
 </project>
