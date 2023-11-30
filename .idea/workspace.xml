@@ -7,7 +7,8 @@
     <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CustomerGUI/HomeScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/HomeScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ManagerGUI/UserManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ManagerGUI/UserManagement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ManagerGUI/HomeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ManagerGUI/HomeManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StaffGUI/staffView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StaffGUI/staffView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -235,7 +236,14 @@
       <option name="project" value="LOCAL" />
       <updated>1701298803565</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="usermanagement table changes">
+      <created>1701301773738</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1701301773738</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -274,6 +282,7 @@
     <MESSAGE value="added archive" />
     <MESSAGE value="changes" />
     <MESSAGE value="flipiing registatrion page to work right" />
-    <option name="LAST_COMMIT_MESSAGE" value="flipiing registatrion page to work right" />
+    <MESSAGE value="usermanagement table changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="usermanagement table changes" />
   </component>
 </project>

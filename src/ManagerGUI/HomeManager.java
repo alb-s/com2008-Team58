@@ -18,6 +18,7 @@ public class HomeManager extends JFrame {
     private JTextField StatsField;
     private JTable table;
     private Vector<String> columnNames;
+    private JComboBox<String> categoryComboBox;
     public HomeManager() {
         setTitle("Home Page");
         setSize(800, 600);
@@ -99,6 +100,22 @@ public class HomeManager extends JFrame {
         placeButton.addActionListener(e -> doButton());
         panel5.add(placeButton);
 
+        categoryComboBox = new JComboBox<>(new String[] {"train sets", "track packs", "locomotives", "rolling stock", "track", "controllers"}); // Add all relevant categories
+        categoryComboBox.setEditable(true);
+        categoryComboBox.setBounds(145, 165, 165, 25);
+        panel5.add(categoryComboBox);
+
+        JButton ComboButton = new JButton("Search Category");
+        ComboButton.setBounds(320, 165, 135, 25);
+        panel5.add(ComboButton);
+
+        categoryComboBox.addActionListener(e -> {
+
+            String input = (String) categoryComboBox.getEditor().getItem();
+            String category = determineCategory(input);
+            updateTableWithCategory(category);
+        });
+
         columnNames = new Vector<>();
         columnNames.add("ProductCode");
         columnNames.add("BrandName");
@@ -136,6 +153,55 @@ public class HomeManager extends JFrame {
         UserManagement UserManagement = new UserManagement();
         UserManagement.setVisible(true);
 
+    }
+    private void updateTableWithCategory(String category) {
+        Vector<Vector<Object>> categoryData = new Vector<>();
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team058",
+                    "team058", "eel7Ahsi0");
+            String sql = "SELECT * FROM Product WHERE ProductCode LIKE ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, category + "%");
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Vector<Object> row = new Vector<>();
+                row.add(rs.getObject("ProductCode"));
+                row.add(rs.getObject("BrandName"));
+                row.add(rs.getObject("ProductName"));
+                row.add(rs.getObject("RetailPrice"));
+                row.add(rs.getObject("FeatureCode"));
+                row.add(rs.getObject("Gauge"));
+                row.add(rs.getObject("Era"));
+                categoryData.add(row);
+            }
+            rs.close();
+            pstmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        updateTable(categoryData);
+    }
+    private String determineCategory(String input) {
+        if (input.equalsIgnoreCase("train sets")) {
+            return "M";
+        }
+        if (input.equalsIgnoreCase("track packs")) {
+            return "P";
+        }
+        if (input.equalsIgnoreCase("locomotives")) {
+            return "L";
+        }
+        if (input.equalsIgnoreCase("controllers")) {
+            return "C";
+        }
+        if (input.equalsIgnoreCase("waggon")) {
+            return "W";
+        }
+        if (input.equalsIgnoreCase("track")) {
+            return "R";
+        }
+        return input;
     }
 
     private void doButton(){
