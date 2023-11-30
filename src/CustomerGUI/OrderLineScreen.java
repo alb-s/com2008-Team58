@@ -86,7 +86,7 @@ public class OrderLineScreen extends JFrame {
         }
 
         String orderLineID = orderLinesTableModel.getValueAt(selectedRow, 0).toString();
-        String currentQuantity = orderLinesTableModel.getValueAt(selectedRow, 2).toString();
+        String currentQuantity = orderLinesTableModel.getValueAt(selectedRow, 1).toString();
 
         String newQuantity = JOptionPane.showInputDialog(this, "Enter new quantity:", currentQuantity);
         if (newQuantity == null || newQuantity.isEmpty()) {
@@ -128,8 +128,8 @@ public class OrderLineScreen extends JFrame {
 
                 int affectedRows = pstmt.executeUpdate();
                 if (affectedRows > 0) {
-                    orderLinesTableModel.setValueAt(newQuantity, rowInTable, 2); // Update Quantity
-                    orderLinesTableModel.setValueAt(newLineCost, rowInTable, 3); // Update Line Cost
+                    orderLinesTableModel.setValueAt(newQuantity, rowInTable, 1); // Update Quantity
+                    orderLinesTableModel.setValueAt(newLineCost, rowInTable, 2); // Update Line Cost
                     JOptionPane.showMessageDialog(this, "Order line updated successfully.");
                 } else {
                     JOptionPane.showMessageDialog(this, "Failed to update order line.");
