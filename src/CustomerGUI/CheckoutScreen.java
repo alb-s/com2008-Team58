@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
-import java.util.Vector;
+import java.util.Date;
 
 public class CheckoutScreen extends JFrame {
     private DefaultTableModel checkoutTableModel;
@@ -110,7 +110,6 @@ private void performPayment(){
                 return;
             }
 
-            updateProductStock(connection, productCode, currentStock - orderedQuantity);
             int orderLineID = Integer.parseInt(checkoutTableModel.getValueAt(i, 0).toString());
             updateOrderLineStatus(connection, orderLineID);
         }
@@ -119,6 +118,7 @@ private void performPayment(){
         JOptionPane.showMessageDialog(this, "Order confirmed and stock updated.");
         dispose();
         new OrderLineScreen().setVisible(true);
+
     } catch (SQLException e) {
         try {
             if (connection != null) {
@@ -151,7 +151,7 @@ private void performPayment(){
             return false;
         }
     }
-        private int getCurrentStock(Connection connection, String productCode) throws SQLException {
+    private int getCurrentStock(Connection connection, String productCode) throws SQLException {
         String sql = "SELECT Stock FROM Product WHERE ProductCode = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, productCode);
@@ -164,22 +164,15 @@ private void performPayment(){
         }
     }
 
-    private void updateProductStock(Connection connection, String productCode, int newStock) throws SQLException {
-        String sql = "UPDATE Product SET Stock = ? WHERE ProductCode = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, newStock);
-            pstmt.setString(2, productCode);
-            int affectedRows = pstmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Updating stock failed, no rows affected.");
-            }
-        }
-    }
+
 
     private void updateOrderLineStatus(Connection connection, int orderLineID) throws SQLException {
-        String sql = "UPDATE OrderLine SET Status = 'Confirmed' WHERE OrderLineID = ?";
+        String sql = "UPDATE OrderLine SET Status = 'Confirmed', order_date = ? WHERE OrderLineID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, orderLineID);
+            Date orderDate = new Date();
+            Timestamp orderTimestamp = new Timestamp(orderDate.getTime());
+            pstmt.setInt(2, orderLineID);
+            pstmt.setTimestamp(1, orderTimestamp);
             pstmt.executeUpdate();
         }
     }

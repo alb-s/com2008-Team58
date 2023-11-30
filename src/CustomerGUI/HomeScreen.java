@@ -5,6 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
 import java.util.Vector;
+import java.util.Date;
 
 public class HomeScreen extends JFrame {
     private JButton searchButton, EditButton, CardButton, orderButton, outButton, placeButton;
@@ -195,6 +196,7 @@ public class HomeScreen extends JFrame {
             return;
         }
         int orderQuantity;
+
         try{
             orderQuantity = Integer.parseInt(quantity);
             if (orderQuantity <= 0){
@@ -202,10 +204,12 @@ public class HomeScreen extends JFrame {
                 return;
             }
         }
+
         catch(NumberFormatException e){
             JOptionPane.showMessageDialog(null, "Please enter a valid order quantity.");
             return;
         }
+
         try {
             String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
             String dbUsername = "team058";
@@ -224,17 +228,22 @@ public class HomeScreen extends JFrame {
             double unitPrice = productResultSet.getDouble("RetailPrice");
             double totalCost = unitPrice * orderQuantity;
 
-            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status, userID) VALUES (?, ?, ?, ?, ?)");
+            Date orderDate = new Date();
+            Timestamp orderTimestamp = new Timestamp(orderDate.getTime());
+
+            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status, userID, order_date) VALUES (?, ?, ?, ?, ?, ?)");
             insertOrderStmt.setString(1, productCode);
             insertOrderStmt.setInt(2, orderQuantity);
             insertOrderStmt.setDouble(3, totalCost);
             insertOrderStmt.setString(4, Status);
             insertOrderStmt.setString(5,userID);
+            insertOrderStmt.setTimestamp(6, orderTimestamp);
             int rowsAffected = insertOrderStmt.executeUpdate();
 
             if (rowsAffected > 0) {
                 JOptionPane.showMessageDialog(null, "Order placed successfully.\nTotal Cost: " + totalCost);
             }
+
             else {
                 JOptionPane.showMessageDialog(null, "Failed to place order.");
             }
@@ -244,6 +253,7 @@ public class HomeScreen extends JFrame {
             insertOrderStmt.close();
             connection.close();
         }
+
         catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error processing order.");

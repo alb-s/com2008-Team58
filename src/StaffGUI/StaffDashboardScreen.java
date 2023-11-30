@@ -4,6 +4,8 @@ import CustomerGUI.HomeScreen;
 import CustomerGUI.LoginScreen;
 import CustomerGUI.Session;
 import ManagerGUI.HomeManager;
+
+import java.util.Date;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
@@ -78,6 +80,7 @@ public class StaffDashboardScreen extends JFrame {
         return archivePanel;
 
     }
+
     private DefaultTableModel fetchDataFromDatabaseForArchive() {
         DefaultTableModel ordersModel = new DefaultTableModel();
 
@@ -87,17 +90,16 @@ public class StaffDashboardScreen extends JFrame {
             String dbPassword = "eel7Ahsi0";
             Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
             Statement stmt = connection.createStatement();
-            String query = "SELECT OrderLineID, Quantity, LineCost, ProductCode, Status, userID FROM OrderLine WHERE (Status = ? OR Status = ?)";
+            String query = "SELECT OrderLineID, Quantity, LineCost, ProductCode, Status, userID, order_date FROM OrderLine WHERE Status = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, "Confirmed");
-            pstmt.setString(2,"Fulfiled");
+            pstmt.setString(1,"Fulfiled");
 
             ordersModel.addColumn("Order ID");
             ordersModel.addColumn("Quantity");
             ordersModel.addColumn("Line Cost");
             ordersModel.addColumn("Product Code");
+            ordersModel.addColumn("Order Date");
             ordersModel.addColumn("Status");
-            ordersModel.addColumn("userID");
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -106,8 +108,8 @@ public class StaffDashboardScreen extends JFrame {
                         rs.getInt("Quantity"),
                         rs.getDouble("Quantity"),
                         rs.getString("ProductCode"),
+                        rs.getTimestamp("order_date"),
                         rs.getString("Status"),
-                        rs.getString("userID")
                 };
                 ordersModel.addRow(rowData);
             }
@@ -172,7 +174,7 @@ public class StaffDashboardScreen extends JFrame {
             Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
             
             // Use PreparedStatement to prevent SQL injection and specify the status "Confirmed"
-            String query = "SELECT OrderLineID, Quantity, LineCost, ProductCode, Status, userID FROM OrderLine WHERE Status = ?";
+            String query = "SELECT OrderLineID, Quantity, LineCost, ProductCode, Status, userID, order_date FROM OrderLine WHERE Status = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, "Confirmed");
     
@@ -181,8 +183,8 @@ public class StaffDashboardScreen extends JFrame {
             ordersModel.addColumn("Quantity");
             ordersModel.addColumn("Line Cost");
             ordersModel.addColumn("Product Code");
+            ordersModel.addColumn("Order Date");
             ordersModel.addColumn("Status");
-            ordersModel.addColumn("userID");
     
             while (rs.next()) {
                 Object[] rowData = {
@@ -190,8 +192,8 @@ public class StaffDashboardScreen extends JFrame {
                     rs.getInt("Quantity"),
                     rs.getDouble("LineCost"),
                     rs.getString("ProductCode"),
+                    rs.getTimestamp("order_date"),
                     rs.getString("Status"),
-                    rs.getString("userID")
                 };
                 ordersModel.addRow(rowData);
             }
@@ -224,16 +226,41 @@ public class StaffDashboardScreen extends JFrame {
 
 
     private void updateOrderStatusToPending(Object orderId) {
+        Date orderDate = new Date();
+        Timestamp orderTimestamp = new Timestamp(orderDate.getTime());
+
         try {
             String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
             String dbUsername = "team058";
             String dbPassword = "eel7Ahsi0";
             Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
-            String query = "UPDATE OrderLine SET Status = 'Fulfiled' WHERE OrderLineID = ?";
+            String query = "UPDATE OrderLine SET Status = 'Fulfiled', order_date = ? WHERE OrderLineID = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setObject(1, orderId);
+            pstmt.setTimestamp(1, orderTimestamp);
+            pstmt.setObject(2, orderId);
             pstmt.executeUpdate();
             pstmt.close();
+
+            String orderInfoQuery = "SELECT ProductCode, Quantity FROM OrderLine WHERE OrderLineID = ?";
+            PreparedStatement getOrderIQ = connection.prepareStatement(orderInfoQuery);
+            getOrderIQ.setObject(1,orderId);
+            ResultSet orderResultSet = getOrderIQ.executeQuery();
+
+            if (orderResultSet.next()) {
+                String productCode = orderResultSet.getString("ProductCode");
+                int orderedQuantity = orderResultSet.getInt("Quantity");
+    
+                // Update the stock quantity in the Product table
+                String updateStockQuery = "UPDATE Product SET Stock = Stock - ? WHERE ProductCode = ?";
+                PreparedStatement updateStockStmt = connection.prepareStatement(updateStockQuery);
+                updateStockStmt.setInt(1, orderedQuantity);
+                updateStockStmt.setString(2, productCode);
+                updateStockStmt.executeUpdate();
+                updateStockStmt.close();
+            }
+            orderResultSet.close();
+            getOrderIQ.close();
+
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
