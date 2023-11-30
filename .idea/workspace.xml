@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="editing">
+    <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CustomerGUI/CheckoutScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/CheckoutScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/EditPasswordScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/EditPasswordScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/UserDetailsScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/UserDetailsScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StaffGUI/StaffDashboardScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StaffGUI/StaffDashboardScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ManagerGUI/HomeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ManagerGUI/HomeManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StaffGUI/staffView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StaffGUI/staffView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -265,7 +264,14 @@
       <option name="project" value="LOCAL" />
       <updated>1701372002439</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="editing">
+      <created>1701373986661</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1701373986661</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

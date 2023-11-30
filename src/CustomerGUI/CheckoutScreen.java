@@ -122,7 +122,7 @@ private void performPayment(){
         }
 
         connection.commit();
-        JOptionPane.showMessageDialog(this, "Order confirmed and stock updated.");
+        JOptionPane.showMessageDialog(this, "Order confirmed.");
         dispose();
         new OrderLineScreen().setVisible(true);
 

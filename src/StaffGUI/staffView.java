@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
+import java.util.Date;
 import java.util.Vector;
 import CustomerGUI.LoginScreen;
 
@@ -232,15 +233,19 @@ public class staffView extends JFrame {
                 return;
             }
 
+            java.util.Date orderDate = new Date();
+            Timestamp orderTimestamp = new Timestamp(orderDate.getTime());
+
             double unitPrice = productResultSet.getDouble("RetailPrice");
             double totalCost = unitPrice * orderQuantity;
 
-            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status, userID) VALUES (?, ?, ?, ?, ?)");
+            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status, order_date, userID) VALUES (?, ?, ?, ?, ?, ?)");
             insertOrderStmt.setString(1, productCode);
             insertOrderStmt.setInt(2, orderQuantity);
             insertOrderStmt.setDouble(3, totalCost);
             insertOrderStmt.setString(4, Status);
-            insertOrderStmt.setString(5,userID);
+            insertOrderStmt.setTimestamp(5,orderTimestamp);
+            insertOrderStmt.setString(6,userID);
             int rowsAffected = insertOrderStmt.executeUpdate();
 
             if (rowsAffected > 0) {
