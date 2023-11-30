@@ -106,10 +106,11 @@ public class StaffDashboardScreen extends JFrame {
                 Object[] rowData = {
                         rs.getInt("OrderLineID"),
                         rs.getInt("Quantity"),
-                        rs.getDouble("Quantity"),
+                        rs.getDouble("LineCost"),
                         rs.getString("ProductCode"),
                         rs.getTimestamp("order_date"),
                         rs.getString("Status"),
+                        rs.getString("userID")
                 };
                 ordersModel.addRow(rowData);
             }
@@ -194,6 +195,7 @@ public class StaffDashboardScreen extends JFrame {
                     rs.getString("ProductCode"),
                     rs.getTimestamp("order_date"),
                     rs.getString("Status"),
+                    rs.getString("userID")
                 };
                 ordersModel.addRow(rowData);
             }

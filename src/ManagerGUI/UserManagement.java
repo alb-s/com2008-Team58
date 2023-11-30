@@ -4,6 +4,8 @@ import CustomerGUI.LoginScreen;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.sql.*;
 import java.util.Vector;
@@ -86,6 +88,7 @@ public class UserManagement extends JFrame {
 
         // Initialize column names
         columnNames = new Vector<>();
+        columnNames.add("idnew_table");
         columnNames.add("email");
         columnNames.add("forename");
         columnNames.add("surname");
@@ -147,14 +150,22 @@ public class UserManagement extends JFrame {
     private void updateTable(Vector<Vector<Object>> data) {
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
         table.setModel(model);
+
+        // Hide the idnew_table column from view
+        TableColumnModel columnModel = table.getColumnModel();
+        TableColumn idColumn = columnModel.getColumn(0); // Assuming idnew_table is the first column
+        columnModel.removeColumn(idColumn);
     }
     private void updateRole(String newRole) {
         int selectedRow = table.getSelectedRow();
         if (selectedRow != -1) { // Check if a row is selected
             Object userId = table.getModel().getValueAt(selectedRow, 0); // Assuming user ID is in column 0
             if (userId != null) {
-                table.getModel().setValueAt(newRole, selectedRow, 9); // Assuming role is in column 10
+                table.getModel().setValueAt(newRole, selectedRow, 3); // Assuming role is in column 10
                 updateRoleInDatabase(userId.toString(), newRole);
+                dispose();
+                UserManagement userManagement = new UserManagement();
+                userManagement.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this, "User ID is null", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -171,10 +182,12 @@ public class UserManagement extends JFrame {
             ResultSet rs = stmt.executeQuery("SELECT * FROM Users");
             while (rs.next()) {
                 Vector<Object> row = new Vector<>();
+                row.add(rs.getObject("idnew_table"));
                 row.add(rs.getObject("email"));
                 row.add(rs.getObject("forename"));
                 row.add(rs.getObject("surname"));
                 row.add(rs.getObject("Role"));
+
                 data.add(row);
             }
             rs.close();
