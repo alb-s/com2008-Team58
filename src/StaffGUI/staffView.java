@@ -91,7 +91,7 @@ public class staffView extends JFrame {
         placeButton.addActionListener(e -> doButton());
         panel9.add(placeButton);
 
-        categoryComboBox = new JComboBox<>(new String[] {"train sets", "track packs", "locomotives", "rolling stock", "track", "controllers"}); // Add all relevant categories
+        categoryComboBox = new JComboBox<>(new String[] {"train sets", "track packs", "locomotives", "track", "controllers"}); // Add all relevant categories
         categoryComboBox.setEditable(true);
         categoryComboBox.setBounds(145, 165, 165, 25);
         panel9.add(categoryComboBox);
