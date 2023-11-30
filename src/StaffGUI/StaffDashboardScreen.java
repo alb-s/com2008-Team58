@@ -154,7 +154,9 @@ public class StaffDashboardScreen extends JFrame {
                 Object orderId = ordersTable.getValueAt(selectedRow, 0);
                 updateOrderStatusToPending(orderId);
                 refreshOrdersTable();
-
+                dispose();
+                StaffDashboardScreen StaffDashboardScreen = new StaffDashboardScreen();
+                StaffDashboardScreen.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(null, "No order selected.");
             }
