@@ -87,14 +87,6 @@ public class CheckoutScreen extends JFrame {
         return summaryPanel;
     }
 
-    private double calculateTotalCost() {
-        double totalCost = 0.0;
-        for (int i = 0; i < checkoutTableModel.getRowCount(); i++) {
-            double lineCost = (double) checkoutTableModel.getValueAt(i, 2); 
-            totalCost += lineCost;
-        }
-        return totalCost;
-    }
     
     private void returnToOrderLineScreen() {
         this.dispose();
@@ -115,8 +107,8 @@ private void performPayment(){
         connection.setAutoCommit(false);
 
         for (int i = 0; i < checkoutTableModel.getRowCount(); i++) {
-            String productCode = checkoutTableModel.getValueAt(i, 5).toString();
-            int orderedQuantity = Integer.parseInt(checkoutTableModel.getValueAt(i, 2).toString());
+            String productCode = checkoutTableModel.getValueAt(i, 3).toString();
+            int orderedQuantity = Integer.parseInt(checkoutTableModel.getValueAt(i, 1).toString());
 
             int currentStock = getCurrentStock(connection, productCode);
             if (currentStock < orderedQuantity) {

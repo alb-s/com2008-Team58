@@ -91,6 +91,9 @@ public class EditPasswordScreen extends JFrame {
     
                     if (affectedRows > 0) {
                         JOptionPane.showMessageDialog(this, "Password updated successfully.");
+                        dispose();
+                        LoginScreen LoginScreen = new LoginScreen();
+                        LoginScreen.setVisible(true);
                     } else {
                         JOptionPane.showMessageDialog(this, "Password update failed.");
                     }
@@ -107,7 +110,7 @@ public class EditPasswordScreen extends JFrame {
             }
         } 
         else {
-            JOptionPane.showMessageDialog(this, "Old password is incorrect.");
+            JOptionPane.showMessageDialog(this, "Check Entered Fields");
         }
     }
 

@@ -12,8 +12,8 @@ import java.sql.*;
 import java.awt.*;
 
 public class StaffDashboardScreen extends JFrame {
-    private JTable ordersTable; // Class level variable for orders table
-    private JTable inventoryTable; // Class level variable for inventory table
+    private JTable ordersTable;
+    private JTable inventoryTable;
     private JPanel mainPanel;
     private CardLayout cardLayout;
 
@@ -42,7 +42,7 @@ public class StaffDashboardScreen extends JFrame {
         JPanel topPanel = new JPanel(new BorderLayout());
         JButton signOutButton = new JButton("Sign Out");
         signOutButton.addActionListener(e -> {
-            dispose(); // Close current window
+            dispose();
             new LoginScreen().setVisible(true);
         });
         JButton homeButton = new JButton("Home");
@@ -166,10 +166,8 @@ public class StaffDashboardScreen extends JFrame {
     }
 
 
-
     private DefaultTableModel fetchDataFromDatabaseForOrders() {
         DefaultTableModel ordersModel = new DefaultTableModel();
-
         try {
             String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
             String dbUsername = "team058";
@@ -232,7 +230,6 @@ public class StaffDashboardScreen extends JFrame {
     private void updateOrderStatusToPending(Object orderId) {
         Date orderDate = new Date();
         Timestamp orderTimestamp = new Timestamp(orderDate.getTime());
-
         try {
             String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
             String dbUsername = "team058";

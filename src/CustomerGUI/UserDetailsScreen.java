@@ -89,6 +89,7 @@ public class UserDetailsScreen extends JFrame {
         });
     
         editPasswordButton.addActionListener((ActionEvent e) -> {
+            dispose();
             new EditPasswordScreen().setVisible(true);
         });
     
