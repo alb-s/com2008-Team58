@@ -18,7 +18,7 @@ public class CheckoutScreen extends JFrame {
         setLayout(new BorderLayout(10, 10));
         setLocationRelativeTo(null);
 
-        checkoutTableModel = new DefaultTableModel(new Object[]{"OrderLineID","LineNumber", "Quantity", "LineCost", "OrderNumber", "ProductCode", "Status"}, 0);
+        checkoutTableModel = new DefaultTableModel(new Object[]{"OrderLineID", "Quantity", "LineCost", "ProductCode", "Status"}, 0);
         checkoutTable = new JTable(checkoutTableModel);
         checkoutTable.getTableHeader().setReorderingAllowed(false);
         checkoutTable.getTableHeader().setResizingAllowed(false);
@@ -40,21 +40,27 @@ public class CheckoutScreen extends JFrame {
             String query = "SELECT * FROM OrderLine WHERE userID = '" + userID + "' AND Status = '" + pending + "'";
             ResultSet rs = stmt.executeQuery(query);
 
+            double totalCost = 0.0;
+
             while (rs.next()) {
                 Object[] row = {
                         rs.getInt("OrderLineID"),
-                        rs.getInt("LineNumber"),
                         rs.getInt("Quantity"),
                         rs.getDouble("LineCost"),
-                        rs.getInt("OrderNumber"),
                         rs.getString("ProductCode"),
                         rs.getString("Status"),
                 };
                 checkoutTableModel.addRow(row);
+
+                totalCost += rs.getDouble("LineCost");
             }
             rs.close();
             stmt.close();
             conn.close();
+
+            totalAmountLabel.setText("Total Amount: " + totalCost);
+
+
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error loading order lines: " + e.getMessage());
@@ -63,7 +69,7 @@ public class CheckoutScreen extends JFrame {
 
     private JPanel createSummaryPanel() {
         JPanel summaryPanel = new JPanel(new BorderLayout());
-        totalAmountLabel = new JLabel("Total Amount:");
+        totalAmountLabel = new JLabel();
         summaryPanel.add(totalAmountLabel, BorderLayout.WEST);
     
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -79,6 +85,15 @@ public class CheckoutScreen extends JFrame {
         summaryPanel.add(buttonPanel, BorderLayout.EAST);
     
         return summaryPanel;
+    }
+
+    private double calculateTotalCost() {
+        double totalCost = 0.0;
+        for (int i = 0; i < checkoutTableModel.getRowCount(); i++) {
+            double lineCost = (double) checkoutTableModel.getValueAt(i, 2); 
+            totalCost += lineCost;
+        }
+        return totalCost;
     }
     
     private void returnToOrderLineScreen() {
