@@ -1,16 +1,12 @@
 package StaffGUI;
 
-import CustomerGUI.LoginScreen;
-import CustomerGUI.RegisterScreen;
-import Utility.PasswordHashUtility;
 
-import java.security.SecureRandom;
+
 import java.sql.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Base64;
 
 public class addProduct extends JFrame  {
     private JTextField productCode,BrandName, ProductName, RetailPrice, FeatureCode, Gauge, Era, Stock;

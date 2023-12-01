@@ -14,6 +14,26 @@ public class LoginScreen extends JFrame {
     private JPasswordField passwordField;
     private JButton loginButton, registerButton;
 
+    static class LoginResult {
+        boolean isValid;
+        String Role;
+        String userId;
+        static String userEmail;
+        int housenumber;
+        String postcode;
+
+        LoginResult(boolean isValid, String Role, String userId, String userEmail, int housenumber, String postcode) {
+            this.isValid = isValid;
+            this.Role = Role;
+            this.userId = userId;
+            LoginResult.userEmail = userEmail;
+            this.housenumber = housenumber;
+            this.postcode = postcode;
+        }
+
+
+    }
+
     public LoginScreen() {
         setTitle("Login Page");
         setSize(500, 400);
@@ -76,60 +96,21 @@ public class LoginScreen extends JFrame {
         String username = emailField.getText();
         String password = new String(passwordField.getPassword());
         LoginResult loginResult = checkCredentials(username, password);
-
+    
         if (loginResult.isValid) {
             JOptionPane.showMessageDialog(null, "Login Successful");
-
-            // Set session information
-            Session.getInstance().setUserDetails(loginResult.userId, LoginResult.userEmail, loginResult.Role,loginResult.housenumber,loginResult.postcode);
-
+    
+            // Set session information using LoginResult.userEmail
+            Session.getInstance().setUserDetails(loginResult.userId, LoginResult.userEmail, loginResult.Role, loginResult.housenumber, loginResult.postcode);
+    
             dispose();
             navigateBasedOnRole(loginResult.Role);
         } else {
             JOptionPane.showMessageDialog(null, "Invalid username or password!");
         }
     }
+    
 
-    private LoginResult checkCredentials(String username, String password) {
-        String url = "jdbc:mysql://stusql.dcs.shef.ac.uk/team058";
-        String dbUsername = "team058";
-        String dbPassword = "eel7Ahsi0";
-        boolean loginValidator = false;
-        String Role = null;
-        String userId = null;
-        String userEmail = null;
-        int housenumber = 0; // Default to 0
-        String postcode = null;
-
-        try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)) {
-            String query = "SELECT password, Salt, Role, idnew_table, email, housenumber, postcode FROM Users WHERE email = ?";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setString(1, username);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                if (resultSet.next()) {
-                    String hashedPasswordFromDB = resultSet.getString("password");
-                    String storedSalt = resultSet.getString("Salt");
-
-                    char[] passwordChars = passwordField.getPassword();
-                    String hashedEnteredPassword = PasswordHashUtility.hashPassword(passwordChars, storedSalt);
-
-                    if (hashedEnteredPassword != null && hashedEnteredPassword.equals(hashedPasswordFromDB)) {
-                        loginValidator = true;
-                        Role = resultSet.getString("Role");
-                        userId = resultSet.getString("idnew_table");
-                        userEmail = resultSet.getString("email");
-                        housenumber = resultSet.getInt("housenumber"); // Get as int
-                        postcode = resultSet.getString("postcode");
-                    }
-                }
-            }
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-        }
-
-        return new LoginResult(loginValidator, Role, userId, userEmail, housenumber, postcode);
-    }
 
     private void navigateBasedOnRole(String Role) {
         if (Role.equals("Manager")) {
@@ -158,23 +139,52 @@ public class LoginScreen extends JFrame {
             login.setVisible(true);
         });
     }
-}
 
-class LoginResult {
-    boolean isValid;
-    String Role;
-    String userId;
-    static String userEmail;
-    int housenumber;
-    String postcode;
+private LoginResult checkCredentials(String username, String password) {
+    DatabaseConnectionHandler connectionHandler = new DatabaseConnectionHandler();
 
-    LoginResult(boolean isValid, String Role, String userId, String userEmail, int housenumber, String postcode) {
-        this.isValid = isValid;
-        this.Role = Role;
-        this.userEmail = userEmail;
-        this.userId = userId;
-        this.housenumber = housenumber;
-        this.postcode = postcode;
+    boolean loginValidator = false;
+    String role = null;
+    String userId = null;
+    String userEmail = null;
+    int housenumber = 0;
+    String postcode = null;
+
+    try {
+        connectionHandler.openConnection();
+        Connection connection = connectionHandler.getConnection();
+
+        String query = "SELECT password, Salt, Role, idnew_table, email, housenumber, postcode FROM Users WHERE email = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                String hashedPasswordFromDB = resultSet.getString("password");
+                String storedSalt = resultSet.getString("Salt");
+
+                char[] passwordChars = password.toCharArray();
+                String hashedEnteredPassword = PasswordHashUtility.hashPassword(passwordChars, storedSalt);
+
+                if (hashedEnteredPassword != null && hashedEnteredPassword.equals(hashedPasswordFromDB)) {
+                    loginValidator = true;
+                    role = resultSet.getString("Role");
+                    userId = resultSet.getString("idnew_table");
+                    userEmail = resultSet.getString("email");
+                    housenumber = resultSet.getInt("housenumber");
+                    postcode = resultSet.getString("postcode");
+                }
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        connectionHandler.closeConnection();
     }
+
+    // Return LoginResult object with all fields set
+    return new LoginResult(loginValidator, role, userId, userEmail, housenumber, postcode);
 }
+}
+
+
 
