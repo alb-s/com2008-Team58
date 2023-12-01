@@ -190,6 +190,9 @@ public class HomeScreen extends JFrame {
         String quantity = quantityField.getText();
         String Status = StatsField.getText();
         String userID = Session.getInstance().getUserId();
+        String userEmail = Session.getInstance().getUserEmail();
+        String userPost = Session.getInstance().getPostcode();
+        int userNumber = Session.getInstance().getHouseNumber();
 
         if(quantity.isEmpty() || productCode.isEmpty()){
             JOptionPane.showMessageDialog(null, "Please enter both a product code and quantity.");
@@ -231,13 +234,16 @@ public class HomeScreen extends JFrame {
             Date orderDate = new Date();
             Timestamp orderTimestamp = new Timestamp(orderDate.getTime());
 
-            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status, userID, order_date) VALUES (?, ?, ?, ?, ?, ?)");
+            PreparedStatement insertOrderStmt = connection.prepareStatement("INSERT INTO `OrderLine` (ProductCode, Quantity, LineCost, Status, userID, order_date, housenumber, postcode, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             insertOrderStmt.setString(1, productCode);
             insertOrderStmt.setInt(2, orderQuantity);
             insertOrderStmt.setDouble(3, totalCost);
             insertOrderStmt.setString(4, Status);
             insertOrderStmt.setString(5,userID);
             insertOrderStmt.setTimestamp(6, orderTimestamp);
+            insertOrderStmt.setInt(7, userNumber);
+            insertOrderStmt.setString(8,userPost);
+            insertOrderStmt.setString(9,userEmail);
             int rowsAffected = insertOrderStmt.executeUpdate();
 
             if (rowsAffected > 0) {

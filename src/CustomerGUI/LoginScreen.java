@@ -81,7 +81,7 @@ public class LoginScreen extends JFrame {
             JOptionPane.showMessageDialog(null, "Login Successful");
 
             // Set session information
-            Session.getInstance().setUserDetails(loginResult.userId, LoginResult.userEmail, loginResult.Role);
+            Session.getInstance().setUserDetails(loginResult.userId, LoginResult.userEmail, loginResult.Role,loginResult.housenumber,loginResult.postcode);
 
             dispose();
             navigateBasedOnRole(loginResult.Role);
@@ -98,24 +98,28 @@ public class LoginScreen extends JFrame {
         String Role = null;
         String userId = null;
         String userEmail = null;
+        int housenumber = 0; // Default to 0
+        String postcode = null;
 
         try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)) {
-            String query = "SELECT password, Salt, Role, idnew_table, email FROM Users WHERE email = ?";
+            String query = "SELECT password, Salt, Role, idnew_table, email, housenumber, postcode FROM Users WHERE email = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setString(1, username);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
                     String hashedPasswordFromDB = resultSet.getString("password");
                     String storedSalt = resultSet.getString("Salt");
-                        
+
                     char[] passwordChars = passwordField.getPassword();
                     String hashedEnteredPassword = PasswordHashUtility.hashPassword(passwordChars, storedSalt);
-                    
+
                     if (hashedEnteredPassword != null && hashedEnteredPassword.equals(hashedPasswordFromDB)) {
                         loginValidator = true;
                         Role = resultSet.getString("Role");
                         userId = resultSet.getString("idnew_table");
                         userEmail = resultSet.getString("email");
+                        housenumber = resultSet.getInt("housenumber"); // Get as int
+                        postcode = resultSet.getString("postcode");
                     }
                 }
             }
@@ -124,7 +128,7 @@ public class LoginScreen extends JFrame {
             e.printStackTrace();
         }
 
-        return new LoginResult(loginValidator, Role, userId, userEmail);
+        return new LoginResult(loginValidator, Role, userId, userEmail, housenumber, postcode);
     }
 
     private void navigateBasedOnRole(String Role) {
@@ -161,11 +165,16 @@ class LoginResult {
     String Role;
     String userId;
     static String userEmail;
+    int housenumber;
+    String postcode;
 
-    LoginResult(boolean isValid, String Role, String userId, String userEmail) {
+    LoginResult(boolean isValid, String Role, String userId, String userEmail, int housenumber, String postcode) {
         this.isValid = isValid;
         this.Role = Role;
         this.userEmail = userEmail;
         this.userId = userId;
+        this.housenumber = housenumber;
+        this.postcode = postcode;
     }
 }
+

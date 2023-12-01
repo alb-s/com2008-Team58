@@ -22,7 +22,7 @@ public class OrderLineScreen extends JFrame {
 
         JLabel pending = new JLabel("View Pending Orders");
 
-        orderLinesTableModel = new NonEditableTableModel(new String[]{"OrderLineID", "Quantity", "LineCost", "ProductCode", "Order Date" , "Status"}, 0);
+        orderLinesTableModel = new NonEditableTableModel(new String[]{"OrderLineID", "Quantity", "LineCost", "ProductCode", "Order Date" , "Status","housenumber", "postcode", "email"}, 0);
         orderLinesTable = new JTable(orderLinesTableModel);
         orderLinesTable.getTableHeader().setReorderingAllowed(false);
         orderLinesTable.getTableHeader().setResizingAllowed(false);
@@ -224,6 +224,9 @@ public class OrderLineScreen extends JFrame {
                         rs.getString("ProductCode"),
                         rs.getTimestamp("order_date"),
                         rs.getString("Status"),
+                            rs.getInt("housenumber"),
+                            rs.getString("postcode"),
+                            rs.getString("email"),
                     };
                     orderLinesTableModel.addRow(row);
                 }

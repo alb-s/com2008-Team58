@@ -90,7 +90,7 @@ public class StaffDashboardScreen extends JFrame {
             String dbPassword = "eel7Ahsi0";
             Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
             Statement stmt = connection.createStatement();
-            String query = "SELECT OrderLineID, Quantity, LineCost, ProductCode, Status, userID, order_date FROM OrderLine WHERE Status = ?";
+            String query = "SELECT OrderLineID, Quantity, LineCost, ProductCode, Status, userID, order_date, housenumber, postcode, email FROM OrderLine WHERE Status = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1,"Fulfiled");
 
@@ -100,6 +100,9 @@ public class StaffDashboardScreen extends JFrame {
             ordersModel.addColumn("Product Code");
             ordersModel.addColumn("Order Date");
             ordersModel.addColumn("Status");
+            ordersModel.addColumn("housenumber");
+            ordersModel.addColumn("postcode");
+            ordersModel.addColumn("email");
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -110,7 +113,11 @@ public class StaffDashboardScreen extends JFrame {
                         rs.getString("ProductCode"),
                         rs.getTimestamp("order_date"),
                         rs.getString("Status"),
-                        rs.getString("userID")
+                        rs.getInt("housenumber"),
+                        rs.getString("postcode"),
+                        rs.getString("email"),
+                        rs.getString("userID"),
+
                 };
                 ordersModel.addRow(rowData);
             }
@@ -175,7 +182,7 @@ public class StaffDashboardScreen extends JFrame {
             Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword);
             
             // Use PreparedStatement to prevent SQL injection and specify the status "Confirmed"
-            String query = "SELECT OrderLineID, Quantity, LineCost, ProductCode, Status, userID, order_date FROM OrderLine WHERE Status = ?";
+            String query = "SELECT OrderLineID, Quantity, LineCost, ProductCode, Status, userID, order_date, housenumber, postcode, email FROM OrderLine WHERE Status = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, "Confirmed");
     
@@ -186,16 +193,22 @@ public class StaffDashboardScreen extends JFrame {
             ordersModel.addColumn("Product Code");
             ordersModel.addColumn("Order Date");
             ordersModel.addColumn("Status");
+            ordersModel.addColumn("housenumber");
+            ordersModel.addColumn("postcode");
+            ordersModel.addColumn("email");
     
             while (rs.next()) {
                 Object[] rowData = {
-                    rs.getInt("OrderLineID"),
-                    rs.getInt("Quantity"),
-                    rs.getDouble("LineCost"),
-                    rs.getString("ProductCode"),
-                    rs.getTimestamp("order_date"),
-                    rs.getString("Status"),
-                    rs.getString("userID")
+                        rs.getInt("OrderLineID"),
+                        rs.getInt("Quantity"),
+                        rs.getDouble("LineCost"),
+                        rs.getString("ProductCode"),
+                        rs.getTimestamp("order_date"),
+                        rs.getString("Status"),
+                        rs.getInt("housenumber"),
+                        rs.getString("postcode"),
+                        rs.getString("email"),
+                        rs.getString("userID"),
                 };
                 ordersModel.addRow(rowData);
             }
