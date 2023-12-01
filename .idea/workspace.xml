@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="editing">
+    <list default="true" id="3fb5bd88-9f18-4dd0-9ed7-e446a8595584" name="Changes" comment="adding email and adress to order view">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/HomeScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/HomeScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/LoginScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/LoginScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/OrderLineHistory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/OrderLineHistory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/OrderLineScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/OrderLineScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CustomerGUI/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomerGUI/Session.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StaffGUI/StaffDashboardScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StaffGUI/StaffDashboardScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ManagerGUI/HomeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ManagerGUI/HomeManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StaffGUI/staffView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StaffGUI/staffView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -281,7 +277,14 @@
       <option name="project" value="LOCAL" />
       <updated>1701375162461</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="adding email and adress to order view">
+      <created>1701389725694</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1701389725694</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -296,7 +299,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="editing function for card reader" />
     <MESSAGE value="created new user management page with functionality from database and fixed other bugs" />
     <MESSAGE value="connected home page to log in and created registration page with no functionality" />
     <MESSAGE value="work" />
@@ -321,6 +323,7 @@
     <MESSAGE value="usermanagement table changes" />
     <MESSAGE value="adding category view for the tables" />
     <MESSAGE value="editing" />
-    <option name="LAST_COMMIT_MESSAGE" value="editing" />
+    <MESSAGE value="adding email and adress to order view" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding email and adress to order view" />
   </component>
 </project>
