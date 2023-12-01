@@ -50,11 +50,16 @@ public class EditPasswordScreen extends JFrame {
         submitButton.addActionListener(e -> updatePassword());
 
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(e -> dispose());
+        cancelButton.addActionListener(e -> cancelButton());
 
         buttonPanel.add(submitButton);
         buttonPanel.add(cancelButton);
         return buttonPanel;
+    }
+
+    private void cancelButton(){
+        dispose();
+        new UserDetailsScreen().setVisible(true);
     }
 
     private void updatePassword() {
